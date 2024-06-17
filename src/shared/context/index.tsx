@@ -33,14 +33,12 @@ type RefsObject = Record<string, {
 
 type Props = {
   children?: React.ReactNode;
-  commonData: Record<string, string>;
 };
 
 declare const document: Document;
 
 export const LayoutContextProvider: React.FC<Props> = ({
   children,
-  commonData,
 }) => {
   const [pending, setPending] = useState<number>(0);
 
