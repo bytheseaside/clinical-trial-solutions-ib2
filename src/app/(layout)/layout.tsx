@@ -1,4 +1,5 @@
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 
 import { LayoutContextProvider } from 'shared/context';
 
@@ -6,9 +7,11 @@ import { LayoutContextProvider } from 'shared/context';
 export default async function Layout({ children }: PropsWithChildren) {
   return (
     <>
-      <LayoutContextProvider>
-        {children}
-      </LayoutContextProvider>
+      <UserProvider>
+        <LayoutContextProvider>
+          {children}
+        </LayoutContextProvider>
+      </UserProvider>
     </>
   );
 }
