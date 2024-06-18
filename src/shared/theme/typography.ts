@@ -1,5 +1,5 @@
 import { ThemeOptions, TypographyVariantsOptions } from '@mui/material/styles';
-import { Roboto, Inter } from 'next/font/google';
+import { Inter, Roboto } from 'next/font/google';
 
 const roboto = Roboto({
   weight: ['300', '400', '500'],
