@@ -2,7 +2,7 @@ const PALETTE = {
   palette: {
     contrastThreshold: 4.5,
     background: {
-      default: '#F7F7F7',
+      default: '#f0f0f0',
     },
     common: {
       transparent: 'rgba(255, 255, 255, 0.001)',
