@@ -5,11 +5,27 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 's.gravatar.com',
-        port: '',
-        pathname: '/avatar/**',
       },
     ],
   },
+
+  redirects: async () => [
+    {
+      source: '/signin',
+      destination: '/api/auth/login',
+      permanent: true,
+    },
+    {
+      source: '/login',
+      destination: '/api/auth/login',
+      permanent: true,
+    },
+    {
+      source: '/logout',
+      destination: '/api/auth/logout',
+      permanent: true,
+    },
+  ],
 };
 
 export default nextConfig;
