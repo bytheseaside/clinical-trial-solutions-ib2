@@ -6,7 +6,7 @@ import { UserProvider } from '@auth0/nextjs-auth0/client';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { ThemeProvider } from '@mui/material/styles';
 
-import { LayoutContextProvider } from 'shared/context';
+import { LayoutContextProvider } from 'shared/layout/LayoutContext';
 import customTheme from 'shared/theme';
 
 export default async function Layout({ children }: PropsWithChildren) {
