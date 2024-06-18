@@ -12,17 +12,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body
-        style={{
-          margin: 0,
-          padding: 0,
-          fontFamily: 'sans-serif',
-          fontSize: '16px',
-          lineHeight: 1.5,
-          color: '#333',
-          backgroundColor: '#f0f0f0',
-        }}
-      >{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

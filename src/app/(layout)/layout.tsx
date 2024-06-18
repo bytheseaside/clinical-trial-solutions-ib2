@@ -31,6 +31,7 @@ export default async function Layout({ children }: PropsWithChildren) {
               position: 'relative',
               display: 'flex',
               flexDirection: 'column',
+              margin: 0,
             },
             a: {
               color: theme.palette.primary.main,
