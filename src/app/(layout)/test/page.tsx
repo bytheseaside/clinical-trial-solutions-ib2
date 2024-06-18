@@ -7,7 +7,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 export default function Page() {
-  const { user, error, isLoading } = useUser();
+  const { user } = useUser();
+  // comment out the following line to see the error
 
   return (
     <Box
