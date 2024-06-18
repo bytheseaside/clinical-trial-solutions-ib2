@@ -1,11 +1,13 @@
+'use client';
+
 import React from 'react';
 
-import { getSession } from '@auth0/nextjs-auth0';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-export default async function Home() {
-  const session = await getSession();
+export default function Page() {
+  const { user, error, isLoading } = useUser();
 
   return (
     <Box
@@ -17,21 +19,20 @@ export default async function Home() {
         minHeight: '100vh',
       }}
     >
-      {session?.user?.nickname ? `${session.user.nickname} is logged in` : 'Welcome stranger, please log in'}
+      {user ? `${user?.nickname} is logged in` : 'Welcome stranger, please log in'}
       {/*  login button */}
       <a href="/api/auth/login">
         <Typography
-          component="span"
-          variant="hSmallBold"
+          component="h3"
         >
+
           LOGIN
         </Typography>
       </a>
       {/*  logout */}
       <a href="/api/auth/logout">
         <Typography
-          component="span"
-          variant="hSmallBold"
+          component="h3"
         >
           LOGOUT
         </Typography>
