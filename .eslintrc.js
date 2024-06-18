@@ -20,7 +20,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: './tsconfig.json',
   },
-  ignorePatterns: ['.eslintrc.js', 'next.config.js'],
+  ignorePatterns: ['.eslintrc.js', 'next.config.mjs'],
   plugins: [
     'react',
     'react-hooks',
