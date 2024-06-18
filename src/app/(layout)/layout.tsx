@@ -9,7 +9,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { LayoutContextProvider } from 'shared/layout/LayoutContext';
 import customTheme from 'shared/theme';
 
-export default async function Layout({ children }: PropsWithChildren) {
+export default function Layout({ children }: PropsWithChildren) {
   return (
     <UserProvider>
       <ThemeProvider theme={customTheme}>
