@@ -19,7 +19,7 @@ export default async function Home() {
     >
       {session?.user?.nickname ? `${session.user.nickname} is logged in` : 'Welcome stranger, please log in'}
       {/*  login button */}
-      <a href="/login">
+      <a href="/api/auth/login">
         <Typography
           component="span"
           variant="hSmallBold"
@@ -28,7 +28,7 @@ export default async function Home() {
         </Typography>
       </a>
       {/*  logout */}
-      <a href="/logout">
+      <a href="/api/auth/logout">
         <Typography
           component="span"
           variant="hSmallBold"
