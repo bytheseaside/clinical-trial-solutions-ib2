@@ -19,23 +19,30 @@ export default async function Home() {
     >
       {session?.user?.nickname ? `${session.user.nickname} is logged in` : 'Welcome stranger, please log in'}
       {/*  login button */}
-      <a href="/api/auth/login">
-        <Typography
-          component="span"
-          variant="hSmallBold"
-        >
-          * LOGIN *
-        </Typography>
-      </a>
+      {/* if !isLoggedIn */}
+
+      { !session?.idToken && (
+        <a href="/api/auth/login">
+          <Typography
+            component="span"
+            variant="hSmallBold"
+          >
+            * LOGIN *
+          </Typography>
+        </a>
+      )}
       {/*  logout */}
-      <a href="/api/auth/logout">
-        <Typography
-          component="span"
-          variant="hSmallBold"
-        >
-          - LOGOUT -
-        </Typography>
-      </a>
+
+      {session?.idToken && (
+        <a href="/api/auth/logout">
+          <Typography
+            component="span"
+            variant="hSmallBold"
+          >
+            - LOGOUT -
+          </Typography>
+        </a>
+      )}
       {/* <Typography
         variant="hSmallBold"
       >
