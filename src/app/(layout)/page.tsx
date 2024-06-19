@@ -24,7 +24,7 @@ export default async function Home() {
           component="span"
           variant="hSmallBold"
         >
-          LOGIN *
+          * LOGIN *
         </Typography>
       </a>
       {/*  logout */}
@@ -77,6 +77,11 @@ export default async function Home() {
 
       <Typography variant="captionBold">captionBold</Typography>
       <Box sx={{ mb: 2 }} /> */}
+
+      {/*  show stringified user */}
+      <Box>
+        <pre>{JSON.stringify(session, null, 2)}</pre>
+      </Box>
     </Box>
   );
 }
