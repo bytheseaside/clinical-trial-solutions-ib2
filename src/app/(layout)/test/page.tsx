@@ -19,7 +19,6 @@ export default function Page() {
         minHeight: '100vh',
       }}
     >
-      one more trigger here!
       {user ? `${user?.nickname} is logged in` : 'Welcome stranger, please log in'}
       {/*  login button */}
       <a href="/api/auth/login">
