@@ -22,7 +22,7 @@ export default async function Home() {
       {/* if !isLoggedIn */}
 
       { !session?.idToken && (
-        <a href="/api/auth/login">
+        <a href="/login">
           <Typography
             component="span"
             variant="hSmallBold"
@@ -34,7 +34,7 @@ export default async function Home() {
       {/*  logout */}
 
       {session?.idToken && (
-        <a href="/api/auth/logout">
+        <a href="/logout">
           <Typography
             component="span"
             variant="hSmallBold"
