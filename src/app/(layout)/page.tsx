@@ -24,7 +24,7 @@ export default async function Home() {
           component="span"
           variant="hSmallBold"
         >
-          * LOGIN
+          * LOGIN *
         </Typography>
       </a>
       {/*  logout */}
