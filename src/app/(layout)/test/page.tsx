@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 
 export default function Page() {
   const { user } = useUser();
-  // comment out the following line to see the error
 
   return (
     <Box
