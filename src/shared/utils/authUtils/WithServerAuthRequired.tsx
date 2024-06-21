@@ -4,7 +4,10 @@ const WithServerAuthRequired = <P extends object>(
   Component: React.FC<P>,
   options: WithPageAuthRequiredAppRouterOptions,
 ) => {
-  const AuthComponent = withPageAuthRequired(Component as AppRouterPageRoute, { ...options });
+  const AuthComponent = withPageAuthRequired(
+    Component as unknown as AppRouterPageRoute,
+    { ...options },
+  );
   return (props: P) => <AuthComponent {...props} />;
 };
 
