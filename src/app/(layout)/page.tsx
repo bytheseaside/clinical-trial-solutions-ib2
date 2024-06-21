@@ -20,7 +20,7 @@ export default async function Home() {
       {session?.user?.nickname ? `${session.user.nickname} is logged in` : 'Welcome stranger, please log in'}
       {/* login button */}
       { !session?.idToken && (
-        <a href="/login?returnTo=/try">
+        <a href="/login">
           <Typography
             component="span"
             variant="hSmallBold"
