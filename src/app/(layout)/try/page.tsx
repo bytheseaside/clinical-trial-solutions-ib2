@@ -4,7 +4,7 @@ import { getSession } from '@auth0/nextjs-auth0';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-export default async function Home() {
+export default async function Try() {
   const session = await getSession();
 
   return (
@@ -17,10 +17,11 @@ export default async function Home() {
         minHeight: '100vh',
       }}
     >
+      TRY PAGE
       {session?.user?.nickname ? `${session.user.nickname} is logged in` : 'Welcome stranger, please log in'}
       {/* login button */}
       { !session?.idToken && (
-        <a href="/login?returnTo=/try">
+        <a href="/login">
           <Typography
             component="span"
             variant="hSmallBold"
