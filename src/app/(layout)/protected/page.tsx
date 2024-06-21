@@ -17,7 +17,8 @@ export default async function Try() {
         minHeight: '100vh',
       }}
     >
-      TRY PAGE
+      PROTECTED PAGE
+      {/*  show user nickname */}
       {session?.user?.nickname ? `${session.user.nickname} is logged in` : 'Welcome stranger, please log in'}
       {/* login button */}
       { !session?.idToken && (
