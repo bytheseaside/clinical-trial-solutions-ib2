@@ -3,7 +3,6 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import { SxProps, Theme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-// import logo from '../assets/logo_cts-png.png'
 
 type Props = {
   sx?: SxProps<Theme>;
@@ -32,19 +31,17 @@ const Footer: React.FC<Props> = ({ sx }) => (
       }}
     >
       <Box
-          // component='img'
-          // src={logo}
-          // alt={'logo'}
         sx={{
           width: 50,
           height: 50,
           borderRadius: '50%',
           backgroundColor: 'secondary.main',
-          // objectFit: 'cover'
         }}
       />
     </Box>
-    <Typography variant="body2">Bazano - Mendieta - Rojas</Typography>
+    <Typography variant="lead">
+      Clinical Trial Solutions
+    </Typography>
   </Box>
 );
 

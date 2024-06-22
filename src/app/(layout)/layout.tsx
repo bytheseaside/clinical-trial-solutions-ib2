@@ -5,6 +5,7 @@ import React, { PropsWithChildren } from 'react';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { ThemeProvider } from '@mui/material/styles';
 
+import BaseLayout from 'shared/layout/BaseLayout';
 import { LayoutContextProvider } from 'shared/layout/LayoutContext';
 import customTheme from 'shared/theme';
 
@@ -78,7 +79,9 @@ export default function Layout({ children }: PropsWithChildren) {
         })}
       />
       <LayoutContextProvider>
-        {children}
+        <BaseLayout>
+          {children}
+        </BaseLayout>
       </LayoutContextProvider>
     </ThemeProvider>
   );
