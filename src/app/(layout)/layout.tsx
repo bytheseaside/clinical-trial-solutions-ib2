@@ -77,7 +77,6 @@ export default function Layout({ children }: PropsWithChildren) {
           },
         })}
       />
-
       <LayoutContextProvider>
         {children}
       </LayoutContextProvider>
