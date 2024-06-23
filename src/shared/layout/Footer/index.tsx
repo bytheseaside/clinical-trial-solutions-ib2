@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import { SxProps, Theme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
@@ -42,15 +43,24 @@ const Footer: React.FC<Props> = ({ sx }) => (
           py: 3,
           color: 'tertiary.main',
           display: 'flex',
-          gap: 3,
+          justifyContent: 'space-between',
           alignItems: 'center',
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
-      <BrandLogo />
-      <Typography variant="caption" display="block" color="tertiary.main">
-        Clinical Trial Solutions
+      <Stack direction="row" alignItems="center" gap={4}>
+        <BrandLogo />
+        <Typography variant="caption" display="block" color="tertiary.main">
+          Clinical Trial Solutions
+        </Typography>
+      </Stack>
+      <Typography variant="caption" color="secondary.dark" sx={{ justifySelf: 'flex-end' }}>
+        ©
+        {' '}
+        {new Date().getFullYear()}
+        {' '}
+        - IB2
       </Typography>
     </Container>
   </Box>
