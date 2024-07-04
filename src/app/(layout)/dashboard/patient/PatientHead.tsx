@@ -26,12 +26,11 @@ const getRGBA = (hexColor: string, opacity: number): string => {
 
 type Props = {
   name: string;
-  dni: string;
   trialName: string;
   sx?: SxProps<Theme>;
 };
 
-const PatientHead: React.FC<Props> = ({ name, dni, trialName, sx = [] }) => (
+const PatientHead: React.FC<Props> = ({ name, trialName, sx = [] }) => (
   <Box
     sx={(theme) => ({
       position: 'relative',
@@ -84,16 +83,7 @@ const PatientHead: React.FC<Props> = ({ name, dni, trialName, sx = [] }) => (
         >
           <Typography
             color="text.secondary"
-            variant="small"
-            sx={{ display: { xxs: 'none', xs: 'block' } }}
-          >
-            DNI:
-            {' '}
-            {dni}
-          </Typography>
-          <Typography
-            color="text.secondary"
-            variant="small"
+            variant="captionSmall"
           >
             Trial:
             {' '}

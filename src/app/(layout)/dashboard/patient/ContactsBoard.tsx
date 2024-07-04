@@ -41,9 +41,9 @@ const ContactsBoard: React.FC<Props> = ({ staff, sx = [] }) => (
           target="_blank"
           rel="noopener noreferrer"
           sx={{
-            backgroundColor: 'primary.100',
+            backgroundColor: 'background.paper',
             p: 2,
-            m: 1,
+            m: 2,
             width: { xxs: '100%', xs: 300 },
             display: 'flex',
             flexDirection: 'column',
@@ -58,24 +58,27 @@ const ContactsBoard: React.FC<Props> = ({ staff, sx = [] }) => (
               transform: 'scale(1.05)',
               boxShadow: 6,
               textDecoration: 'none',
-              color: 'inherit',
             },
           }}
         >
           <Typography
-            variant="h5"
+            variant="lead"
             sx={{
               mb: 1,
               pb: 1,
-              borderBottom: '1px solid black',
+              borderBottom: '1px solid',
+              borderColor: 'primary.main',
               display: 'flex',
               alignItems: 'center',
             }}
           >
-            <MedicalInformationIcon sx={{ mr: 1 }} />
+            <MedicalInformationIcon
+              color="primary"
+              sx={{ mr: 1 }}
+            />
             {name}
           </Typography>
-          <Typography variant="h6">{specialty}</Typography>
+          <Typography variant="caption">{specialty}</Typography>
           <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
             <WhatsAppIcon sx={{ mr: 1 }} />
             {phone}

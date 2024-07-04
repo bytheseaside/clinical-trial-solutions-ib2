@@ -27,7 +27,6 @@ export default async function PatientDashboard() {
     <>
       <PatientHead
         name="BRISA ROJAS"
-        dni="42421293"
         trialName="probando 123"
       />
       <TrialProgress
