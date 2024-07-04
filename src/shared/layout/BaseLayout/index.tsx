@@ -23,7 +23,10 @@ const BaseLayout: React.FC<Props> = ({
     </Suspense>
     <Box
       component="main"
-      sx={[{ flexGrow: 1 }, ...(Array.isArray(mainSx) ? mainSx : [mainSx])]}
+      sx={[{
+        flexGrow: 1,
+        mb: { xxs: 20, xl: 30 },
+      }, ...(Array.isArray(mainSx) ? mainSx : [mainSx])]}
       aria-label="Content"
     >
       {children}
