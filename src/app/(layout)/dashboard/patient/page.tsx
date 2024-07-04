@@ -1,14 +1,22 @@
 import React from 'react';
 
-import { SxProps, Theme } from '@mui/material/styles';
-
-import Container from 'shared/layout/Container';
+import ContactsBoard from './ContactsBoard';
 
 type Props = {
-  sx?: SxProps<Theme>;
 };
 
-const PatientPage: React.FC<Props> = ({ sx }) => {
-  console.log('patient');
-  return <Container>Patient page here:</Container>;
-};
+export default async function PatientDashboard({ }: Props) {
+  const doctors = [
+    { name: 'Dr. John Smith', specialty: 'Cardiology', phone: '555-1234' },
+    { name: 'Dr. Emily Davis', specialty: 'Neurology', phone: '555-5678' },
+    { name: 'Dr. Michael Johnson', specialty: 'Orthopedics', phone: '555-8765' },
+    { name: 'Dr. Sarah Lee', specialty: 'Pediatrics', phone: '555-4321' },
+    { name: 'Dr. David Brown', specialty: 'Dermatology', phone: '555-6789' },
+  ];
+  return (
+    <>
+      Patient page
+      <ContactsBoard staff={doctors} />
+    </>
+  );
+}

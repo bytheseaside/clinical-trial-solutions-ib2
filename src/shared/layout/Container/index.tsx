@@ -9,19 +9,18 @@ type Props = {
   sx?: SxProps<Theme>;
   component?: React.ElementType;
   children?: React.ReactNode;
-  className?: string;
 };
 
 const Container = forwardRef<HTMLElement, PropsWithChildren<Props>>(
-  ({ sx, className, children, component: Component = 'section', ...props }, ref) => (
+  ({ sx, children, component: Component = 'section', ...props }, ref) => (
     <Box
       component={Component}
-      className={className}
       sx={[
         (theme) => ({
+          boxSizing: 'border-box',
           width: '100%',
-          minWidth: '320px',
-          maxWidth: '1800px',
+          minWidth: 320,
+          maxWidth: 1800,
           margin: '0 auto',
           [theme.breakpoints.only('xxs')]: {
             px: 4,

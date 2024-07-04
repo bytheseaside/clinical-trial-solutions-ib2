@@ -28,7 +28,7 @@ const BaseLayout: React.FC<Props> = ({
     >
       {children}
     </Box>
-    <Footer sx={{ flexShrink: 0, boxSizing: 'border-box' }} />
+    <Footer sx={{ flexShrink: 0 }} />
   </>
 );
 
