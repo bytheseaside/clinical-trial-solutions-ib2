@@ -21,10 +21,14 @@ const BaseLayout: React.FC<Props> = ({
     <Suspense fallback={null}>
       <Next13ProgressBar height="4px" color="#4eb6ac" options={{ showSpinner: false }} />
     </Suspense>
-    <Box component="main" sx={[{ flexGrow: 1 }, ...(Array.isArray(mainSx) ? mainSx : [mainSx])]} aria-label="Content">
+    <Box
+      component="main"
+      sx={[{ flexGrow: 1 }, ...(Array.isArray(mainSx) ? mainSx : [mainSx])]}
+      aria-label="Content"
+    >
       {children}
     </Box>
-    <Footer sx={{ flexShrink: 0 }} />
+    <Footer sx={{ flexShrink: 0, boxSizing: 'border-box' }} />
   </>
 );
 

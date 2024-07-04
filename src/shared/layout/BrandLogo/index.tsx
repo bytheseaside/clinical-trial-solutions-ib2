@@ -1,6 +1,5 @@
 import React from 'react';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Box from '@mui/material/Box';
 import { SxProps, Theme } from '@mui/material/styles';
 
@@ -8,12 +7,14 @@ type Props = {
   sx?: SxProps<Theme>;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const BrandLogo: React.FC<Props> = ({ sx }) => (
   <Box
     component="svg"
     viewBox="0 0 519 481"
-    sx={{ widht: 54, height: 50, fill: 'none' }}
+    sx={[
+      { widht: 54, height: 50, fill: 'none' },
+      ...(Array.isArray(sx) ? sx : [sx]),
+    ]}
   >
     <Box
       component="path"
