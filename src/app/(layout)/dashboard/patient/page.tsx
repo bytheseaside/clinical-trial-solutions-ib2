@@ -1,6 +1,7 @@
 import React from 'react';
 
 import ContactsBoard from './ContactsBoard';
+import PatientHead from './PatientHead';
 
 export default async function PatientDashboard() {
   const doctors = [
@@ -12,7 +13,11 @@ export default async function PatientDashboard() {
   ];
   return (
     <>
-      Patient page
+      <PatientHead
+        name="BRISA ROJAS"
+        dni="42421293"
+        trialName="probando 123"
+      />
       <ContactsBoard staff={doctors} />
     </>
   );

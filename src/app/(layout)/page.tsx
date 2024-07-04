@@ -1,5 +1,6 @@
 import React from 'react';
 
+import LoginIcon from '@mui/icons-material/Login';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -86,9 +87,15 @@ export default async function Home() {
           sx={{
             width: { xxs: '100%', sm: 343 },
             mx: 4,
+            color: 'common.white',
+            ':hover': { color: 'common.white' },
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2,
           }}
         >
-          Login
+          <LoginIcon sx={{ color: 'inherit', fontSize: 20 }} />
+          Log in or sign in
         </Button>
       </Box>
     </Container>
