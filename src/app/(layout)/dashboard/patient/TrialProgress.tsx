@@ -18,9 +18,6 @@ const TrialProgress: React.FC<Props> = ({ steps, sx = [] }) => (
   <Container
     component="header"
     sx={[
-      {
-        // backgroundColor: 'primary.main',
-      },
       ...(Array.isArray(sx) ? sx : [sx]),
     ]}
   >
@@ -39,11 +36,11 @@ const TrialProgress: React.FC<Props> = ({ steps, sx = [] }) => (
             justifyContent: 'flex-start',
             alignItems: 'center',
             backgroundColor: 'background.paper',
-            p: 1,
+            px: 2,
+            py: 2,
             mt: 2,
             boxShadow: 4,
             borderRadius: 1,
-            textOverflow: 'ellipsis',
           }}
         >
           {status === 'toDo' && (
@@ -55,7 +52,16 @@ const TrialProgress: React.FC<Props> = ({ steps, sx = [] }) => (
           {status === 'done' && (
             <OfflinePinIcon color="success" />
           )}
-          <Typography variant="caption" sx={{ ml: 1 }}>
+          <Typography
+            sx={{
+              ml: 3,
+              mr: 3,
+              overflow: 'hidden',
+              typography: { xxs: 'captionSmall', sm: 'caption' },
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+            }}
+          >
             {title}
           </Typography>
         </Box>
