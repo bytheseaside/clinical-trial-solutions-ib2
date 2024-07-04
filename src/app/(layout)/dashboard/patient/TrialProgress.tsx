@@ -1,11 +1,11 @@
 import React from 'react';
 
-import AdjustIcon from '@mui/icons-material/Adjust';
-import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
-import OfflinePinIcon from '@mui/icons-material/OfflinePin';
+import AlarmIcon from '@mui/icons-material/Alarm';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import Box from '@mui/material/Box';
+import { SxProps, Theme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { SxProps, Theme } from '@mui/system';
 
 import Container from 'shared/layout/Container';
 
@@ -14,7 +14,20 @@ type Props = {
   sx?: SxProps<Theme>;
 };
 
-const TrialProgress: React.FC<Props> = ({ steps, sx = [] }) => (
+const getStatusText = (status: 'toDo' | 'inProgress' | 'done'): string => {
+  switch (status) {
+    case 'toDo':
+      return 'To Do';
+    case 'inProgress':
+      return 'In Progress';
+    case 'done':
+      return 'Done';
+    default:
+      return '';
+  }
+};
+
+const TrialProgress: React.FC<Props> = ({ steps, sx = {} }) => (
   <Container
     component="header"
     sx={[
@@ -23,7 +36,7 @@ const TrialProgress: React.FC<Props> = ({ steps, sx = [] }) => (
   >
     <Typography
       color="text.primary"
-      sx={{ typography: { xxs: 'h4', sm: 'h3' }, mb: 2 }}
+      sx={{ typography: { xxs: 'h4', sm: 'h3' }, mb: 3 }}
     >
       Progress
     </Typography>
@@ -33,37 +46,64 @@ const TrialProgress: React.FC<Props> = ({ steps, sx = [] }) => (
           key={title + status}
           sx={{
             display: 'flex',
-            justifyContent: 'flex-start',
             alignItems: 'center',
             backgroundColor: 'background.paper',
-            px: 2,
-            py: 2,
+            p: 2,
             mt: 2,
-            boxShadow: 4,
             borderRadius: 1,
+            borderLeft: '6px solid',
+            borderColor: status === 'toDo' ? 'error.main' : status === 'inProgress' ? 'warning.main' : 'success.main',
+            boxShadow: 4,
           }}
         >
-          {status === 'toDo' && (
-            <AdjustIcon color="error" />
-          )}
-          {status === 'inProgress' && (
-            <AssignmentLateIcon color="warning" />
-          )}
-          {status === 'done' && (
-            <OfflinePinIcon color="success" />
-          )}
-          <Typography
+          <Box
             sx={{
-              ml: 3,
-              mr: 3,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: status === 'toDo' ? 'error.light' : status === 'inProgress' ? 'warning.light' : 'success.light',
+              borderRadius: '50%',
+              width: '60px',
+              height: '60px',
+              marginRight: 2,
+            }}
+          >
+            {status === 'toDo' && <AlarmIcon color="error" sx={{ fontSize: '2.5rem' }} />}
+            {status === 'inProgress' && <HourglassEmptyIcon color="warning" sx={{ fontSize: '2.5rem' }} />}
+            {status === 'done' && <CheckCircleIcon color="success" sx={{ fontSize: '2.5rem' }} />}
+          </Box>
+          <Box
+            sx={{
+              flex: 1,
+              minWidth: 0,
               overflow: 'hidden',
-              typography: { xxs: 'captionSmall', sm: 'caption' },
-              whiteSpace: 'nowrap',
               textOverflow: 'ellipsis',
             }}
           >
-            {title}
-          </Typography>
+            <Typography
+              sx={{
+                typography: { xxs: 'body2', sm: 'body1' },
+                color: 'text.primary',
+                mb: 0.5,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {title}
+            </Typography>
+            <Typography
+              sx={{
+                typography: { xxs: 'caption', sm: 'caption' },
+                color: 'text.secondary',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {getStatusText(status)}
+            </Typography>
+          </Box>
         </Box>
       ))}
     </Box>
