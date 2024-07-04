@@ -25,13 +25,27 @@ export default async function PatientDashboard() {
   ];
 
   const appointments = [
-    { date: 4, month: 'July', name: 'Doctor Appointment', hour: '10:00 AM' },
-    { date: 5, month: 'July', name: 'Team Meeting', hour: '02:00 PM' },
-    { date: 6, month: 'July', name: 'Dentist Appointment', hour: '11:30 AM' },
-    { date: 7, month: 'July', name: 'Project Review', hour: '03:00 PM' },
-    { date: 8, month: 'July', name: 'Yoga Class', hour: '06:00 PM' },
+    {
+      title: 'Checkup',
+      date: new Date('2024-07-10T09:30:00'),
+    },
+    {
+      title: 'Dental cleaning',
+      date: new Date('2024-07-12T14:00:00'),
+    },
+    {
+      title: 'MRI Scan',
+      date: new Date('2024-07-15T11:15:00'),
+    },
+    {
+      title: 'Physical therapy',
+      date: new Date('2024-07-18T16:45:00'),
+    },
+    {
+      title: 'Consultation',
+      date: new Date('2024-07-22T10:00:00'),
+    },
   ];
-
   return (
     <>
       <PatientHead
