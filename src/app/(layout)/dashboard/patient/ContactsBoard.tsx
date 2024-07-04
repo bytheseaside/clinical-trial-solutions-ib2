@@ -16,12 +16,17 @@ type Props = {
 
 const ContactsBoard: React.FC<Props> = ({ staff, sx = [] }) => (
   <Container
-    sx={sx}
+    sx={[
+      {
+        mt: 2,
+      },
+      ...(Array.isArray(sx) ? sx : [sx]),
+    ]}
   >
     <Typography
       color="text.primary"
       component="h2"
-      sx={{ typography: { xxs: 'h4', sm: 'h3' } }}
+      sx={{ typography: { xxs: 'h4', sm: 'h3' }, mb: 2 }}
     >
       Contact us
     </Typography>
@@ -30,7 +35,7 @@ const ContactsBoard: React.FC<Props> = ({ staff, sx = [] }) => (
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'center',
-        mt: 2,
+        gap: 2,
       }}
     >
       {staff.map(({ name, specialty, phone }) => (
@@ -42,15 +47,15 @@ const ContactsBoard: React.FC<Props> = ({ staff, sx = [] }) => (
           rel="noopener noreferrer"
           sx={{
             backgroundColor: 'background.paper',
-            p: 2,
-            m: 2,
-            width: { xxs: '100%', xs: 300 },
+            px: 2,
+            py: 3,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: 2,
+            alignItems: 'flex-start',
+            borderRadius: 1,
             boxShadow: 3,
+            width: { xxs: '100%', sm: '40%', md: '30%' },
             transition: 'transform 0.3s, box-shadow 0.3s',
             textDecoration: 'none',
             color: 'text.primary',
@@ -62,7 +67,8 @@ const ContactsBoard: React.FC<Props> = ({ staff, sx = [] }) => (
           }}
         >
           <Typography
-            variant="lead"
+            variant="h6"
+            color="text.secondary"
             sx={{
               mb: 1,
               pb: 1,
@@ -70,16 +76,26 @@ const ContactsBoard: React.FC<Props> = ({ staff, sx = [] }) => (
               borderColor: 'primary.main',
               display: 'flex',
               alignItems: 'center',
+              width: '100%',
             }}
           >
             <MedicalInformationIcon
               color="primary"
               sx={{ mr: 1 }}
             />
+            {specialty}
+          </Typography>
+          <Typography
+            variant="body1"
+            color="text.primary"
+            sx={{ mb: 1, typography: { xxs: 'captionSmall', sm: 'caption' } }}
+          >
             {name}
           </Typography>
-          <Typography variant="caption">{specialty}</Typography>
-          <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography
+            variant="body2"
+            sx={{ display: 'flex', alignItems: 'center' }}
+          >
             <WhatsAppIcon sx={{ mr: 1 }} />
             {phone}
           </Typography>
