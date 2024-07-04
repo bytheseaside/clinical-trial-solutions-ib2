@@ -2,10 +2,7 @@ import React from 'react';
 
 import ContactsBoard from './ContactsBoard';
 
-type Props = {
-};
-
-export default async function PatientDashboard({ }: Props) {
+export default async function PatientDashboard() {
   const doctors = [
     { name: 'Dr. John Smith', specialty: 'Cardiology', phone: '555-1234' },
     { name: 'Dr. Emily Davis', specialty: 'Neurology', phone: '555-5678' },
