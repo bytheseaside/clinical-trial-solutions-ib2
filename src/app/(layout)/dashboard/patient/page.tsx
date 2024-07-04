@@ -1,5 +1,6 @@
 import React from 'react';
 
+import AppointmentsSection from './AppointmentCalendar';
 import ContactsBoard from './ContactsBoard';
 import PatientHead from './PatientHead';
 import TrialProgress from './TrialProgress';
@@ -23,6 +24,14 @@ export default async function PatientDashboard() {
     { title: 'Publicación de resultados', status: 'toDo' as const },
   ];
 
+  const appointments = [
+    { date: 4, month: 'July', name: 'Doctor Appointment', hour: '10:00 AM' },
+    { date: 5, month: 'July', name: 'Team Meeting', hour: '02:00 PM' },
+    { date: 6, month: 'July', name: 'Dentist Appointment', hour: '11:30 AM' },
+    { date: 7, month: 'July', name: 'Project Review', hour: '03:00 PM' },
+    { date: 8, month: 'July', name: 'Yoga Class', hour: '06:00 PM' },
+  ];
+
   return (
     <>
       <PatientHead
@@ -32,6 +41,7 @@ export default async function PatientDashboard() {
       <TrialProgress
         steps={steps}
       />
+      <AppointmentsSection appointments={appointments} />
       <ContactsBoard staff={doctors} />
     </>
   );
