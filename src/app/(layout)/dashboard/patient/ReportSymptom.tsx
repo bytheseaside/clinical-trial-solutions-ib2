@@ -46,7 +46,7 @@ const ReportSymptom: React.FC<Props> = ({ symptoms, userId, sx = [] }) => {
       >
         Report new symptom
       </Typography>
-      <Typography variant="caption">
+      <Typography variant="caption" color="text.secondary">
         If you have any symptoms, please fill out this form.
         It&apos;s important to include the start date.
       </Typography>
@@ -57,7 +57,7 @@ const ReportSymptom: React.FC<Props> = ({ symptoms, userId, sx = [] }) => {
           flexDirection: 'column',
           padding: '1rem',
           margin: '1rem auto',
-          my: 2,
+          mt: 2,
         }}
         onSubmit={handleSubmit}
       >

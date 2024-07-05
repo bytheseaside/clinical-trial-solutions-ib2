@@ -40,7 +40,13 @@ const TrialProgress: React.FC<Props> = ({ steps, sx = {} }) => (
     >
       Progress
     </Typography>
-    <Box>
+    <Typography variant="caption" color="text.secondary">
+      Here, you can check which steps you&apos;ve completed and
+      which ones you still need to go through.
+    </Typography>
+    <Box
+      sx={{ mt: 3 }}
+    >
       {steps.map(({ title, status }) => (
         <Box
           key={title + status}

@@ -17,9 +17,6 @@ type Props = {
 const ContactsBoard: React.FC<Props> = ({ staff, sx = [] }) => (
   <Container
     sx={[
-      {
-        mt: 2,
-      },
       ...(Array.isArray(sx) ? sx : [sx]),
     ]}
   >
@@ -30,12 +27,16 @@ const ContactsBoard: React.FC<Props> = ({ staff, sx = [] }) => (
     >
       Contact us
     </Typography>
+    <Typography variant="caption" color="text.secondary">
+      Need to speak with a physician? Here&apos;s their contact info.
+    </Typography>
     <Box
       sx={{
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'center',
         gap: 2,
+        mt: 3,
       }}
     >
       {staff.map(({ name, specialty, phone }) => (

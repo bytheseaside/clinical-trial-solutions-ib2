@@ -23,6 +23,9 @@ const AppointmentsSection: React.FC<Props> = ({ appointments, sx = [] }) => (
     <Typography color="text.primary" sx={{ typography: { xxs: 'h4', sm: 'h3' }, mb: 3 }}>
       Appointments
     </Typography>
+    <Typography variant="caption" color="text.secondary">
+      Check when are you scheduled.
+    </Typography>
     <Box
       sx={{
         display: 'flex',
