@@ -14,23 +14,22 @@ const Footer: React.FC<Props> = ({ sx }) => (
   <Box
     sx={{
       borderTop: '1px solid',
-      borderColor: 'grey.400', // Adjust border color as needed
+      borderColor: 'grey.400',
     }}
   >
     <Container
       component="footer"
-      sx={{
+      sx={[{
         py: 3,
-        color: 'text.secondary', // Adjust text color as needed
+        color: 'text.secondary',
         display: 'flex',
         alignItems: 'center',
         gap: 3,
-        ...sx, // Allow custom styles to override defaults
-      }}
+      },
+      ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
     >
       <BrandLogo sx={{ width: 32, height: 30 }} />
-      {' '}
-      {/* Keep the BrandLogo sizes */}
       <Typography variant="caption" display="block" color="text.secondary">
         Clinical Trial Solutions
       </Typography>
