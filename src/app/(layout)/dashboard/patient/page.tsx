@@ -3,6 +3,7 @@ import React from 'react';
 import AppointmentsSection from './AppointmentCalendar';
 import ContactsBoard from './ContactsBoard';
 import PatientHead from './PatientHead';
+import ReportSymptom from './ReportSymptom';
 import TrialProgress from './TrialProgress';
 
 export default async function PatientDashboard() {
@@ -23,6 +24,9 @@ export default async function PatientDashboard() {
     { title: 'Informe final', status: 'toDo' as const },
     { title: 'Publicación de resultados', status: 'toDo' as const },
   ];
+
+  const symptomsList = ['Fever', 'Cough', 'Headache', 'Fatigue']; // Example symptoms list
+  const userId = '123456789'; // Example user ID
 
   const appointments = [
     {
@@ -55,6 +59,7 @@ export default async function PatientDashboard() {
       <TrialProgress
         steps={steps}
       />
+      <ReportSymptom symptoms={symptomsList} userId={userId} />
       <AppointmentsSection appointments={appointments} />
       <ContactsBoard staff={doctors} />
     </>
