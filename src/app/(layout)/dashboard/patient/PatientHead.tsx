@@ -20,17 +20,15 @@ type Props = {
 const PatientHead: React.FC<Props> = ({ name, trialName, sx = [] }) => (
   <Container
     component="header"
-    sx={[
-      {
-        py: 4,
-        top: 0,
-        color: 'text.primary',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      },
+    sx={{
+      py: 2,
+      borderBottom: '1px solid',
+      borderColor: 'divider',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
       ...(Array.isArray(sx) ? sx : [sx]),
-    ]}
+    }}
   >
     <Box
       sx={{
@@ -44,16 +42,17 @@ const PatientHead: React.FC<Props> = ({ name, trialName, sx = [] }) => (
       <BrandLogo />
       <Box
         sx={{
-          display: 'flex',
+          display: { xxs: 'none', xs: 'flex' },
           flexDirection: 'column',
           alignItems: 'flex-start',
-          gap: '5px',
+          gap: 1,
         }}
       >
         <Typography
           sx={{
             typography: { xxs: 'hSmall', sm: 'hMid' },
             textTransform: 'uppercase',
+            color: 'text.primary',
           }}
           component="h2"
         >
@@ -66,8 +65,11 @@ const PatientHead: React.FC<Props> = ({ name, trialName, sx = [] }) => (
         </Typography>
       </Box>
     </Box>
-    <Button variant="contained" color="secondary" href="/api/auth/logout">
-      <LogoutIcon sx={{ color: 'common.white' }} />
+    <Button variant="contained" color="primary" href="/api/auth/logout">
+      <LogoutIcon sx={{ fontSize: '1.5rem', color: 'common.white', mr: 1 }} />
+      <Typography variant="captionSmall" sx={{ display: { xxs: 'none', xs: 'block' } }}>
+        Logout
+      </Typography>
     </Button>
   </Container>
 );
