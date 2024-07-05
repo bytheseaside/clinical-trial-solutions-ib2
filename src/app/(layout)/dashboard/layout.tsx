@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 
-import { AppRouterPageRoute, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Box from '@mui/material/Box';
 
 function DashboardsLayout({ children }: PropsWithChildren) {
