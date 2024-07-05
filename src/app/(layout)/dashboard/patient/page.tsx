@@ -1,12 +1,14 @@
 import React from 'react';
 
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+
 import AppointmentsSection from './AppointmentCalendar';
 import ContactsBoard from './ContactsBoard';
 import PatientHead from './PatientHead';
 import ReportSymptom from './ReportSymptom';
 import TrialProgress from './TrialProgress';
 
-export default async function PatientDashboard() {
+async function PatientDashboard() {
   const doctors = [
     { name: 'Dr. John Smith', specialty: 'Cardiology', phone: '555-1234' },
     { name: 'Dr. Emily Davis', specialty: 'Neurology', phone: '555-5678' },
@@ -65,3 +67,5 @@ export default async function PatientDashboard() {
     </>
   );
 }
+
+export default withPageAuthRequired(PatientDashboard, { returnTo: '/dashboard' });
