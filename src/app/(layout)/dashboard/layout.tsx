@@ -3,9 +3,7 @@ import { PropsWithChildren } from 'react';
 import { AppRouterPageRoute, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Box from '@mui/material/Box';
 
-interface DashboardsLayoutProps extends AppRouterPageRoute {}
-
-function DashboardsLayout({ children }: DashboardsLayoutProps & PropsWithChildren) {
+function DashboardsLayout({ children }: PropsWithChildren) {
   return (
     <Box
       sx={{
@@ -20,6 +18,6 @@ function DashboardsLayout({ children }: DashboardsLayoutProps & PropsWithChildre
 }
 
 export default withPageAuthRequired(
-  DashboardsLayout as unknown as AppRouterPageRoute,
+  DashboardsLayout,
   { returnTo: '/dashboard' },
 );
