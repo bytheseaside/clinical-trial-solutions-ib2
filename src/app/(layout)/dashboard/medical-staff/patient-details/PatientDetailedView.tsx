@@ -28,6 +28,16 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
   const router = useRouter();
   const [patient, setPatient] = useState<Patient | null>(null);
 
+  useEffect(() => {
+    const patientId = searchParams.get('patient');
+    if (patientId) {
+      const foundPatient = patientList.find((p) => p.id === patientId);
+      if (foundPatient) {
+        setPatient(foundPatient);
+      }
+    }
+  }, [searchParams, patientList]);
+
   return (
     <Container
       sx={[
