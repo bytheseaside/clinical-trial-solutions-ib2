@@ -30,7 +30,9 @@ type ClinicalStudyKeyVariable = 'boolean' | 'threshold' | 'text' | 'number';
 
 type ClinicalStudy = {
   name: string;
-  keyVariables: { name: string; type: ClinicalStudyKeyVariable }[];
+  keyVariables: {
+    value: string | number | boolean; name: string; type: ClinicalStudyKeyVariable;
+  }[];
 };
 
 type ExclusionCriteriaAnswer = {
@@ -73,6 +75,15 @@ type Patient = {
   group?: string;
   observations?: Observation[];
   symptoms?: Symptom[];
+  assesments?: {
+    [key: string]: boolean | number | string;
+  }[];
+};
+
+type KeyVariableSingleValue = {
+  name: string;
+  type: ClinicalStudyKeyVariable;
+  value: boolean | number | string;
 };
 
 type Props = {
@@ -86,6 +97,8 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
   const [patient, setPatient] = useState<Patient | null>(null);
   const [newObservation, setNewObservation] = useState<string>('');
   const [clinicalTrial, setClinicalTrial] = useState<ClinicalTrial | null>(null);
+  const [selectedStudyName, setSelectedStudyName] = useState<string>('');
+  const [keyVariableValues, setKeyVariableValues] = useState<KeyVariableSingleValue[][]>([]);
 
   const handleClear = () => {
     setPatient(null);
@@ -159,6 +172,35 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
       }
     }
   }, [searchParams, patientList]);
+
+  useEffect(() => {
+    if (clinicalTrial && patient) {
+      const auxiliarKeyVariableValues = [];
+
+      for (let i = 0; i < clinicalTrial.studies.length; i += 1) {
+        const expectedAssesments = clinicalTrial.studies[i].keyVariables;
+        if (expectedAssesments) {
+          auxiliarKeyVariableValues.push(expectedAssesments);
+        } else {
+          auxiliarKeyVariableValues.push([]);
+        }
+      }
+
+      const keyVariableMeasuredValues = patient?.assesments;
+      if (keyVariableMeasuredValues) {
+        for (let i = 0; i < keyVariableMeasuredValues.length; i += 1) {
+          for (let j = 0; j < auxiliarKeyVariableValues[i].length; j += 1) {
+            const currentAssesment = auxiliarKeyVariableValues[i][j];
+            const value = keyVariableMeasuredValues[i][currentAssesment.name];
+            if (value) {
+              auxiliarKeyVariableValues[i][j].value = value;
+            }
+          }
+        }
+      }
+      setKeyVariableValues(auxiliarKeyVariableValues);
+    }
+  }, [clinicalTrial, patient]);
 
   return (
     <Container
@@ -335,24 +377,55 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
             </List>
           </Box>
           {/* STUDY ASSESMENT DATA */}
-          <Box>
-            <Typography
-              color="text.primary"
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                mt: 2,
-                typography: { xxs: 'h5', sm: 'h4' },
-              }}
-            >
-              <DataThresholdingIcon fontSize="inherit" color="secondary" />
-              Study Assessment Data
-            </Typography>
-            <List>
-              sddfsa
-            </List>
-          </Box>
+          {clinicalTrial
+           && (
+             <Box>
+               <Typography
+                 color="text.primary"
+                 sx={{
+                   display: 'flex',
+                   alignItems: 'center',
+                   gap: 1,
+                   mt: 2,
+                   typography: { xxs: 'h5', sm: 'h4' },
+                 }}
+               >
+                 <DataThresholdingIcon fontSize="inherit" color="secondary" />
+                 Study Assessment Data
+               </Typography>
+               <TextField
+                 sx={{ my: 1 }}
+                 id="tag"
+                 label="Select a study to assess"
+                 variant="outlined"
+                 required
+                 fullWidth
+                 select
+                 value={selectedStudyName}
+                 size="small"
+                 onChange={(e) => setSelectedStudyName(e.target.value)}
+               >
+                 <MenuItem value="" disabled dense>
+                   Select
+                 </MenuItem>
+                 {Array.isArray(clinicalTrial?.studies)
+                  && clinicalTrial?.studies.map(({ name }) => (
+                    <MenuItem
+                      key={name + clinicalTrial.id}
+                      value={name}
+                      dense
+                    >
+                      {name}
+                    </MenuItem>
+                  ))}
+               </TextField>
+               {selectedStudyName && keyVariableValues && (
+                 <List>
+                   hello
+                 </List>
+               )}
+             </Box>
+           )}
         </Box>
       )}
     </Container>
