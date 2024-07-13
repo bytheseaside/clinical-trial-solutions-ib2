@@ -7,7 +7,8 @@ import { withPageAuthRequired } from '@auth0/nextjs-auth0/client';
 function Dashboard() {
   return (
     <>
-      General dashboard, then we have to redirect people to the correct dashboard
+      General dashboard.  Later we have to redirect people to the correct dashboard
+      after checking their role.
     </>
   );
 }
