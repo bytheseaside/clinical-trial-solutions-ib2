@@ -3,12 +3,12 @@
 import React, { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import { SxProps, Theme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import Container from 'shared/layout/Container';
 
@@ -44,7 +44,6 @@ const AppointmentsToday: React.FC<Props> = ({
 }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const pathname = usePathname();
 
   const [selectedTrial, setSelectedTrial] = useState<string>(searchParams.get('trial') || '');
   const [selectedStudy, setSelectedStudy] = useState<string>(searchParams.get('study') || '');
@@ -62,7 +61,7 @@ const AppointmentsToday: React.FC<Props> = ({
       params.delete('trial');
       params.delete('study');
     }
-    router.replace(`${pathname}?${params.toString()}`);
+    router.replace(`/dashboard/medical-staff?${params.toString()}`);
   }, [selectedTrial, selectedStudy]);
 
   const handleTrialChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,14 +73,27 @@ const AppointmentsToday: React.FC<Props> = ({
     setSelectedStudy(event.target.value);
   };
 
-  const handleViewDetails = (personId: string) => {
-    const params = new URLSearchParams(window.location.search);
-    params.set('patient', personId);
-    router.replace(`${pathname}?${params.toString()}`);
+  const handleViewDetails = (patientId: string) => {
+    const params = new URLSearchParams();
+    params.set('patient', patientId);
+    router.push(`/dashboard/medical-staff/patient-details?${params.toString()}`);
   };
 
   return (
-    <Container sx={sx}>
+    <Container sx={[
+      {
+        mt: -10,
+      },
+      ...(Array.isArray(sx) ? sx : [sx]),
+    ]}
+    >
+      <Box
+        component={Link}
+        sx={{ typography: 'caption', mb: 10, display: 'block' }}
+        href="/dashboard/medical-staff/patient-details"
+      >
+        See patient&apos;s details
+      </Box>
       <Box sx={{ mb: 4 }}>
         <Typography
           color="text.primary"
@@ -146,46 +158,85 @@ const AppointmentsToday: React.FC<Props> = ({
       </Box>
       {selectedTrial && selectedStudy && (
         <Box sx={{ mb: 4 }}>
-          <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
+          <Typography
+            variant="caption"
+            component="h2"
+            color="text.primary"
+          >
             Appointments for Selected Study
           </Typography>
-          { Array.isArray(peopleWithAppointmentsToday)
+          {Array.isArray(peopleWithAppointmentsToday)
             && peopleWithAppointmentsToday.length > 0 ? (
-              peopleWithAppointmentsToday.map((person) => (
-                <Box
-                  key={person.id}
-                  sx={{
-                    mb: 4,
-                    p: 3,
-                    boxShadow: 1,
-                    borderRadius: 2,
-                    backgroundColor: '#fff',
-                  }}
-                >
-                  <Typography variant="body1">
-                    Name:
-                    {' '}
-                    {person.name}
-                  </Typography>
-                  <Typography variant="body1">
-                    Hour:
-                    {' '}
-                    {person.hour}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    sx={{ mt: 2 }}
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  justifyContent: 'center',
+                  gap: 2,
+                  py: 3,
+                  maxHeight: '50vh',
+                  overflowY: 'scroll',
+                }}
+              >
+                {peopleWithAppointmentsToday.map((person) => (
+                  <Box
+                    key={person.id}
                     onClick={() => handleViewDetails(person.id)}
+                    sx={{
+                      backgroundColor: 'background.paper',
+                      px: 2,
+                      py: 3,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'flex-start',
+                      borderRadius: 1,
+                      boxShadow: 3,
+                      width: { xxs: '100%', sm: '40%', md: '30%' },
+                      transition: 'transform 0.3s, box-shadow 0.3s',
+                      textDecoration: 'none',
+                      color: 'text.primary',
+                      '&:hover': {
+                        transform: 'scale(1.05)',
+                        boxShadow: 6,
+                        textDecoration: 'none',
+                      },
+                    }}
                   >
-                    View Details
-                  </Button>
-                </Box>
-              ))
+                    <Typography
+                      variant="h6"
+                      color="text.secondary"
+                      sx={{
+                        mb: 1,
+                        pb: 1,
+                        borderBottom: '1px solid',
+                        borderColor: 'primary.main',
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: '100%',
+                      }}
+                    >
+                      Today at
+                      {' '}
+                      {person.hour}
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      color="text.primary"
+                      sx={{ mb: 1, typography: { xxs: 'captionSmall', sm: 'caption' } }}
+                    >
+                      {person.name}
+
+                    </Typography>
+                  </Box>
+                ))}
+              </Box>
             ) : (
               <Typography variant="body1">
                 No appointments today.
               </Typography>
             )}
+
         </Box>
       )}
     </Container>

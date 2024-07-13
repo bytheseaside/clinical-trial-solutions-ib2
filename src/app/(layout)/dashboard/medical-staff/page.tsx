@@ -1,8 +1,10 @@
-'use server';
-
 import React from 'react';
 
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import Box from '@mui/material/Box';
+import Link from 'next/link';
+
+import Container from 'shared/layout/Container';
 
 import AppoinmentsToday from './AppointmentsToday';
 import MedicalStaffHead from './MedicalStaffHead';
@@ -22,7 +24,7 @@ async function MedicalStaffDashboard() {
     { id: '3-1', name: 'Study C1', trialId: '3' },
     { id: '3-2', name: 'Study C2', trialId: '3' },
   ];
-  const mockPeopleWithAppointmentsToday: PersonWithAppointment[] = [
+  const mockPeopleWithAppointmentsToday = [
     {
       id: 'p1',
       name: 'Alice Johnson',
@@ -47,6 +49,16 @@ async function MedicalStaffDashboard() {
       id: 'p5',
       name: 'Evelyn Adams',
       hour: '04:00 PM',
+    },
+    {
+      id: 'p6',
+      name: 'Franklin Roosevelt',
+      hour: '05:30 PM',
+    },
+    {
+      id: 'p7',
+      name: 'Gina Rodriguez',
+      hour: '07:00  PM',
     },
   ];
 
