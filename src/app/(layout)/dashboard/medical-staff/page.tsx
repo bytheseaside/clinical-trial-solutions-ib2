@@ -11,7 +11,6 @@ async function MedicalStaffDashboard() {
     { id: '2', name: 'Trial B' },
     { id: '3', name: 'Trial C' },
   ];
-
   const studies = [
     { id: '1-1', name: 'Study A1', trialId: '1' },
     { id: '1-2', name: 'Study A2', trialId: '1' },
