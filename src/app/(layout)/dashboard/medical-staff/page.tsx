@@ -1,10 +1,6 @@
 import React from 'react';
 
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
-import Box from '@mui/material/Box';
-import Link from 'next/link';
-
-import Container from 'shared/layout/Container';
 
 import AppoinmentsToday from './AppointmentsToday';
 import MedicalStaffHead from './MedicalStaffHead';
