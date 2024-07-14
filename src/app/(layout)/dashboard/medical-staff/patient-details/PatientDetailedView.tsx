@@ -22,61 +22,8 @@ import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+import { ClinicalStudyKeyVariable, ClinicalTrial, Patient } from 'shared/api';
 import Container from 'shared/layout/Container';
-
-type ClinicalStudyKeyVariable = 'boolean' | 'threshold' | 'text' | 'number';
-
-type ClinicalStudy = {
-  name: string;
-  keyVariables: {
-    value: string | number | boolean; name: string; type: ClinicalStudyKeyVariable;
-  }[];
-};
-
-type ExclusionCriteriaAnswer = {
-  answer: string;
-  shouldBeExcludedFromTrial: boolean;
-};
-
-type ExclusionCriteria = {
-  question: string;
-  answers: ExclusionCriteriaAnswer[];
-};
-
-type ClinicalTrial = {
-  id: string;
-  name: string;
-  studies: ClinicalStudy[];
-  groups?: string[];
-  knownPossibleSecondaryEffects?: string[];
-  exclusionCriteria?: ExclusionCriteria[];
-};
-
-type Observation = {
-  date: Date;
-  text: string;
-};
-
-type Symptom = {
-  startDate: Date;
-  comments: string;
-  tag: string;
-};
-
-type Patient = {
-  name: string;
-  surname: string;
-  age: number;
-  sex: string;
-  id: string;
-  trialId: string;
-  group?: string;
-  observations?: Observation[];
-  symptoms?: Symptom[];
-  assesments?: {
-    [key: string]: boolean | number | string;
-  }[];
-};
 
 type KeyVariableSingleValue = {
   name: string;

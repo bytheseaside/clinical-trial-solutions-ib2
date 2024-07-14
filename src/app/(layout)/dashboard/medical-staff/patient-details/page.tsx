@@ -4,18 +4,23 @@ import React from 'react';
 
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
+import { Patient } from 'shared/api';
+
 import PatientDetailedView from './PatientDetailedView';
 import MedicalStaffHead from '../MedicalStaffHead';
 
 async function PatientDetailsPage() {
   const mockPatientList = [
-  // Surname starts with 'A'
     {
-      id: '1',
+      usertype: 'patient',
+      mail: 'aaron.anderson@example.com',
       name: 'Aaron',
       surname: 'Anderson',
+      dni: '12345678',
+      birthDate: new Date('1996-01-15'),
       age: 28,
-      sex: 'Male',
+      sex: 'M',
+      id: '1',
       trialId: 'T001',
       group: 'A',
       observations: [
@@ -28,11 +33,15 @@ async function PatientDetailsPage() {
       ],
     },
     {
-      id: '2',
+      usertype: 'patient',
+      mail: 'alice.andrews@example.com',
       name: 'Alice',
       surname: 'Andrews',
+      dni: '87654321',
+      birthDate: new Date('1992-03-22'),
       age: 32,
-      sex: 'Female',
+      sex: 'F',
+      id: '2',
       trialId: 'T002',
       group: 'A',
       observations: [
@@ -45,11 +54,15 @@ async function PatientDetailsPage() {
       ],
     },
     {
-      id: '3',
+      usertype: 'patient',
+      mail: 'adam.archer@example.com',
       name: 'Adam',
       surname: 'Archer',
+      dni: '11223344',
+      birthDate: new Date('1979-05-15'),
       age: 45,
-      sex: 'Male',
+      sex: 'M',
+      id: '3',
       trialId: 'T003',
       group: 'B',
       observations: [
@@ -61,14 +74,16 @@ async function PatientDetailsPage() {
         { startDate: new Date('2024-02-10'), comments: 'Pain level decreased.', tag: 'Chest Pain' },
       ],
     },
-
-    // Surname starts with 'B'
     {
-      id: '4',
+      usertype: 'patient',
+      mail: 'ben.brown@example.com',
       name: 'Ben',
       surname: 'Brown',
+      dni: '55667788',
+      birthDate: new Date('1990-07-20'),
       age: 34,
-      sex: 'Male',
+      sex: 'M',
+      id: '4',
       trialId: 'T004',
       group: 'B',
       observations: [
@@ -81,11 +96,15 @@ async function PatientDetailsPage() {
       ],
     },
     {
-      id: '5',
+      usertype: 'patient',
+      mail: 'bella.bennett@example.com',
       name: 'Bella',
       surname: 'Bennett',
+      dni: '33445566',
+      birthDate: new Date('1984-08-30'),
       age: 40,
-      sex: 'Female',
+      sex: 'F',
+      id: '5',
       trialId: 'T005',
       group: 'B',
       observations: [
@@ -98,11 +117,15 @@ async function PatientDetailsPage() {
       ],
     },
     {
-      id: '6',
+      usertype: 'patient',
+      mail: 'billy.bailey@example.com',
       name: 'Billy',
       surname: 'Bailey',
+      dni: '99887766',
+      birthDate: new Date('1995-12-25'),
       age: 29,
-      sex: 'Male',
+      sex: 'M',
+      id: '6',
       trialId: 'T006',
       group: 'C',
       observations: [
@@ -114,14 +137,16 @@ async function PatientDetailsPage() {
         { startDate: new Date('2024-03-20'), comments: 'Pain has reduced.', tag: 'Back Pain' },
       ],
     },
-
-    // Surname starts with 'C'
     {
-      id: '7',
+      usertype: 'patient',
+      mail: 'charles.clark@example.com',
       name: 'Charles',
       surname: 'Clark',
+      dni: '55443322',
+      birthDate: new Date('1969-11-10'),
       age: 55,
-      sex: 'Male',
+      sex: 'M',
+      id: '7',
       trialId: 'T007',
       group: 'C',
       observations: [
@@ -134,11 +159,15 @@ async function PatientDetailsPage() {
       ],
     },
     {
-      id: '8',
+      usertype: 'patient',
+      mail: 'catherine.collins@example.com',
       name: 'Catherine',
       surname: 'Collins',
+      dni: '44332211',
+      birthDate: new Date('1982-05-18'),
       age: 42,
-      sex: 'Female',
+      sex: 'F',
+      id: '8',
       trialId: 'T008',
       group: 'C',
       observations: [
@@ -151,11 +180,15 @@ async function PatientDetailsPage() {
       ],
     },
     {
-      id: '9',
+      usertype: 'patient',
+      mail: 'carol.cook@example.com',
       name: 'Carol',
       surname: 'Cook',
+      dni: '66778899',
+      birthDate: new Date('1987-09-22'),
       age: 37,
-      sex: 'Female',
+      sex: 'F',
+      id: '9',
       trialId: 'T009',
       group: 'D',
       observations: [
@@ -167,14 +200,16 @@ async function PatientDetailsPage() {
         { startDate: new Date('2024-02-20'), comments: 'Fatigue has reduced.', tag: 'Fatigue' },
       ],
     },
-
-    // Surname starts with 'D'
     {
-      id: '10',
+      usertype: 'patient',
+      mail: 'daniel.davis@example.com',
       name: 'Daniel',
       surname: 'Davis',
+      dni: '11224466',
+      birthDate: new Date('1985-04-12'),
       age: 39,
-      sex: 'Male',
+      sex: 'M',
+      id: '10',
       trialId: 'T010',
       group: 'D',
       observations: [
@@ -182,95 +217,8 @@ async function PatientDetailsPage() {
         { date: new Date('2024-04-05'), text: 'No major concerns.' },
       ],
       symptoms: [
-        { startDate: new Date('2024-01-20'), comments: 'Slight abdominal pain.', tag: 'Abdominal Pain' },
-        { startDate: new Date('2024-03-15'), comments: 'Pain subsided.', tag: 'Abdominal Pain' },
-      ],
-    },
-    {
-      id: '11',
-      name: 'Diana',
-      surname: 'Dixon',
-      age: 33,
-      sex: 'Female',
-      trialId: 'T011',
-      group: 'D',
-      observations: [
-        { date: new Date('2024-01-10'), text: 'Initial examination notes.' },
-        { date: new Date('2024-03-20'), text: 'Patient feeling better.' },
-      ],
-      symptoms: [
-        { startDate: new Date('2024-01-05'), comments: 'Nausea and dizziness.', tag: 'Nausea' },
-        { startDate: new Date('2024-02-20'), comments: 'Symptoms have lessened.', tag: 'Nausea' },
-      ],
-    },
-    {
-      id: '12',
-      name: 'Deborah',
-      surname: 'Douglas',
-      age: 49,
-      sex: 'Female',
-      trialId: 'T012',
-      group: 'E',
-      observations: [
-        { date: new Date('2024-01-15'), text: 'Patient reports joint stiffness.' },
-        { date: new Date('2024-03-30'), text: 'Stiffness lessening with treatment.' },
-      ],
-      symptoms: [
-        { startDate: new Date('2024-01-10'), comments: 'Stiffness in joints.', tag: 'Joint Stiffness' },
-        { startDate: new Date('2024-02-15'), comments: 'Stiffness has reduced.', tag: 'Joint Stiffness' },
-      ],
-    },
-
-    // Surname starts with 'E'
-    {
-      id: '13',
-      name: 'Edward',
-      surname: 'Evans',
-      age: 45,
-      sex: 'Male',
-      trialId: 'T013',
-      group: 'E',
-      observations: [
-        { date: new Date('2024-02-05'), text: 'Check-up shows improvement in condition.' },
-        { date: new Date('2024-04-15'), text: 'Overall health stable.' },
-      ],
-      symptoms: [
-        { startDate: new Date('2024-01-15'), comments: 'Occasional headaches.', tag: 'Headache' },
-        { startDate: new Date('2024-03-15'), comments: 'Headaches have become less frequent.', tag: 'Headache' },
-      ],
-    },
-    {
-      id: '14',
-      name: 'Emma',
-      surname: 'Ellis',
-      age: 31,
-      sex: 'Female',
-      trialId: 'T014',
-      group: 'E',
-      observations: [
-        { date: new Date('2024-03-01'), text: 'Patient experiencing mild anxiety.' },
-        { date: new Date('2024-05-10'), text: 'Anxiety levels improving with therapy.' },
-      ],
-      symptoms: [
-        { startDate: new Date('2024-02-01'), comments: 'Mild anxiety symptoms.', tag: 'Anxiety' },
-        { startDate: new Date('2024-04-01'), comments: 'Anxiety has lessened.', tag: 'Anxiety' },
-      ],
-    },
-    {
-      id: '15',
-      name: 'Eve',
-      surname: 'Edwards',
-      age: 29,
-      sex: 'Female',
-      trialId: 'T015',
-      group: 'F',
-      observations: [
-        { date: new Date('2024-01-20'), text: 'Patient reports frequent headaches.' },
-        { date: new Date('2024-03-25'), text: 'Headache frequency has decreased.' },
-      ],
-      symptoms: [
-        { startDate: new Date('2024-01-10'), comments: 'Frequent headaches.', tag: 'Headache' },
-        { startDate: new Date('2024-02-10'), comments: 'Headaches are less frequent.', tag: 'Headache' },
+        { startDate: new Date('2024-01-25'), comments: 'Minor joint pain.', tag: 'Joint Pain' },
+        { startDate: new Date('2024-03-05'), comments: 'Joint pain resolved.', tag: 'Joint Pain' },
       ],
     },
   ];
@@ -278,7 +226,8 @@ async function PatientDetailsPage() {
   return (
     <>
       <MedicalStaffHead name="some name" trialName="ajbskd" />
-      <PatientDetailedView patientList={mockPatientList} />
+      {/* // @ts-expect-error const as atring */}
+      <PatientDetailedView patientList={mockPatientList as Patient[]} />
     </>
   );
 }
