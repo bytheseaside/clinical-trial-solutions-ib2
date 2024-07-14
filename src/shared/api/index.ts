@@ -33,7 +33,8 @@ export type ClinicalStudyKeyVariable = 'boolean' | 'threshold' | 'text' | 'numbe
 export type ClinicalStudy = {
   name: string;
   keyVariables: {
-    value: string | number | boolean; name: string; type: ClinicalStudyKeyVariable;
+    name: string;
+    type: ClinicalStudyKeyVariable;
   }[];
 };
 
