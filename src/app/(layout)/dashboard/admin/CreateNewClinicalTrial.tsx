@@ -30,6 +30,7 @@ const BASE_TRIAL = {
 
 const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
   const [trial, setTrial] = useState<ClinicalTrial>(BASE_TRIAL);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errorID, setErrorID] = useState(false);
 
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
@@ -37,6 +38,7 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
     // eslint-disable-next-line no-console
     console.log(trial);
   };
+
   return (
     <Container
       component="header"
