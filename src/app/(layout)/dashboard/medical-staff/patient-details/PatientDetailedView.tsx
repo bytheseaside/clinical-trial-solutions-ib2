@@ -7,13 +7,10 @@ import ClearIcon from '@mui/icons-material/Clear';
 import CoronavirusIcon from '@mui/icons-material/Coronavirus';
 import DataThresholdingIcon from '@mui/icons-material/DataThresholding';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
-import Person4Icon from '@mui/icons-material/Person4';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -22,6 +19,7 @@ import Select from '@mui/material/Select';
 import { SxProps, Theme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import Container from 'shared/layout/Container';
@@ -220,17 +218,23 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
     <Container
       sx={[
         {
-          py: 3,
+          mt: -10,
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
+      <Box
+        component={Link}
+        sx={{ typography: 'caption', mb: 10, display: 'block' }}
+        href="/dashboard/medical-staff"
+      >
+        See today&apos;s appointments
+      </Box>
       <Autocomplete
         isOptionEqualToValue={(option, value) => option.id === value.id}
         options={patientList.sort((a, b) => a.name.localeCompare(b.name))}
         getOptionLabel={(pat) => `${pat.surname}, ${pat.name}`}
         sx={{
-          mt: -10,
           mb: 4,
         }}
         groupBy={({ surname }) => surname.charAt(0)}
