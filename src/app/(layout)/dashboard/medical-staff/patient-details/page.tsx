@@ -225,7 +225,7 @@ async function PatientDetailsPage() {
 
   return (
     <>
-      <MedicalStaffHead name="some name" trialName="ajbskd" />
+      <MedicalStaffHead name="some name" trialName="hola que tal" />
       <PatientDetailedView patientList={mockPatientList as Patient[]} />
     </>
   );

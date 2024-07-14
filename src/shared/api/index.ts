@@ -38,14 +38,9 @@ export type ClinicalStudy = {
   }[];
 };
 
-export type ExclusionCriteriaAnswer = {
-  answer: boolean;
-  shouldBeExcludedFromTrial: boolean;
-};
-
 export type ExclusionCriteria = {
   question: string;
-  answers: ExclusionCriteriaAnswer[];
+  answerToExclude: boolean;
 };
 
 export type ClinicalTrial = {
