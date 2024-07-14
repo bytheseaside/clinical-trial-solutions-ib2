@@ -39,7 +39,7 @@ export type ClinicalStudy = {
 };
 
 export type ExclusionCriteriaAnswer = {
-  answer: string;
+  answer: boolean;
   shouldBeExcludedFromTrial: boolean;
 };
 
