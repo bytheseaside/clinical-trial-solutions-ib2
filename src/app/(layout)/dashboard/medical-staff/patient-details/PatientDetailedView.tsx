@@ -177,12 +177,26 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
       >
         See today&apos;s appointments
       </Box>
+      <Typography
+        color="text.primary"
+        sx={{
+          typography: { xxs: 'h4', sm: 'h3' },
+          mb: 3,
+        }}
+      >
+        Patient Detailed View
+      </Typography>
+      <Typography variant="caption" color="text.secondary">
+        Select a patient to see their clinical history.
+      </Typography>
       <Autocomplete
         isOptionEqualToValue={(option, value) => option.id === value.id}
         options={patientList.sort((a, b) => a.name.localeCompare(b.name))}
         getOptionLabel={(pat) => `${pat.surname}, ${pat.name}`}
         sx={{
           mb: 4,
+          mt: { xxs: 2, sm: 4 },
+
         }}
         groupBy={({ surname }) => surname.charAt(0)}
         blurOnSelect

@@ -226,7 +226,6 @@ async function PatientDetailsPage() {
   return (
     <>
       <MedicalStaffHead name="some name" trialName="ajbskd" />
-      {/* // @ts-expect-error const as atring */}
       <PatientDetailedView patientList={mockPatientList as Patient[]} />
     </>
   );
