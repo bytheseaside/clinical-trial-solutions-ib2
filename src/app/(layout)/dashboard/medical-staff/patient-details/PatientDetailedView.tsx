@@ -113,15 +113,15 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
             {
               question: 'Question A',
               answers: [
-                { answer: 'Answer A', shouldBeExcludedFromTrial: true },
-                { answer: 'Answer B', shouldBeExcludedFromTrial: false },
+                { answer: true, shouldBeExcludedFromTrial: true },
+                { answer: false, shouldBeExcludedFromTrial: false },
               ],
             },
             {
               question: 'Question B',
               answers: [
-                { answer: 'Answer C', shouldBeExcludedFromTrial: true },
-                { answer: 'Answer D', shouldBeExcludedFromTrial: false },
+                { answer: true, shouldBeExcludedFromTrial: true },
+                { answer: false, shouldBeExcludedFromTrial: false },
               ],
             },
           ],
