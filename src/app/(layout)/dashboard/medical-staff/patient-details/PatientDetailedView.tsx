@@ -28,7 +28,7 @@ import Container from 'shared/layout/Container';
 type KeyVariableSingleValue = {
   name: string;
   type: ClinicalStudyKeyVariable;
-  value: boolean | number | string;
+  value?: boolean | number | string;
 };
 
 type Props = {
@@ -134,7 +134,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
 
   useEffect(() => {
     if (clinicalTrial && patient) {
-      const auxiliarKeyVariableValues = [];
+      const auxiliarKeyVariableValues: KeyVariableSingleValue[][] = [];
 
       for (let i = 0; i < clinicalTrial.studies.length; i += 1) {
         const expectedAssesments = clinicalTrial.studies[i].keyVariables;
