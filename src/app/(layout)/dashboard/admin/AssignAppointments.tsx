@@ -2,18 +2,13 @@
 
 import React, { useEffect, useState } from 'react';
 
-import { set } from '@auth0/nextjs-auth0/dist/session';
 import ClearIcon from '@mui/icons-material/Clear';
 import LabelImportantIcon from '@mui/icons-material/LabelImportant';
-import { Menu } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import { SxProps, Theme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -42,16 +37,10 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [newAppointment, setNewAppointment] = useState<Appointment>(BASE_APPOINTMENT);
   const [patientTrial, setPatientTrial] = useState<ClinicalTrial | null>(null);
-  const [error, setError] = useState<boolean>(false);
 
   const onSubmitHandler = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     // on submit, check if theres a new appointment complete and valid
-    if (!newAppointment.date || !newAppointment.study.name) {
-      setError(true);
-      return;
-    }
-    setError(false);
     // TODO: add new appointment to patient in DB
     console.log('New appointment:', newAppointment);
   };
