@@ -7,10 +7,11 @@ import Box from '@mui/material/Box';
 import { SxProps, Theme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
+import { Appointment } from 'shared/api';
 import Container from 'shared/layout/Container';
 
 type Props = {
-  steps: { title: string; status: 'toDo' | 'inProgress' | 'done' }[];
+  steps: Appointment[];
   sx?: SxProps<Theme>;
 };
 
@@ -26,7 +27,22 @@ const getStatusText = (status: 'toDo' | 'inProgress' | 'done'): string => {
       return '';
   }
 };
+const getStatusFromDate = (date: Date): 'toDo' | 'inProgress' | 'done' => {
+  const now = new Date();
 
+  const yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 1);
+  const tomorrow = new Date(now);
+  tomorrow.setDate(now.getDate() + 1);
+
+  if (date < yesterday) {
+    return 'done';
+  }
+  if (date > tomorrow) {
+    return 'toDo';
+  }
+  return 'inProgress';
+};
 const TrialProgress: React.FC<Props> = ({ steps, sx = {} }) => (
   <Container
     component="header"
@@ -47,9 +63,9 @@ const TrialProgress: React.FC<Props> = ({ steps, sx = {} }) => (
     <Box
       sx={{ mt: 3 }}
     >
-      {steps.map(({ title, status }) => (
+      {steps.map(({ study, date }) => (
         <Box
-          key={title + status}
+          key={study.name + date.toISOString()}
           sx={{
             display: 'flex',
             alignItems: 'center',
@@ -58,7 +74,7 @@ const TrialProgress: React.FC<Props> = ({ steps, sx = {} }) => (
             mt: 2,
             borderRadius: 1,
             borderLeft: '6px solid',
-            borderColor: status === 'toDo' ? 'error.main' : status === 'inProgress' ? 'warning.main' : 'success.main',
+            borderColor: getStatusFromDate(date) === 'toDo' ? 'error.main' : getStatusFromDate(date) === 'inProgress' ? 'warning.main' : 'success.main',
             boxShadow: 4,
           }}
         >
@@ -67,16 +83,16 @@ const TrialProgress: React.FC<Props> = ({ steps, sx = {} }) => (
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: status === 'toDo' ? 'error.light' : status === 'inProgress' ? 'warning.light' : 'success.light',
+              backgroundColor: getStatusFromDate(date) === 'toDo' ? 'error.light' : getStatusFromDate(date) === 'inProgress' ? 'warning.light' : 'success.light',
               borderRadius: '50%',
               width: '60px',
               height: '60px',
               marginRight: 2,
             }}
           >
-            {status === 'toDo' && <AlarmIcon color="error" sx={{ fontSize: '2.5rem' }} />}
-            {status === 'inProgress' && <HourglassEmptyIcon color="warning" sx={{ fontSize: '2.5rem' }} />}
-            {status === 'done' && <CheckCircleIcon color="success" sx={{ fontSize: '2.5rem' }} />}
+            {getStatusFromDate(date) === 'toDo' && <AlarmIcon color="error" sx={{ fontSize: '2.5rem' }} />}
+            {getStatusFromDate(date) === 'inProgress' && <HourglassEmptyIcon color="warning" sx={{ fontSize: '2.5rem' }} />}
+            {getStatusFromDate(date) === 'done' && <CheckCircleIcon color="success" sx={{ fontSize: '2.5rem' }} />}
           </Box>
           <Box
             sx={{
@@ -96,7 +112,7 @@ const TrialProgress: React.FC<Props> = ({ steps, sx = {} }) => (
                 textOverflow: 'ellipsis',
               }}
             >
-              {title}
+              {study.name}
             </Typography>
             <Typography
               sx={{
@@ -107,7 +123,7 @@ const TrialProgress: React.FC<Props> = ({ steps, sx = {} }) => (
                 textOverflow: 'ellipsis',
               }}
             >
-              {getStatusText(status)}
+              {getStatusText(getStatusFromDate(date))}
             </Typography>
           </Box>
         </Box>

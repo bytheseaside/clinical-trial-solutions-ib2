@@ -2,6 +2,8 @@ import React from 'react';
 
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
+import { Appointment, Patient } from 'shared/api';
+
 import AppointmentsSection from './AppointmentCalendar';
 import ContactsBoard from './ContactsBoard';
 import PatientHead from './PatientHead';
@@ -15,16 +17,6 @@ async function PatientDashboard() {
     { name: 'Dr. Michael Johnson', specialty: 'Orthopedics', phone: '555-8765' },
     { name: 'Dr. Sarah Lee', specialty: 'Pediatrics', phone: '555-4321' },
     { name: 'Dr. David Brown', specialty: 'Dermatology', phone: '555-6789' },
-  ];
-
-  const steps = [
-    { title: 'Registro de pacientes', status: 'done' as const },
-    { title: 'Evaluación inicial', status: 'done' as const },
-    { title: 'Asignación de tratamiento', status: 'inProgress' as const },
-    { title: 'Seguimiento clínico', status: 'toDo' as const },
-    { title: 'Análisis de datos', status: 'toDo' as const },
-    { title: 'Informe final', status: 'toDo' as const },
-    { title: 'Publicación de resultados', status: 'toDo' as const },
   ];
 
   const symptomsList = ['Fever', 'Cough', 'Headache', 'Fatigue']; // Example symptoms list
@@ -52,6 +44,50 @@ async function PatientDashboard() {
       date: new Date('2024-07-22T10:00:00'),
     },
   ];
+
+  const mockClinicalStudies = [
+    {
+      name: 'Study ABC',
+      keyVariables: [
+        { name: 'Blood Pressure', type: 'number' },
+        { name: 'Heart Rate', type: 'number' },
+        { name: 'Patient Feedback', type: 'text' },
+      ],
+    },
+    {
+      name: 'Study XYZ',
+      keyVariables: [
+        { name: 'Cholesterol Level', type: 'number' },
+        { name: 'Glucose Level', type: 'number' },
+        { name: 'Lifestyle Assessment', type: 'text' },
+      ],
+    },
+    {
+      name: 'Study DEF',
+      keyVariables: [
+        { name: 'Body Temperature', type: 'number' },
+        { name: 'Respiratory Rate', type: 'number' },
+        { name: 'Health History', type: 'text' },
+      ],
+    },
+  ];
+
+  // Array of mock appointments
+  const mockAppointments = [
+    {
+      date: new Date('2024-07-20'),
+      study: mockClinicalStudies[0], // Study ABC
+    },
+    {
+      date: new Date('2024-07-14'),
+      study: mockClinicalStudies[1], // Study XYZ
+    },
+    {
+      date: new Date('2024-07-15'),
+      study: mockClinicalStudies[2], // Study DEF
+    },
+  ];
+
   return (
     <>
       <PatientHead
@@ -59,7 +95,7 @@ async function PatientDashboard() {
         trialName="probando 123"
       />
       <TrialProgress
-        steps={steps}
+        steps={mockAppointments as Appointment[]}
       />
       <ReportSymptom symptoms={symptomsList} userId={userId} />
       <AppointmentsSection appointments={appointments} />
