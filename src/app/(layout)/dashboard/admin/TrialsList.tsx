@@ -18,8 +18,6 @@ import Container from 'shared/layout/Container';
 
 const renderIcon = (key: string) => {
   switch (key) {
-    case 'medicalStaff':
-      return <LocalHospital color="secondary" sx={{ mr: 1 }} />;
     case 'analyst':
       return <AssignmentInd color="secondary" sx={{ mr: 1 }} />;
     default:
@@ -29,8 +27,6 @@ const renderIcon = (key: string) => {
 
 const renderLabel = (key: string) => {
   switch (key) {
-    case 'medicalStaff':
-      return 'Medical Staff';
     case 'analyst':
       return 'Analyst';
     default:
@@ -39,10 +35,11 @@ const renderLabel = (key: string) => {
 };
 type Props = {
   trials: ClinicalTrial[];
+  medicalStaffCode: string;
   sx?: SxProps<Theme>;
 };
 
-const TrialsList: React.FC<Props> = ({ trials, sx = [] }) => {
+const TrialsList: React.FC<Props> = ({ trials, medicalStaffCode, sx = [] }) => {
   const [expanded, setExpanded] = React.useState<string>('');
 
   const handlePanelChange = (panel: string) =>
@@ -73,6 +70,21 @@ const TrialsList: React.FC<Props> = ({ trials, sx = [] }) => {
         sign up codes to give.
       </Typography>
       <Box>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            mb: 1,
+          }}
+        >
+          <LocalHospital color="secondary" sx={{ mr: 1 }} />
+          {' '}
+          <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+            Medical Staff:
+            {' '}
+            {medicalStaffCode}
+          </Typography>
+        </Box>
         {trials.map((trial) => (
           <Accordion
             key={trial.id}

@@ -350,9 +350,7 @@ async function AdminDashboard() {
       ],
       groups: ['Group 1', 'Group 2', 'Group 3'],
       signUpCodes: {
-        medicalStaff: 'MS-TR4-001',
         analyst: 'AN-TR4-001',
-        'patient-Group 1': 'PT-G1-TR4-001',
         'patient-Group 2': 'PT-G2-TR4-001',
         'patient-Group 3': 'PT-G3-TR4-001',
       },
@@ -373,7 +371,6 @@ async function AdminDashboard() {
       ],
       knownPossibleSecondaryEffects: ['Fatigue'],
       signUpCodes: {
-        medicalStaff: 'MS-TR5-001',
         analyst: 'AN-TR5-001',
         patient: 'PT-TR5-001',
       },
@@ -383,7 +380,7 @@ async function AdminDashboard() {
   return (
     <>
       <AdminHead clinicName="Clinica Monte Grande" />
-      <TrialsList trials={mockClinicalTrials as ClinicalTrial[]} />
+      <TrialsList trials={mockClinicalTrials as ClinicalTrial[]} medicalStaffCode="123455" />
       <ContactInfo trials={mockClinicalTrials as ClinicalTrial[]} />
       <CreateNewClinicalTrial />
       <AssignAppointments patientList={mockPatientList as Patient[]} />
