@@ -246,39 +246,137 @@ async function AdminDashboard() {
       ],
     },
   ];
-  const mockClinicalTrials = [
+  const mockClinicalTrials: ClinicalTrial[] = [
     {
       id: 'trial1',
       name: 'Trial 1',
       studies: [
         {
-          name: 'Study A',
+          name: 'Study A1',
           keyVariables: [
             { name: 'Variable 1', type: 'boolean' },
             { name: 'Variable 2', type: 'number' },
           ],
         },
-      ],
-      groups: ['Group 1', 'Group 2'],
-      knownPossibleSecondaryEffects: ['Nausea', 'Headache'],
-      exclusionCriteria: [
-        { question: 'Are you pregnant?', answerToExclude: true },
-      ],
-    },
-    {
-      id: 'trial2',
-      name: 'Trial 2',
-      studies: [
         {
-          name: 'Study B',
+          name: 'Study B1',
           keyVariables: [
             { name: 'Variable 3', type: 'text' },
             { name: 'Variable 4', type: 'threshold' },
           ],
         },
       ],
+      signUpCodes: {
+        medicalStaff: 'MS-TR1-001',
+        analist: 'AN-TR1-001',
+        patient: 'PT-TR1-001',
+      },
+    },
+    {
+      id: 'trial2',
+      name: 'Trial 2',
+      studies: [
+        {
+          name: 'Study A2',
+          keyVariables: [
+            { name: 'Variable 1', type: 'boolean' },
+            { name: 'Variable 2', type: 'number' },
+          ],
+        },
+        {
+          name: 'Study B2',
+          keyVariables: [
+            { name: 'Variable 3', type: 'text' },
+            { name: 'Variable 4', type: 'threshold' },
+          ],
+        },
+        {
+          name: 'Study C2',
+          keyVariables: [
+            { name: 'Variable 5', type: 'number' },
+            { name: 'Variable 6', type: 'boolean' },
+          ],
+        },
+      ],
+      groups: ['Group 1', 'Group 2'],
+      signUpCodes: {
+        medicalStaff: 'MS-TR2-001',
+        analist: 'AN-TR2-001',
+        'patient-Group 1': 'PT-G1-TR2-001',
+        'patient-Group 2': 'PT-G2-TR2-001',
+      },
+    },
+    {
+      id: 'trial3',
+      name: 'Trial 3',
+      studies: [
+        {
+          name: 'Study A3',
+          keyVariables: [
+            { name: 'Variable 1', type: 'boolean' },
+            { name: 'Variable 2', type: 'number' },
+          ],
+        },
+      ],
+      knownPossibleSecondaryEffects: ['Nausea', 'Headache'],
+      exclusionCriteria: [
+        { question: 'Are you pregnant?', answerToExclude: true },
+      ],
+      signUpCodes: {
+        medicalStaff: 'MS-TR3-001',
+        analist: 'AN-TR3-001',
+        patient: 'PT-TR3-001',
+      },
+    },
+    {
+      id: 'trial4',
+      name: 'Trial 4',
+      studies: [
+        {
+          name: 'Study A4',
+          keyVariables: [
+            { name: 'Variable 1', type: 'boolean' },
+            { name: 'Variable 2', type: 'number' },
+          ],
+        },
+        {
+          name: 'Study B4',
+          keyVariables: [
+            { name: 'Variable 3', type: 'text' },
+            { name: 'Variable 4', type: 'threshold' },
+          ],
+        },
+      ],
+      groups: ['Group 1', 'Group 2', 'Group 3'],
+      signUpCodes: {
+        medicalStaff: 'MS-TR4-001',
+        analist: 'AN-TR4-001',
+        'patient-Group 1': 'PT-G1-TR4-001',
+        'patient-Group 2': 'PT-G2-TR4-001',
+        'patient-Group 3': 'PT-G3-TR4-001',
+      },
+    },
+    {
+      id: 'trial5',
+      name: 'Trial 5',
+      studies: [
+        {
+          name: 'Study A5',
+          keyVariables: [
+            { name: 'Variable 1', type: 'boolean' },
+            { name: 'Variable 2', type: 'number' },
+          ],
+        },
+      ],
+      knownPossibleSecondaryEffects: ['Fatigue'],
+      signUpCodes: {
+        medicalStaff: 'MS-TR5-001',
+        analist: 'AN-TR5-001',
+        patient: 'PT-TR5-001',
+      },
     },
   ];
+
   return (
     <>
       <AdminHead clinicName="Clinica Monte Grande" />

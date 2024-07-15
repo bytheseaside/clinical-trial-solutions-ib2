@@ -3,7 +3,10 @@
 import React from 'react';
 
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
-import { Accordion } from '@mui/material';
+import AssignmentInd from '@mui/icons-material/AssignmentInd';
+import LocalHospital from '@mui/icons-material/LocalHospital';
+import People from '@mui/icons-material/People';
+import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Box from '@mui/material/Box';
@@ -13,6 +16,27 @@ import Typography from '@mui/material/Typography';
 import { ClinicalTrial } from 'shared/api';
 import Container from 'shared/layout/Container';
 
+const renderIcon = (key: string) => {
+  switch (key) {
+    case 'medicalStaff':
+      return <LocalHospital color="secondary" sx={{ mr: 1 }} />;
+    case 'analist':
+      return <AssignmentInd color="secondary" sx={{ mr: 1 }} />;
+    default:
+      return <People color="secondary" sx={{ mr: 1 }} />;
+  }
+};
+
+const renderLabel = (key: string) => {
+  switch (key) {
+    case 'medicalStaff':
+      return 'Medical Staff';
+    case 'analist':
+      return 'Analist';
+    default:
+      return `Patient (${key.split('-')[1] || 'General'})`;
+  }
+};
 type Props = {
   trials: ClinicalTrial[];
   sx?: SxProps<Theme>;
@@ -97,7 +121,25 @@ const TrialsList: React.FC<Props> = ({ trials, sx = [] }) => {
                 borderTop: '1px solid rgba(0, 0, 0, .125)',
               }}
             >
-              aca van los codigos
+              {Object.entries(trial.signUpCodes).map(([key, value]) => (
+                <Box
+                  key={key}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    mb: 1,
+                  }}
+                >
+                  {renderIcon(key)}
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                    {renderLabel(key)}
+                    :
+                  </Typography>
+                  <Typography variant="body2" sx={{ ml: 1 }}>
+                    {value}
+                  </Typography>
+                </Box>
+              ))}
             </AccordionDetails>
           </Accordion>
         ))}
