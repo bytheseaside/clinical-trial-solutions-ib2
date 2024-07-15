@@ -1,6 +1,6 @@
-import { get, ref } from 'firebase/database';
+import { get, getDatabase, push, ref, set, update } from 'firebase/database';
 
-import firebaseDB from './firebaseDB'; // Asegúrate de ajustar la importación según la configuración de tu proyecto
+import firebaseDB from './firebaseDB';
 
 const PatientService = {
   getAllPatients: async () => {
@@ -20,6 +20,20 @@ const PatientService = {
       return []; // Manejo de errores, devuelve una lista vacía en caso de fallo
     }
   },
+  addObservation: async (id, observation) => {
+    const db = getDatabase();
+    const observationRef = ref(
+      db,
+      `/users/${id}/observations`,
+    );
+    try {
+      const newObsKey = push(observationRef, observation).key;
+      observationRef.push(newObsKey);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
 };
 
 export default PatientService;

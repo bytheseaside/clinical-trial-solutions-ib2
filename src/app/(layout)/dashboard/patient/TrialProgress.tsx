@@ -43,6 +43,7 @@ const getStatusFromDate = (date: Date): 'toDo' | 'inProgress' | 'done' => {
   }
   return 'inProgress';
 };
+
 const TrialProgress: React.FC<Props> = ({ steps, sx = {} }) => (
   <Container
     component="header"
@@ -65,7 +66,7 @@ const TrialProgress: React.FC<Props> = ({ steps, sx = {} }) => (
     >
       {steps.map(({ study, date }) => (
         <Box
-          key={study.name + date.toISOString()}
+          key={study.name + new Date(date).toDateString()}
           sx={{
             display: 'flex',
             alignItems: 'center',

@@ -1,82 +1,43 @@
 import React from 'react';
 
-import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { getSession, GetSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import ClinicalTrialService from 'services/firebase/clinicalTrialService';
+import UserService from 'services/firebase/userService';
 
-import { Appointment } from 'shared/api';
+import { Appointment, ClinicalTrial } from 'shared/api';
 
-import AppointmentsSection from './AppointmentCalendar';
+import AppointmentsSection from './AppointmentSection';
 import ContactsBoard from './ContactsBoard';
 import PatientHead from './PatientHead';
 import ReportSymptom from './ReportSymptom';
 import TrialProgress from './TrialProgress';
 
 async function PatientDashboard() {
-  const doctors = [
-    { name: 'Dr. John Smith', specialty: 'Cardiology', phone: '555-1234' },
-    { name: 'Dr. Emily Davis', specialty: 'Neurology', phone: '555-5678' },
-    { name: 'Dr. Michael Johnson', specialty: 'Orthopedics', phone: '555-8765' },
-    { name: 'Dr. Sarah Lee', specialty: 'Pediatrics', phone: '555-4321' },
-    { name: 'Dr. David Brown', specialty: 'Dermatology', phone: '555-6789' },
-  ];
+  const session = await getSession();
 
-  const symptomsList = ['Fever', 'Cough', 'Headache', 'Fatigue']; // Example symptoms list
-  const userId = '123456789'; // Example user ID
+  const userId = session?.user.sub;
+  const patient = await UserService.getUserById(userId);
 
-  const mockClinicalStudies = [
-    {
-      name: 'Study ABC',
-      keyVariables: [
-        { name: 'Blood Pressure', type: 'number' },
-        { name: 'Heart Rate', type: 'number' },
-        { name: 'Patient Feedback', type: 'text' },
-      ],
-    },
-    {
-      name: 'Study XYZ',
-      keyVariables: [
-        { name: 'Cholesterol Level', type: 'number' },
-        { name: 'Glucose Level', type: 'number' },
-        { name: 'Lifestyle Assessment', type: 'text' },
-      ],
-    },
-    {
-      name: 'Study DEF',
-      keyVariables: [
-        { name: 'Body Temperature', type: 'number' },
-        { name: 'Respiratory Rate', type: 'number' },
-        { name: 'Health History', type: 'text' },
-      ],
-    },
-  ];
-
-  // Array of mock appointments
-  const mockAppointments = [
-    {
-      date: new Date('2024-07-20'),
-      study: mockClinicalStudies[0], // Study ABC
-    },
-    {
-      date: new Date('2024-07-14'),
-      study: mockClinicalStudies[1], // Study XYZ
-    },
-    {
-      date: new Date('2024-07-15'),
-      study: mockClinicalStudies[2], // Study DEF
-    },
-  ];
+  const doctors = await ClinicalTrialService.getAllContacts(patient.trialId);
+  console.log('doctors are here', doctors);
+  // eslint-disable-next-line max-len
+  const relatedTrial: ClinicalTrial = await ClinicalTrialService.getClinicalTrialById(patient.trialId);
 
   return (
     <>
       <PatientHead
-        name="BRISA ROJAS"
-        trialName="probando 123"
+        name={`${patient.name} ${patient.surname}`}
+        trialName={relatedTrial.name}
       />
       <TrialProgress
-        steps={mockAppointments as Appointment[]}
+        steps={patient?.appointments || []}
       />
-      <ReportSymptom symptoms={symptomsList} userId={userId} />
-      <AppointmentsSection appointments={mockAppointments as Appointment[]} />
-      <ContactsBoard staff={doctors} />
+      <ReportSymptom
+        symptoms={relatedTrial.knownPossibleSecondaryEffects || []}
+        userId={userId}
+      />
+      <AppointmentsSection appointments={patient?.appointments || []} />
+      {/* <ContactsBoard staff={doctors} /> */}
     </>
   );
 }

@@ -20,7 +20,7 @@ export type Patient = {
   id: string;
   trialId: string;
   group?: string;
-  observations?: Observation[];
+  observations?: { [key: string]: Observation };
   symptoms?: Symptom[];
   assesments?: {
     [key: string]: boolean | number | string;

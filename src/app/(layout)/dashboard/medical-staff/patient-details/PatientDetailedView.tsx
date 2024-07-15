@@ -10,7 +10,6 @@ import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -21,6 +20,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import PatientService from 'services/firebase/patientService';
 
 import { ClinicalStudyKeyVariable, ClinicalTrial, Patient } from 'shared/api';
 import Container from 'shared/layout/Container';
@@ -49,16 +49,40 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
     router.push('/dashboard/medical-staff/patient-details');
   };
 
-  const handleObservationSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleObservationSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (newObservation.trim() !== '') {
-      const observation = { date: new Date(), text: newObservation };
-      console.log('Submitting observation:', observation); // TODO replace with actual call to DB
-      setNewObservation('');
-      const { id } = patient!;
-      const params = new URLSearchParams();
-      params.set('patient', id);
-      router.push(`/dashboard/medical-staff/patient-details?${params.toString()}`);
+      const createdNewObservation = { date: new Date().toISOString(), text: newObservation };
+
+      try {
+        await PatientService.addObservation(patient!.id, createdNewObservation);
+        setNewObservation('');
+
+        const { id } = patient!;
+        const params = new URLSearchParams();
+        params.set('patient', id);
+        router.push(`/dashboard/medical-staff/patient-details?${params.toString()}`);
+        setPatient((prevPatient) => {
+          if (prevPatient !== null) {
+            return {
+              ...prevPatient,
+              observations: {
+                ...prevPatient.observations,
+                [createdNewObservation.date]: createdNewObservation,
+              },
+            };
+          }
+          return prevPatient;
+        });
+      } catch (error) {
+      // Handle any errors that occurred during the observation submission
+        console.error('Failed to add observation:', error);
+      // Optionally, show an error message to the user
+      }
+    } else {
+    // Optionally, handle the case where the observation text is empty
+      console.warn('Observation text cannot be empty');
     }
   };
 
@@ -200,11 +224,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
         renderInput={(params) => (
           <TextField {...params} label="Select a patient" />
         )}
-        clearIcon={(
-          <IconButton onClick={handleClear} color="inherit">
-            <ClearIcon />
-          </IconButton>
-        )}
+        clearIcon={(<ClearIcon onClick={handleClear} color="inherit" />)}
         size="small"
         value={patient}
         onChange={(event, selectedPatient) => {
@@ -238,33 +258,34 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
               Observations
             </Typography>
             <List>
-              {Array.isArray(patient.observations)
-                  && patient.observations.map(({ date, text }) => (
-                    <ListItem
-                      key={date.toISOString()}
-                      sx={{
-                        py: 1,
-                        display: 'flex',
-                        alignItems: 'center',
-                        '&:not(:last-child)': { borderBottom: '1px solid', borderColor: 'divider' },
-                      }}
-                    >
-                      <ListItemText
-                        primary={(
-                          <Typography variant="body2">
-                            <AccessTimeIcon sx={{ mr: 1, color: 'text.secondary' }} />
-                            {date.toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
-                          </Typography>
+              {Array.isArray(Object.values(patient.observations))
+                && Object.values(patient.observations).map(({ date, text }, index) => (
+                  <ListItem
+                      // eslint-disable-next-line react/no-array-index-key
+                    key={text + date + index}
+                    sx={{
+                      py: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      '&:not(:last-child)': { borderBottom: '1px solid', borderColor: 'divider' },
+                    }}
+                  >
+                    <ListItemText
+                      primary={(
+                        <Typography variant="body2">
+                          <AccessTimeIcon sx={{ mr: 1, color: 'text.secondary' }} />
+                          {new Date(date).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
+                        </Typography>
                         )}
-                        secondary={(
-                          <Typography variant="body2" color="textSecondary">
-                            {text}
-                          </Typography>
+                      secondary={(
+                        <Typography variant="body2" color="textSecondary">
+                          {text}
+                        </Typography>
                         )}
-                        sx={{ ml: 1 }}
-                      />
-                    </ListItem>
-                  ))}
+                      sx={{ ml: 1 }}
+                    />
+                  </ListItem>
+                ))}
             </List>
             <Box
               component="form"
@@ -303,54 +324,56 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
             </Box>
           </Box>
           {/* REPORTED SYMPTOMS */}
-          <Box>
-            <Typography
-              color="text.primary"
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                mt: 2,
-                typography: { xxs: 'h5', sm: 'h4' },
-              }}
-            >
-              <CoronavirusIcon fontSize="inherit" color="secondary" />
-              Symptoms
-            </Typography>
-            <List>
-              {Array.isArray(patient.symptoms)
-                  && patient.symptoms.map(({ startDate, comments, tag }) => (
-                    <ListItem
-                      key={startDate.toISOString()}
+          {Array.isArray(patient.symptoms)
+                && patient.symptoms.length > 0 && (
+                  <Box>
+                    <Typography
+                      color="text.primary"
                       sx={{
-                        py: 1,
                         display: 'flex',
                         alignItems: 'center',
-                        '&:not(:last-child)': { borderBottom: '1px solid', borderColor: 'divider' },
+                        gap: 1,
+                        mt: 2,
+                        typography: { xxs: 'h5', sm: 'h4' },
                       }}
                     >
-                      <ListItemText
-                        primary={(
-                          <Typography variant="body2">
-                            <AccessTimeIcon sx={{ mr: 1, color: 'text.secondary' }} />
-                            {tag}
-                            {' '}
-                            (
-                            {startDate.toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
-                            )
-                          </Typography>
+                      <CoronavirusIcon fontSize="inherit" color="secondary" />
+                      Symptoms
+                    </Typography>
+                    <List>
+                      {patient.symptoms.map(({ startDate, comments, tag }) => (
+                        <ListItem
+                          key={startDate.toISOString()}
+                          sx={{
+                            py: 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                            '&:not(:last-child)': { borderBottom: '1px solid', borderColor: 'divider' },
+                          }}
+                        >
+                          <ListItemText
+                            primary={(
+                              <Typography variant="body2">
+                                <AccessTimeIcon sx={{ mr: 1, color: 'text.secondary' }} />
+                                {tag}
+                                {' '}
+                                (
+                                {startDate.toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
+                                )
+                              </Typography>
                         )}
-                        secondary={(
-                          <Typography variant="body2" color="textSecondary">
-                            {comments}
-                          </Typography>
+                            secondary={(
+                              <Typography variant="body2" color="textSecondary">
+                                {comments}
+                              </Typography>
                         )}
-                        sx={{ ml: 1 }}
-                      />
-                    </ListItem>
-                  ))}
-            </List>
-          </Box>
+                            sx={{ ml: 1 }}
+                          />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Box>
+          )}
           {/* STUDY ASSESMENT DATA */}
           {clinicalTrial && keyVariableValues
            && (

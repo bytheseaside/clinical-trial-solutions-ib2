@@ -1,12 +1,30 @@
-import { get, ref, set } from 'firebase/database';
+import { get, getDatabase, ref, set, update } from 'firebase/database';
 
 import firebaseDB from './firebaseDB';
 
 const updateTrialContactInfo = async (trialId, contactInfo) => {
   try {
-    const trialRef = ref(firebaseDB, `/clinical-trials/${trialId}/contacts`);
-    await set(trialRef, contactInfo);
-    console.log('Trial contact info updated successfully');
+    const db = getDatabase();
+    const contactsRef = ref(db, `/clinical-trials/${trialId}/contacts`);
+
+    const snapshot = await get(contactsRef);
+
+    if (snapshot.exists()) {
+      const existingContacts = snapshot.val();
+
+      // Asegúrate de que existingContacts sea un array
+      const updatedContacts = Array.isArray(existingContacts)
+        ? [...existingContacts, contactInfo] : [contactInfo];
+
+      await set(contactsRef, updatedContacts); // Usar set en lugar de update
+
+      console.log('Trial contact info updated successfully');
+    } else {
+      // Si no existe, se crea el array con el nuevo contacto
+      await set(contactsRef, [contactInfo]);
+
+      console.log('Trial contact info created successfully');
+    }
   } catch (error) {
     console.error('Error updating trial contact info:', error);
   }
@@ -54,11 +72,29 @@ const getClinicalTrialById = async (trialId) => {
   }
 };
 
+const getAllContacts = async (trialId) => {
+  try {
+    const contactsRef = ref(firebaseDB, `/clinical-trials/${trialId}/contacts`);
+    const snapshot = await get(contactsRef);
+
+    if (snapshot.exists()) {
+      const contactsData = snapshot.val();
+      // Asegúrate de que se devuelva un array
+      return contactsData;
+    }
+    return [];
+  } catch (error) {
+    console.error('Error getting contacts:', error);
+    return [];
+  }
+};
+
 const ClinicalTrialService = {
   getAllTrials,
   addTrial,
   updateTrialContactInfo,
   getClinicalTrialById,
+  getAllContacts,
 };
 
 export default ClinicalTrialService;

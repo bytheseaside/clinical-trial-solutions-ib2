@@ -41,7 +41,7 @@ const AppointmentsSection: React.FC<Props> = ({ appointments, sx = [] }) => (
 
         return (
           <Box
-            key={`${study.name}-${date.toISOString()}`}
+            key={`${study.name}-${new Date(date).toISOString()}`}
             sx={{
               display: 'flex',
               boxShadow: 4,
