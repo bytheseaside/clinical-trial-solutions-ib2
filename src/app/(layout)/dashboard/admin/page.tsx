@@ -2,7 +2,7 @@ import React from 'react';
 
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
-import { Patient } from 'shared/api';
+import { ClinicalTrial, Patient } from 'shared/api';
 
 import AdminHead from './AdminHead';
 import AssignAppointments from './AssignAppointments';
@@ -246,17 +246,45 @@ async function AdminDashboard() {
       ],
     },
   ];
-  const clinicalTrials = [
-    { id: '1', name: 'Trial A' },
-    { id: '2', name: 'Trial B' },
-    { id: '3', name: 'Trial C' },
+  const mockClinicalTrials = [
+    {
+      id: 'trial1',
+      name: 'Trial 1',
+      studies: [
+        {
+          name: 'Study A',
+          keyVariables: [
+            { name: 'Variable 1', type: 'boolean' },
+            { name: 'Variable 2', type: 'number' },
+          ],
+        },
+      ],
+      groups: ['Group 1', 'Group 2'],
+      knownPossibleSecondaryEffects: ['Nausea', 'Headache'],
+      exclusionCriteria: [
+        { question: 'Are you pregnant?', answerToExclude: true },
+      ],
+    },
+    {
+      id: 'trial2',
+      name: 'Trial 2',
+      studies: [
+        {
+          name: 'Study B',
+          keyVariables: [
+            { name: 'Variable 3', type: 'text' },
+            { name: 'Variable 4', type: 'threshold' },
+          ],
+        },
+      ],
+    },
   ];
   return (
     <>
       <AdminHead clinicName="Clinica Monte Grande" />
       <CreateNewClinicalTrial />
       <AssignAppointments patientList={mockPatientList as Patient[]} />
-      <TrialsList trials={clinicalTrials} />
+      <TrialsList trials={mockClinicalTrials as ClinicalTrial[]} />
     </>
   );
 }

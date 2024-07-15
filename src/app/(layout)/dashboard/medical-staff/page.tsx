@@ -42,7 +42,6 @@ async function MedicalStaffDashboard() {
     },
   ];
 
-
   const mockPersonWithAppointments = [
     {
       patient: {
