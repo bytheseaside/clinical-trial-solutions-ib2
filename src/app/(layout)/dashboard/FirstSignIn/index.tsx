@@ -21,7 +21,6 @@ const FirstSignIn: React.FC<Props> = ({ sx = [] }) => {
   const [usertype, setUsertype] = useState<'patient' | 'medicalStaff' | 'analyst' | ''>('');
   const [group, setGroup] = useState<string>('');
 
-  console.log(error, code);
 
   useEffect(() => {
     if (code) {
@@ -58,11 +57,23 @@ const FirstSignIn: React.FC<Props> = ({ sx = [] }) => {
             ],
           },
         ],
-        contacts: [],
+        contacts: [
+          { name: 'Dr. Smith', specialty: 'Oncology', phone: '555-1234' },
+        ],
         signUpCodes: {
           analyst: 'AN-TR1-001',
           patient: 'PT-TR1-001',
         },
+        exclusionCriteria: [
+          {
+            question: 'Do you have any chronic conditions?',
+            answerToExclude: false,
+          },
+          {
+            question: 'Are you currently pregnant?',
+            answerToExclude: true,
+          },
+        ],
       }; // TODO replace with actual call to DB
 
       const foundUsertype = Object.keys(
@@ -85,6 +96,8 @@ const FirstSignIn: React.FC<Props> = ({ sx = [] }) => {
     }
   }, [usertype]);
 
+  console.log(relatedTrial);
+
   return (
     <Container
       sx={[...(Array.isArray(sx) ? sx : [sx])]}
@@ -95,13 +108,49 @@ const FirstSignIn: React.FC<Props> = ({ sx = [] }) => {
             error={error}
             setError={setError}
             setCode={setCode}
-            usertype={'patient'}
+            usertype="patient"
           />
         )}
       {/* {relatedTrial && !error && usertype === 'patient' && ( */}
       {( // some comment
         <PatientForm
-          trialId="relatedTrial!.id"
+          trial={{
+            id: 'trial1',
+            name: 'Trial 1',
+            studies: [
+              {
+                name: 'Study A1',
+                keyVariables: [
+                  { name: 'Variable 1', type: 'boolean' },
+                  { name: 'Variable 2', type: 'number' },
+                ],
+              },
+              {
+                name: 'Study B1',
+                keyVariables: [
+                  { name: 'Variable 3', type: 'text' },
+                  { name: 'Variable 4', type: 'threshold' },
+                ],
+              },
+            ],
+            contacts: [
+              { name: 'Dr. Smith', specialty: 'Oncology', phone: '555-1234' },
+            ],
+            signUpCodes: {
+              analyst: 'AN-TR1-001',
+              patient: 'PT-TR1-001',
+            },
+            exclusionCriteria: [
+              {
+                question: 'Do you have any chronic conditions?',
+                answerToExclude: false,
+              },
+              {
+                question: 'Are you currently pregnant?',
+                answerToExclude: true,
+              },
+            ],
+          }}
           group={group}
         />
       )}

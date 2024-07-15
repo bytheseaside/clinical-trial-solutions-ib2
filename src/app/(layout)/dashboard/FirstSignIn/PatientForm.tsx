@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Box from '@mui/material/Box';
@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import { SxProps, Theme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
@@ -37,13 +38,39 @@ const PatientForm: React.FC<Props> = ({ trial, group, sx = [] }) => {
   const { user } = useUser();
   const router = useRouter();
 
-  const [patientData, setPatientData] = React.useState<Patient>(
+  const [patientData, setPatientData] = useState<Patient>(
     { ...BASE_PATIENT, mail: user?.email || '', id: user?.sub || '', trialId: trial?.id || '', group: group || '' },
   );
+  const [exclusionAnswers, setExclusionAnswers] = useState<Record<string, boolean>>({});
 
   const handleSubmission = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(patientData); // TODO make API call to save patient data
+
+    // Verifica si exclusionAnswers y trial están definidos
+    if (!exclusionAnswers || !trial?.exclusionCriteria) {
+      console.error('Exclusion answers or trial exclusion criteria are not defined.');
+      return;
+    }
+
+    // Compara cada respuesta de exclusión con los criterios
+    const hasExcludedCriteria = Object.entries(exclusionAnswers)
+      .some(([question, answer]) => {
+        const criteria = trial.exclusionCriteria!.find(
+          (crit) => crit.question === question,
+        );
+        if (!criteria) {
+          return false;
+        }
+        return answer === criteria.answerToExclude;
+      });
+
+    if (hasExcludedCriteria) {
+      router.push('/dashboard/not-suitable-candidate');
+      return;
+    }
+
+    console.log(patientData);
+    // TODO: Realiza la llamada a la API para guardar los datos del paciente
     router.push('/dashboard');
   };
 
@@ -144,6 +171,33 @@ const PatientForm: React.FC<Props> = ({ trial, group, sx = [] }) => {
           }}
           referenceDate={dayjs()}
         />
+        {Array.isArray(trial?.exclusionCriteria) && trial.exclusionCriteria.length > 0 && (
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="h6">Exclusion Criteria</Typography>
+            {trial.exclusionCriteria.map((criteria, index) => (
+              <TextField
+                // eslint-disable-next-line react/no-array-index-key
+                key={index}
+                id={`exclusion-${index}`}
+                name={`exclusion-${index}`}
+                select
+                label={criteria.question}
+                variant="outlined"
+                value={exclusionAnswers[criteria.question]}
+                onChange={(e) => setExclusionAnswers((prevAnswers) => ({
+                  ...prevAnswers,
+                  [criteria.question]: e.target.value === 'true',
+                }))}
+                size="small"
+                fullWidth
+                sx={{ mb: 2 }}
+              >
+                <MenuItem value="true">Yes</MenuItem>
+                <MenuItem value="false">No</MenuItem>
+              </TextField>
+            ))}
+          </Box>
+        )}
 
         <Button
           type="submit"
