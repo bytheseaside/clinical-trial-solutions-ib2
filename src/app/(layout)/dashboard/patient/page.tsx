@@ -98,7 +98,7 @@ async function PatientDashboard() {
         steps={mockAppointments as Appointment[]}
       />
       <ReportSymptom symptoms={symptomsList} userId={userId} />
-      <AppointmentsSection appointments={appointments} />
+      <AppointmentsSection appointments={mockAppointments} />
       <ContactsBoard staff={doctors} />
     </>
   );

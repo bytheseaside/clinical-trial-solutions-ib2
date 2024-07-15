@@ -4,12 +4,8 @@ import Box from '@mui/material/Box';
 import { SxProps, Theme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
+import { Appointment } from 'shared/api';
 import Container from 'shared/layout/Container';
-
-type Appointment = {
-  title: string;
-  date: Date;
-};
 
 type Props = {
   appointments: Appointment[];
@@ -33,7 +29,7 @@ const AppointmentsSection: React.FC<Props> = ({ appointments, sx = [] }) => (
         gap: 2,
       }}
     >
-      {appointments.map(({ title, date }) => {
+      {appointments.map(({ study, date }) => {
         const appointmentDate = new Date(date);
         const monthNames = [
           'January', 'February', 'March', 'April', 'May', 'June', 'July',
@@ -45,7 +41,7 @@ const AppointmentsSection: React.FC<Props> = ({ appointments, sx = [] }) => (
 
         return (
           <Box
-            key={`${title}-${date.toISOString()}`}
+            key={`${study.name}-${date.toISOString()}`}
             sx={{
               display: 'flex',
               boxShadow: 4,
@@ -101,7 +97,7 @@ const AppointmentsSection: React.FC<Props> = ({ appointments, sx = [] }) => (
               <Typography
                 sx={{ typography: { xxs: 'body2', sm: 'body1' }, color: 'text.primary' }}
               >
-                {title}
+                {study.name}
               </Typography>
               <Typography
                 sx={{ typography: { xxs: 'caption', sm: 'body2' }, color: 'text.secondary' }}
