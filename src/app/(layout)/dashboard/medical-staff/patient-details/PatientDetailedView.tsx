@@ -68,7 +68,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
             return {
               ...prevPatient,
               observations: [
-                ...prevPatient.observations,
+                ...(prevPatient?.observations || []),
                 createdNewObservation,
               ],
             };
