@@ -16,7 +16,7 @@ type Props = {
   sx?: SxProps<Theme>;
 };
 
-const MedicalStaffHead: React.FC<Props> = ({ name, sx = [] }) => (
+const AnalystHead: React.FC<Props> = ({ name, sx = [] }) => (
   <Container
     component="header"
     sx={{
@@ -60,4 +60,4 @@ const MedicalStaffHead: React.FC<Props> = ({ name, sx = [] }) => (
   </Container>
 );
 
-export default MedicalStaffHead;
+export default AnalystHead;
