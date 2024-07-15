@@ -42,22 +42,6 @@ async function MedicalStaffDashboard() {
     },
   ];
 
-  const mockStudies = [
-    {
-      name: 'Study A',
-      keyVariables: [
-        { name: 'Variable 1', type: 'boolean' },
-        { name: 'Variable 2', type: 'number' },
-      ],
-    },
-    {
-      name: 'Study B',
-      keyVariables: [
-        { name: 'Variable 3', type: 'text' },
-        { name: 'Variable 4', type: 'threshold' },
-      ],
-    },
-  ];
 
   const mockPersonWithAppointments = [
     {
@@ -103,7 +87,6 @@ async function MedicalStaffDashboard() {
       <MedicalStaffHead name="some name" trialName="ajbskd" />
       <AppoinmentsToday
         clinicalTrials={mockClinicalTrials as ClinicalTrial[]}
-        studies={mockStudies as ClinicalStudy[]}
         peopleWithAppointmentsToday={
           mockPersonWithAppointments as { patient: Patient; appointment: Appointment }[]
         }

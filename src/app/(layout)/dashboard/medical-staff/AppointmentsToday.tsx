@@ -20,7 +20,6 @@ type PersonWithAppointment = {
 
 type Props = {
   clinicalTrials: ClinicalTrial[];
-  studies: ClinicalStudy[];
   peopleWithAppointmentsToday: PersonWithAppointment[];
   sx?: SxProps<Theme>;
 };
@@ -145,7 +144,7 @@ const AppointmentsToday: React.FC<Props> = ({
             onChange={handleStudyChange}
             fullWidth
             size="small"
-            disabled={!selectedTrial}
+            disabled={!selectedTrialId}
             sx={{ mb: 4 }}
           >
             <MenuItem value="" disabled dense>
