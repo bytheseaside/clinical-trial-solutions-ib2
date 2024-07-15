@@ -6,6 +6,7 @@ import { ClinicalTrial, Patient } from 'shared/api';
 
 import AdminHead from './AdminHead';
 import AssignAppointments from './AssignAppointments';
+import ContactInfo from './ContactInfo';
 import CreateNewClinicalTrial from './CreateNewClinicalTrial';
 import TrialsList from './TrialsList';
 
@@ -380,9 +381,10 @@ async function AdminDashboard() {
   return (
     <>
       <AdminHead clinicName="Clinica Monte Grande" />
+      <TrialsList trials={mockClinicalTrials as ClinicalTrial[]} />
+      <ContactInfo trials={mockClinicalTrials as ClinicalTrial[]} />
       <CreateNewClinicalTrial />
       <AssignAppointments patientList={mockPatientList as Patient[]} />
-      <TrialsList trials={mockClinicalTrials as ClinicalTrial[]} />
     </>
   );
 }
