@@ -72,7 +72,6 @@ const ThresholdChart: React.FC<Props> = ({ data, title, colors }) => {
           data={trace}
           layout={layout as PlotLayout}
         />
-        {/* <Plot data={trace} layout={layout as PlotLayout} /> */}
         <Typography
           sx={{
             color: 'text.secondary',
