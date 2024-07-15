@@ -1,4 +1,4 @@
-import { get, getDatabase, ref, set, update } from 'firebase/database';
+import { get, getDatabase, ref, set } from 'firebase/database';
 
 import firebaseDB from './firebaseDB';
 

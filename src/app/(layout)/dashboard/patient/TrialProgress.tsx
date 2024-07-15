@@ -27,21 +27,29 @@ const getStatusText = (status: 'toDo' | 'inProgress' | 'done'): string => {
       return '';
   }
 };
+
 const getStatusFromDate = (date: Date): 'toDo' | 'inProgress' | 'done' => {
   const now = new Date();
 
-  const yesterday = new Date(now);
-  yesterday.setDate(now.getDate() - 1);
-  const tomorrow = new Date(now);
-  tomorrow.setDate(now.getDate() + 1);
+  // Normalize the current date to the start of today
+  const startOfToday = new Date(now.setHours(0, 0, 0, 0));
 
-  if (date < yesterday) {
-    return 'done';
+  // Define end of today as the start of the next day
+  const endOfToday = new Date(startOfToday);
+  endOfToday.setDate(startOfToday.getDate() + 1);
+
+  // Normalize the input date to remove the time part
+  const inputDate = new Date(date);
+  const startOfInputDate = new Date(inputDate.setHours(0, 0, 0, 0));
+
+  // Determine the status based on the normalized date
+  if (startOfInputDate < startOfToday) {
+    return 'done'; // Date is before the start of today
   }
-  if (date > tomorrow) {
-    return 'toDo';
+  if (startOfInputDate >= startOfToday && startOfInputDate < endOfToday) {
+    return 'inProgress'; // Date is between start and end of today
   }
-  return 'inProgress';
+  return 'toDo'; // Date is after the end of today
 };
 
 const TrialProgress: React.FC<Props> = ({ steps, sx = {} }) => (
