@@ -66,3 +66,23 @@ export type ClinicalTrial = {
   signUpCodes: SignUpCodes;
   contacts: Contact[];
 };
+
+export type MedicalStaff = {
+  usertype: 'medicalStaff';
+  mail: string;
+  id: string;
+};
+
+export type Analyst = {
+  usertype: 'analyst';
+  mail: string;
+  id: string;
+};
+
+export type Admin = {
+  usertype: 'admin';
+  mail: string;
+  id: string;
+};
+
+export type User = Patient | MedicalStaff | Analyst | Admin;

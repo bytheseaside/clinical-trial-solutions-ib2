@@ -1,8 +1,10 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
 
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { SxProps, Theme } from '@mui/material/styles';
+import ClinicalTrialService from 'services/firebase/ClinicalTrialService';
+import CodeService from 'services/firebase/codeService';
+import UserService from 'services/firebase/userService';
 
 import { ClinicalTrial } from 'shared/api';
 import Container from 'shared/layout/Container';
@@ -15,6 +17,7 @@ type Props = {
 };
 
 const FirstSignIn: React.FC<Props> = ({ sx = [] }) => {
+  const { user } = useUser();
   const [error, setError] = useState<boolean>(false);
   const [code, setCode] = useState<string>('');
   const [relatedTrial, setRelatedTrial] = useState<ClinicalTrial | null>(null);
@@ -22,134 +25,86 @@ const FirstSignIn: React.FC<Props> = ({ sx = [] }) => {
   const [group, setGroup] = useState<string>('');
 
   useEffect(() => {
-    if (code) {
-      // ClinicalTrial.getTrialByCode(code)
-      //   .then((response) => {
-      //     setRelatedTrial(response.data);
-      //   })
-      //   .catch(() => {
-      //     setError(true);
-      //   });
+    const fetchTrialData = async () => {
+      if (code) {
+        try {
+          // Check if code corresponds to medical staff
+          const medicalStaffCode = await CodeService.getMedicalStaffCode();
+          if (code === medicalStaffCode) {
+            setUsertype('medicalStaff');
+            return;
+          }
 
-      const foundGeneralMedicalStaffCode = 'AN-TR1-001'; // TODO replace with actual call to DB to get this code
-      if (code === foundGeneralMedicalStaffCode) {
-        setUsertype('medicalStaff');
-        return;
+          // Fetch all trials and find the matching trial
+          const trials: ClinicalTrial[] = await ClinicalTrialService.getAllTrials();
+          const foundTrial = trials.find((trial) =>
+            Object.values(trial.signUpCodes).includes(code));
+
+          if (!foundTrial) {
+            setError(true);
+            return;
+          }
+
+          // Determine usertype and group based on sign-up codes
+          const foundUsertype = Object.keys(foundTrial.signUpCodes).find(
+            (key) => foundTrial.signUpCodes[key] === code,
+          );
+
+          if (!foundUsertype) {
+            setError(true);
+            return;
+          }
+
+          setUsertype(foundUsertype.split('-')[0] as 'patient' | 'medicalStaff' | 'analyst');
+          setGroup(foundUsertype.split('-')[1] || '');
+
+          setRelatedTrial(foundTrial);
+        } catch (fetchError) {
+          // eslint-disable-next-line no-console
+          console.error('Error fetching trials:', fetchError);
+          setError(true);
+        }
       }
+    };
 
-      const foundClinicalTrial: ClinicalTrial = {
-        id: 'trial1',
-        name: 'Trial 1',
-        studies: [
-          {
-            name: 'Study A1',
-            keyVariables: [
-              { name: 'Variable 1', type: 'boolean' },
-              { name: 'Variable 2', type: 'number' },
-            ],
-          },
-          {
-            name: 'Study B1',
-            keyVariables: [
-              { name: 'Variable 3', type: 'text' },
-              { name: 'Variable 4', type: 'threshold' },
-            ],
-          },
-        ],
-        contacts: [
-          { name: 'Dr. Smith', specialty: 'Oncology', phone: '555-1234' },
-        ],
-        signUpCodes: {
-          analyst: 'AN-TR1-001',
-          patient: 'PT-TR1-001',
-        },
-        exclusionCriteria: [
-          {
-            question: 'Do you have any chronic conditions?',
-            answerToExclude: false,
-          },
-          {
-            question: 'Are you currently pregnant?',
-            answerToExclude: true,
-          },
-        ],
-      }; // TODO replace with actual call to DB
-
-      const foundUsertype = Object.keys(
-        foundClinicalTrial.signUpCodes,
-      ).find((key) => foundClinicalTrial.signUpCodes[key] === code);
-      if (!foundUsertype) {
-        setError(true);
-        return;
-      }
-      setUsertype(foundUsertype.split('-')[0]);
-      setGroup(foundUsertype.split('-')[1] || '');
-
-      setRelatedTrial(foundClinicalTrial);
-    }
+    fetchTrialData();
   }, [code]);
 
   useEffect(() => {
-    if (usertype === 'analyst' || usertype === 'medicalStaff') {
-      // registrarlos como usuario en firebase
+    if (usertype === 'medicalStaff' && user?.sub && user?.email) {
+      const baseUser = {
+        usertype,
+        mail: user.email,
+        id: user.sub,
+      };
+      UserService.createUser(user.sub, baseUser);
+    }
+    if ((usertype === 'analyst') && user?.sub && user?.email && relatedTrial) {
+      const baseUser = {
+        usertype,
+        mail: user.email,
+        id: user.sub,
+        trialId: relatedTrial.id,
+      };
+      UserService.createUser(user.sub, baseUser);
     }
   }, [usertype]);
-
-  console.log(relatedTrial);
 
   return (
     <Container
       sx={[...(Array.isArray(sx) ? sx : [sx])]}
     >
-      {(!relatedTrial || error)
-        && (
-          <GetSignUpCode
-            error={error}
-            setError={setError}
-            setCode={setCode}
-            usertype="patient"
-          />
-        )}
-      {/* {relatedTrial && !error && usertype === 'patient' && ( */}
-      {( // some comment
+      {(!relatedTrial || error) && (
+        <GetSignUpCode
+          error={error}
+          setError={setError}
+          setCode={setCode}
+          usertype={usertype}
+        />
+      )}
+      {relatedTrial && !error && usertype === 'patient' && (
         <PatientForm
-          trial={{
-            id: 'trial1',
-            name: 'Trial 1',
-            studies: [
-              {
-                name: 'Study A1',
-                keyVariables: [
-                  { name: 'Variable 1', type: 'boolean' },
-                  { name: 'Variable 2', type: 'number' },
-                ],
-              },
-              {
-                name: 'Study B1',
-                keyVariables: [
-                  { name: 'Variable 3', type: 'text' },
-                  { name: 'Variable 4', type: 'threshold' },
-                ],
-              },
-            ],
-            contacts: [
-              { name: 'Dr. Smith', specialty: 'Oncology', phone: '555-1234' },
-            ],
-            signUpCodes: {
-              analyst: 'AN-TR1-001',
-              patient: 'PT-TR1-001',
-            },
-            exclusionCriteria: [
-              {
-                question: 'Do you have any chronic conditions?',
-                answerToExclude: false,
-              },
-              {
-                question: 'Are you currently pregnant?',
-                answerToExclude: true,
-              },
-            ],
-          }}
+          trial={relatedTrial}
           group={group}
         />
       )}
