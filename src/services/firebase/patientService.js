@@ -21,16 +21,25 @@ const PatientService = {
     }
   },
   addObservation: async (id, observation) => {
-    const db = getDatabase();
-    const observationRef = ref(
-      db,
-      `/users/${id}/observations`,
-    );
     try {
-      const newObsKey = push(observationRef, observation).key;
-      observationRef.push(newObsKey);
+      const db = getDatabase();
+      const observationRef = ref(db, `/users/${id}/observations`);
+
+      // Retrieve existing observations
+      const snapshot = await get(observationRef);
+      const existingObservations = snapshot.exists() ? snapshot.val() : [];
+
+      // Ensure observations is an array and add the new observation
+      const updatedObservations = Array.isArray(existingObservations)
+        ? [...existingObservations, observation]
+        : [observation];
+
+      // Save the updated list back to Firebase
+      await set(observationRef, updatedObservations);
+
+      console.log('Observation added successfully');
     } catch (error) {
-      console.log(error);
+      console.error('Error adding observation:', error);
     }
   },
   updatePatientSymptoms: async (userId, symptom) => {

@@ -67,10 +67,10 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
           if (prevPatient !== null) {
             return {
               ...prevPatient,
-              observations: {
+              observations: [
                 ...prevPatient.observations,
-                [createdNewObservation.date]: createdNewObservation,
-              },
+                createdNewObservation,
+              ],
             };
           }
           return prevPatient;
@@ -258,10 +258,10 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
               Observations
             </Typography>
             <List>
-              {Array.isArray(Object.values(patient.observations))
-                && Object.values(patient.observations).map(({ date, text }, index) => (
+              {Array.isArray(patient.observations)
+                && patient.observations.map(({ date, text }, index) => (
                   <ListItem
-                      // eslint-disable-next-line react/no-array-index-key
+                    // eslint-disable-next-line react/no-array-index-key
                     key={text + date + index}
                     sx={{
                       py: 1,
