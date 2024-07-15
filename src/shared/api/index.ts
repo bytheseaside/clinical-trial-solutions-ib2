@@ -52,6 +52,12 @@ export type SignUpCodes = {
   [key: string]: string; // allow for presence of group patient codes
 };
 
+export type Contact = {
+  name: string;
+  specialty: string;
+  phone: string;
+};
+
 export type ClinicalTrial = {
   id: string;
   name: string;
@@ -60,4 +66,5 @@ export type ClinicalTrial = {
   knownPossibleSecondaryEffects?: string[];
   exclusionCriteria?: ExclusionCriteria[];
   signUpCodes: SignUpCodes;
+  contacts: Contact[];
 };
