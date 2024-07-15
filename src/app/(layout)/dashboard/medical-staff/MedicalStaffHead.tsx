@@ -12,11 +12,10 @@ import BrandLogo from 'shared/layout/BrandLogo';
 import Container from 'shared/layout/Container';
 
 type Props = {
-  name: string;
   sx?: SxProps<Theme>;
 };
 
-const MedicalStaffHead: React.FC<Props> = ({ name, sx = [] }) => (
+const MedicalStaffHead: React.FC<Props> = ({ sx = [] }) => (
   <Container
     component="header"
     sx={{
@@ -39,17 +38,6 @@ const MedicalStaffHead: React.FC<Props> = ({ name, sx = [] }) => (
       }}
     >
       <BrandLogo />
-      <Typography
-        sx={{
-          typography: { xxs: 'hSmall', sm: 'hMid' },
-          textTransform: 'uppercase',
-          color: 'text.primary',
-          display: { xxs: 'none', xs: 'flex' },
-        }}
-        component="h2"
-      >
-        {name}
-      </Typography>
     </Box>
     <Button variant="contained" color="primary" href="/api/auth/logout">
       <LogoutIcon sx={{ fontSize: '1.5rem', color: 'common.white', mr: 1 }} />

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { SxProps, Theme } from '@mui/material/styles';
 import { useRouter } from 'next/navigation';
-import ClinicalTrialService from 'services/firebase/ClinicalTrialService';
+import ClinicalTrialService from 'services/firebase/clinicalTrialService';
 import CodeService from 'services/firebase/codeService';
 import UserService from 'services/firebase/userService';
 

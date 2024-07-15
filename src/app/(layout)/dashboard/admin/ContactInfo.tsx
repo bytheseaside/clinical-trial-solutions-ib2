@@ -2,12 +2,13 @@
 
 import React from 'react';
 
-import { Button } from '@mui/material';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import { SxProps, Theme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import ClinicalTrialService from 'services/firebase/clinicalTrialService';
 
 import { ClinicalTrial, Contact } from 'shared/api';
 import Container from 'shared/layout/Container';
@@ -40,9 +41,21 @@ const ContactInfo: React.FC<Props> = ({ trials, sx = [] }) => {
       });
     };
 
-  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
-    e?.preventDefault();
-    console.log('Submit', contact); // TODO send contact info to the server DB CALL
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (selectedTrial?.id) {
+      try {
+        await ClinicalTrialService.updateTrialContactInfo(selectedTrial.id, contact);
+        console.log('Contact info submitted successfully');
+        setContact({
+          name: '',
+          phone: '',
+          specialty: '',
+        });
+      } catch (error) {
+        console.error('Error submitting contact info:', error);
+      }
+    }
   };
 
   return (

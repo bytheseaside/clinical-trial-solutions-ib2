@@ -11,6 +11,8 @@ import Select from '@mui/material/Select';
 import { SxProps, Theme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { useRouter } from 'next/navigation';
+import ClinicalTrialService from 'services/firebase/clinicalTrialService';
 
 import { ClinicalStudyKeyVariable, ClinicalTrial, SignUpCodes } from 'shared/api';
 import Container from 'shared/layout/Container';
@@ -36,6 +38,7 @@ const BASE_TRIAL = {
 
 const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
   const [trial, setTrial] = useState<ClinicalTrial>(BASE_TRIAL);
+  const router = useRouter();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errorID, setErrorID] = useState(false);
 
@@ -55,8 +58,8 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
       uniqueSignUpCodes.patient = Math.random().toString(36).substring(2, 15);
     }
 
-    // eslint-disable-next-line no-console
-    console.log({ ...trial, signUpCodes: uniqueSignUpCodes }); // send to backend TODO DB
+    ClinicalTrialService.addTrial({ ...trial, signUpCodes: uniqueSignUpCodes });
+    router.push('/dashboard/admin');
   };
 
   return (

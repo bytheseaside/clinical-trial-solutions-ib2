@@ -15,6 +15,8 @@ import Typography from '@mui/material/Typography';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
+import AppointmentService from 'services/firebase/appointmentsService';
+import ClinicalTrialService from 'services/firebase/clinicalTrialService';
 
 import { Appointment, ClinicalStudy, ClinicalTrial, Patient } from 'shared/api';
 import Container from 'shared/layout/Container';
@@ -38,11 +40,22 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
   const [newAppointment, setNewAppointment] = useState<Appointment>(BASE_APPOINTMENT);
   const [patientTrial, setPatientTrial] = useState<ClinicalTrial | null>(null);
 
-  const onSubmitHandler = (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const onSubmitHandler = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // on submit, check if theres a new appointment complete and valid
-    // TODO: add new appointment to patient in DB
-    console.log('New appointment:', newAppointment);
+
+    if (!selectedPatient) {
+      // eslint-disable-next-line no-console
+      console.error('No patient selected');
+      return;
+    }
+
+    try {
+      await AppointmentService.addAppointmentToPatient(selectedPatient.id, newAppointment);
+      setNewAppointment(BASE_APPOINTMENT);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error adding appointment:', error);
+    }
   };
 
   const handleClear = () => {
@@ -51,33 +64,21 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
   };
 
   useEffect(() => {
-    // TODO call to get clinical trial after patient is selected
-    const foundClinicalTrial: ClinicalTrial = {
-      id: 'trial1',
-      name: 'Trial 1',
-      studies: [
-        {
-          name: 'Study A1',
-          keyVariables: [
-            { name: 'Variable 1', type: 'boolean' },
-            { name: 'Variable 2', type: 'number' },
-          ],
-        },
-        {
-          name: 'Study B1',
-          keyVariables: [
-            { name: 'Variable 3', type: 'text' },
-            { name: 'Variable 4', type: 'threshold' },
-          ],
-        },
-      ],
-      contacts: [],
-      signUpCodes: {
-        analyst: 'AN-TR1-001',
-        patient: 'PT-TR1-001',
-      },
-    }; // TODO replace with actual call to DB
-    setPatientTrial(foundClinicalTrial);
+    const fetchClinicalTrial = async () => {
+      if (selectedPatient) {
+        try {
+          const clinicalTrialId = selectedPatient.trialId;
+          // eslint-disable-next-line max-len
+          const foundClinicalTrial = await ClinicalTrialService.getClinicalTrialById(clinicalTrialId);
+          setPatientTrial(foundClinicalTrial);
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('Error fetching clinical trial:', error);
+        }
+      }
+    };
+
+    fetchClinicalTrial();
   }, [selectedPatient]);
 
   return (
@@ -114,11 +115,7 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
           renderInput={(params) => (
             <TextField {...params} label="Select a patient" />
           )}
-          clearIcon={(
-            <IconButton onClick={handleClear} color="inherit">
-              <ClearIcon />
-            </IconButton>
-        )}
+          clearIcon={<ClearIcon onClick={handleClear} />}
           size="small"
           value={selectedPatient}
           onChange={(event, choosenPatient) => {
@@ -163,9 +160,7 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
               required
               value={newAppointment.study.name}
               onChange={(e) => {
-                if (e.target.value === 'extraAppointment') {
-                  console.log(' extraaaa');
-
+                if (e.target.value === 'Extra appointment') {
                   setNewAppointment((prevAppointment) => ({
                     ...prevAppointment,
                     study: {
@@ -173,18 +168,15 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
                       keyVariables: [], // set it empty because there is no reason to set it
                     },
                   }));
-                  return;
+                } else {
+                  const matchingStudy = patientTrial.studies.find(
+                    (s) => s.name === e.target.value,
+                  );
+                  setNewAppointment((prevAppointment) => ({
+                    ...prevAppointment,
+                    study: matchingStudy as ClinicalStudy,
+                  }));
                 }
-
-                console.log('not extra');
-                const matchingStudy = patientTrial.studies.find(
-                  (s) => s.name === e.target.value,
-                );
-
-                setNewAppointment((prevAppointment) => ({
-                  ...prevAppointment,
-                  study: matchingStudy as ClinicalStudy,
-                }));
               }}
             >
               <MenuItem disabled value="" dense>Select a study</MenuItem>

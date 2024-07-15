@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
+import UserService from 'services/firebase/userService';
 
 import { ClinicalTrial, Patient } from 'shared/api';
 
@@ -69,9 +70,7 @@ const PatientForm: React.FC<Props> = ({ trial, group, sx = [] }) => {
       return;
     }
 
-    console.log(patientData);
-    // TODO: Realiza la llamada a la API para guardar los datos del paciente
-    router.push('/dashboard');
+    UserService.createUser(user!.sub, patientData);
   };
 
   useEffect(
