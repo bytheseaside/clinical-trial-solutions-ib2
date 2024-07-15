@@ -23,7 +23,15 @@ function NotSuitableCandidate() {
   return (
     <>
       <Header />
-      <Container>
+      <Container
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          typography: 'hBig',
+        }}
+      >
         Thanks for wanting to be part of our study.
         We are sorry to inform you that you are not a suitable candidate for this study.
         You&apos;ll soon be logged out.
