@@ -74,7 +74,7 @@ const ReportSymptom: React.FC<Props> = ({ symptoms, userId, sx = [] }) => {
           onChange={(e) => setTag(e.target.value)}
         >
           <MenuItem value="" disabled dense>
-            Select
+            Select a category
           </MenuItem>
           {symptoms.map((symptom) => (
             <MenuItem

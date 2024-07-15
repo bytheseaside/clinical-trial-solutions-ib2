@@ -112,17 +112,11 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
           exclusionCriteria: [
             {
               question: 'Question A',
-              answers: [
-                { answer: true, shouldBeExcludedFromTrial: true },
-                { answer: false, shouldBeExcludedFromTrial: false },
-              ],
+              answerToExclude: false,
             },
             {
               question: 'Question B',
-              answers: [
-                { answer: true, shouldBeExcludedFromTrial: true },
-                { answer: false, shouldBeExcludedFromTrial: false },
-              ],
+              answerToExclude: true,
             },
           ],
         }; // TODO replace with actual call to DB

@@ -26,7 +26,10 @@ export type Patient = {
   assesments?: {
     [key: string]: boolean | number | string;
   }[];
+  appointments: Appointment[];
 };
+
+export type Appointment = { date: Date; study: ClinicalStudy };
 
 export type ClinicalStudyKeyVariable = 'boolean' | 'threshold' | 'text' | 'number';
 
