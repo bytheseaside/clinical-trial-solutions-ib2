@@ -46,6 +46,12 @@ export type ExclusionCriteria = {
   answerToExclude: boolean;
 };
 
+export type SignUpCodes = {
+  medicalStaff: string;
+  analist: string;
+  [key: string]: string; // allow for presence of group patient codes
+};
+
 export type ClinicalTrial = {
   id: string;
   name: string;
@@ -53,9 +59,5 @@ export type ClinicalTrial = {
   groups?: string[];
   knownPossibleSecondaryEffects?: string[];
   exclusionCriteria?: ExclusionCriteria[];
-  signUpCodes: {
-    medicalStaff: string;
-    analist: string;
-    [key: string]: string; // allow for presence of group patient codes
-  };
+  signUpCodes: SignUpCodes;
 };

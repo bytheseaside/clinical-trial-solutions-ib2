@@ -53,40 +53,29 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
   useEffect(() => {
     // TODO call to get clinical trial after patient is selected
     const foundClinicalTrial: ClinicalTrial = {
-      id: '123',
-      name: 'Trial A',
+      id: 'trial1',
+      name: 'Trial 1',
       studies: [
         {
           name: 'Study A1',
           keyVariables: [
-            { name: 'Variable A', type: 'boolean' },
-            { name: 'Variable B', type: 'threshold' },
-            { name: 'Variable C', type: 'text' },
-            { name: 'Variable D', type: 'number' },
+            { name: 'Variable 1', type: 'boolean' },
+            { name: 'Variable 2', type: 'number' },
           ],
         },
         {
-          name: 'Study A2',
+          name: 'Study B1',
           keyVariables: [
-            { name: 'Variable E', type: 'boolean' },
-            { name: 'Variable F', type: 'threshold' },
-            { name: 'Variable G', type: 'text' },
-            { name: 'Variable H', type: 'number' },
+            { name: 'Variable 3', type: 'text' },
+            { name: 'Variable 4', type: 'threshold' },
           ],
         },
       ],
-      groups: ['A', 'B', 'C'],
-      knownPossibleSecondaryEffects: ['Effect A', 'Effect B', 'Effect C'],
-      exclusionCriteria: [
-        {
-          question: 'Question A',
-          answerToExclude: false,
-        },
-        {
-          question: 'Question B',
-          answerToExclude: true,
-        },
-      ],
+      signUpCodes: {
+        medicalStaff: 'MS-TR1-001',
+        analist: 'AN-TR1-001',
+        patient: 'PT-TR1-001',
+      },
     }; // TODO replace with actual call to DB
     setPatientTrial(foundClinicalTrial);
   }, [selectedPatient]);

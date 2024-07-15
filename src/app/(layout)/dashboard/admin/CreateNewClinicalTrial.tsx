@@ -12,7 +12,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { ClinicalStudyKeyVariable, ClinicalTrial } from 'shared/api';
+import { ClinicalStudyKeyVariable, ClinicalTrial, SignUpCodes } from 'shared/api';
 import Container from 'shared/layout/Container';
 
 type Props = {
@@ -26,6 +26,11 @@ const BASE_TRIAL = {
   groups: [],
   knownPossibleSecondaryEffects: [],
   exclusionCriteria: [],
+  signUpCodes: {
+    patient: '',
+    medicalStaff: '',
+    analist: '',
+  },
 };
 
 const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
@@ -35,8 +40,22 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
 
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const uniqueSignUpCodes: SignUpCodes = {
+      medicalStaff: Math.random().toString(36).substring(2, 15),
+      analist: Math.random().toString(36).substring(2, 15),
+    };
+
+    if (trial?.groups?.length) {
+      trial.groups.forEach((group) => {
+        uniqueSignUpCodes[`patient-${group}`] = Math.random().toString(36).substring(2, 15);
+      });
+    } else {
+      uniqueSignUpCodes.patient = Math.random().toString(36).substring(2, 15);
+    }
+
     // eslint-disable-next-line no-console
-    console.log(trial);
+    console.log({ ...trial, signUpCodes: uniqueSignUpCodes }); // send to backend TODO DB
   };
 
   return (
@@ -70,6 +89,7 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
         >
           <TextField
             id="trialId"
+            name="trialId"
             required
             onChange={(e) => setTrial((prevTrial) => ({ ...prevTrial, id: e.target.value }))}
             label="Clinical trial ID"
@@ -87,6 +107,7 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
           />
           <TextField
             id="trialName"
+            name="trialName"
             required
             onChange={(e) => setTrial((prevTrial) => ({ ...prevTrial, name: e.target.value }))}
             label="Clinical trial name"
@@ -170,6 +191,7 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
                 <TextField
                   size="small"
                   id={`studyName${studyIndex + 1}`}
+                  name={`studyName${studyIndex + 1}`}
                   label={`Name of the study ${studyIndex + 1}`}
                   variant="outlined"
                   helperText="Input the name of the study."
@@ -236,7 +258,7 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
                         required
                         placeholder={`Variable ${varIndex + 1}`}
                         id={`variable${varIndex + 1}`}
-                        name={`variable${varIndex + 1}`}
+                        name={`key variable - ${varIndex + 1} of the study`}
                         onChange={(event) => {
                           const auxStudies = [...trial.studies];
                           auxStudies[studyIndex].keyVariables[varIndex].name = event.target.value;
@@ -299,12 +321,12 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
           </Typography>
           <TextField
             id="exclusionQuestionsNumber"
-            name="studiesNumber"
-            helperText="Input the number of studies included in the trial."
+            name="exclusionQuestionsNumber"
+            helperText="Input the number of exlusion questions in the trial."
             type="number"
             inputProps={{ min: 1 }}
             required
-            label="Number of studies"
+            label="Number of exclusion questions"
             variant="outlined"
             size="small"
             fullWidth
@@ -360,6 +382,7 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
                   <TextField
                     size="small"
                     id={`criteria${criteriaIndex + 1}`}
+                    name={`criteria${criteriaIndex + 1}`}
                     label={`Question # ${criteriaIndex + 1}`}
                     variant="outlined"
                     helperText="Input the relevant question."
@@ -373,7 +396,8 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
                   />
                   <TextField
                     size="small"
-                    id={`exclusion criteria ${criteriaIndex + 1}`}
+                    id={`exclusion criteria ${criteriaIndex + 1} answer to exclude`}
+                    name={`exclusion criteria ${criteriaIndex + 1} answer to exclude`}
                     inputProps={{ min: 0 }}
                     required
                     select
@@ -568,7 +592,7 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
           type="submit"
           variant="outlined"
           color="primary"
-          sx={{ alignSelf: 'flex-end', mt: 6 }}
+          sx={{ alignSelf: 'flex-end', mt: 1, backgroundColor: 'transparent' }}
         >
           Create trial
         </Button>
