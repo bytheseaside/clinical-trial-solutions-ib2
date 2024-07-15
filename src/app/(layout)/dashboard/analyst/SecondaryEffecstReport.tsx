@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 
 import Container from 'shared/layout/Container';
 
-import SecondaryEffectChart, { Data } from './TotalAmountChart';
+import TotalAmountChart, { Data } from './TotalAmountChart';
 
 type Props = {
   effectsData: { data: Data[]; title: string }[];
@@ -44,7 +44,7 @@ const SecondaryEffectsReport: React.FC<Props> = ({ effectsData, colors, sx = [] 
       }}
     >
       {effectsData.map((data) => (
-        <SecondaryEffectChart
+        <TotalAmountChart
           key={data.title}
           title={data.title}
           data={data.data}

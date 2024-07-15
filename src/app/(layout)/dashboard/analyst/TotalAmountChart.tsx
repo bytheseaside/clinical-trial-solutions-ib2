@@ -19,14 +19,9 @@ type Props = {
   colors: string[];
 };
 
-const SecondaryEffectChart: React.FC<Props> = ({ data, title, colors }) => {
+const TotalAmountChart: React.FC<Props> = ({ data, title, colors }) => {
   const [trace, setTrace] = useState<PlotData[]>([]);
   const isUpSm = useMediaQuery((theme:Theme) => theme.breakpoints.up('sm'));
-
-  const getNumberOfGroups = () => {
-    const groups = new Set(data.map((item) => item.group));
-    return groups.size;
-  };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const createTrace = (info: Data[], groupIndex: number) => ({
@@ -51,7 +46,7 @@ const SecondaryEffectChart: React.FC<Props> = ({ data, title, colors }) => {
     });
 
     const traceData = Object.values(dataPerGroup)
-      .map((group, index) => createTrace(group, (getNumberOfGroups() - index)));
+      .map((group, index) => createTrace(group, index));
     setTrace(traceData as PlotData[]);
   }, []);
 
@@ -73,4 +68,4 @@ const SecondaryEffectChart: React.FC<Props> = ({ data, title, colors }) => {
   );
 };
 
-export default SecondaryEffectChart;
+export default TotalAmountChart;
