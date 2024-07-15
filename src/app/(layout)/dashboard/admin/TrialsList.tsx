@@ -79,8 +79,18 @@ const TrialsList: React.FC<Props> = ({ trials, medicalStaffCode, sx = [] }) => {
         >
           <LocalHospital color="secondary" sx={{ mr: 1 }} />
           {' '}
-          <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-            Medical Staff:
+          <Typography variant="body2">
+            All
+            {' '}
+            <Typography
+              component="span"
+              variant="inherit"
+              sx={{ fontWeight: 'bold' }}
+            >
+              Medical Staff
+            </Typography>
+            {' '}
+            from the clinic can use the same code:
             {' '}
             {medicalStaffCode}
           </Typography>
