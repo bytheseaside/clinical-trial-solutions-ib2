@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 
 import Container from 'shared/layout/Container';
 
-import SecondaryEffectChart, { Data } from './SecondaryEffectChart';
+import SecondaryEffectChart, { Data } from './TotalAmountChart';
 
 type Props = {
   effectsData: { data: Data[]; title: string }[];
