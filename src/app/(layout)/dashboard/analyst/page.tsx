@@ -107,6 +107,48 @@ async function AnalystDashboard() {
       ],
     },
   ];
+  const mockBooleanAssessmentsData: AssessmentData[] = [
+    {
+      type: 'boolean',
+      title: 'Assessment 4',
+      data: [
+        { group: 'Group A', value: true },
+        { group: 'Group A', value: false },
+        { group: 'Group A', value: 'NC' },
+        { group: 'Group B', value: true },
+        { group: 'Group B', value: 'NC' },
+        { group: 'Group B', value: false },
+        { group: 'Group C', value: true },
+        { group: 'Group C', value: false },
+      ],
+    },
+    {
+      type: 'boolean',
+      title: 'Assessment 5',
+      data: [
+        { group: 'Group A', value: false },
+        { group: 'Group A', value: true },
+        { group: 'Group B', value: 'NC' },
+        { group: 'Group B', value: true },
+        { group: 'Group C', value: false },
+        { group: 'Group C', value: 'NC' },
+        { group: 'Group C', value: true },
+      ],
+    },
+    {
+      type: 'boolean',
+      title: 'Assessment 6',
+      data: [
+        { group: 'Group A', value: 'NC' },
+        { group: 'Group A', value: true },
+        { group: 'Group B', value: false },
+        { group: 'Group B', value: 'NC' },
+        { group: 'Group C', value: true },
+        { group: 'Group C', value: false },
+        { group: 'Group C', value: 'NC' },
+      ],
+    },
+  ];
 
   return (
     <>
@@ -118,7 +160,7 @@ async function AnalystDashboard() {
         colors={colors}
       />
       <AssesmentsResultsReport
-        assesmentsData={mockAssesmentsData}
+        assesmentsData={[...mockAssesmentsData, ...mockBooleanAssessmentsData]}
         colors={colors}
       />
     </>

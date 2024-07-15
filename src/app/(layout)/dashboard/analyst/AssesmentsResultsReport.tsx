@@ -6,11 +6,12 @@ import Typography from '@mui/material/Typography';
 
 import Container from 'shared/layout/Container';
 
+import BooleanChart, { BooleanData } from './BooleanChart';
 import ThresholdChart, { ThresholdData } from './ThresholdChart';
 
 export type AssessmentData = {
   type: 'threshold' | 'boolean' | 'numeric';
-  data: ThresholdData[];
+  data: (ThresholdData | BooleanData)[];
   title: string;
 };
 
@@ -44,7 +45,7 @@ const AssesmentsResultsReport: React.FC<Props> = ({ assesmentsData, colors, sx =
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 3,
+        gap: 4,
       }}
     >
       {assesmentsData.map((data) => {
@@ -53,8 +54,17 @@ const AssesmentsResultsReport: React.FC<Props> = ({ assesmentsData, colors, sx =
             <ThresholdChart
               key={data.title}
               title={data.title}
-              data={data.data}
+              data={data.data as ThresholdData[]}
               colors={colors}
+            />
+          );
+        }
+        if (data.type === 'boolean') {
+          return (
+            <BooleanChart
+              key={data.title}
+              title={data.title}
+              data={data.data as BooleanData[]}
             />
           );
         }
