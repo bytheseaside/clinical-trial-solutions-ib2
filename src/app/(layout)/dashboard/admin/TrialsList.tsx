@@ -7,7 +7,6 @@ import { Accordion } from '@mui/material';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import { SxProps, Theme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
@@ -22,9 +21,10 @@ type Props = {
 const TrialsList: React.FC<Props> = ({ trials, sx = [] }) => {
   const [expanded, setExpanded] = React.useState<string>('');
 
-  const handlePanelChange = (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-    setExpanded(newExpanded ? panel : false);
-  };
+  const handlePanelChange = (panel: string) =>
+    (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded(newExpanded ? panel : '');
+    };
 
   return (
     <Container
