@@ -16,7 +16,6 @@ export type Patient = {
   surname: string;
   dni: string;
   birthDate: Date;
-  age: number;
   sex: 'F' | 'M';
   id: string;
   trialId: string;

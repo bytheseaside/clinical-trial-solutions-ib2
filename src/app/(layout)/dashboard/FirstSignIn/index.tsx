@@ -95,12 +95,15 @@ const FirstSignIn: React.FC<Props> = ({ sx = [] }) => {
             error={error}
             setError={setError}
             setCode={setCode}
-            usertype={usertype}
+            usertype={'patient'}
           />
         )}
       {/* {relatedTrial && !error && usertype === 'patient' && ( */}
       {( // some comment
-        <PatientForm />
+        <PatientForm
+          trialId="relatedTrial!.id"
+          group={group}
+        />
       )}
     </Container>
   );
