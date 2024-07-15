@@ -87,6 +87,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
         const foundClinicalTrial: ClinicalTrial = {
           id: clinicalTrialId,
           name: 'Trial A',
+          signUpCodes: { patient: 'P001', medicalStaff: 'D001', analist: 'A001' },
           studies: [
             {
               name: 'Study A1',
