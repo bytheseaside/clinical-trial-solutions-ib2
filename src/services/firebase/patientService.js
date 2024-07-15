@@ -33,7 +33,25 @@ const PatientService = {
       console.log(error);
     }
   },
+  updatePatientSymptoms: async (userId, symptom) => {
+    try {
+      const db = getDatabase();
+      const symptomsRef = ref(db, `/users/${userId}/symptoms`);
 
+      const snapshot = await get(symptomsRef);
+      const existingSymptoms = snapshot.exists() ? snapshot.val() : [];
+
+      // Ensure symptoms is an array
+      const updatedSymptoms = Array.isArray(existingSymptoms)
+        ? [...existingSymptoms, symptom] : [symptom];
+
+      await set(symptomsRef, updatedSymptoms);
+
+      console.log('Patient symptoms updated successfully');
+    } catch (error) {
+      console.error('Error updating patient symptoms:', error);
+    }
+  },
 };
 
 export default PatientService;

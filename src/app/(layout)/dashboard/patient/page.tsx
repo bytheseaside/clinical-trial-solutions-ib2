@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { getSession, GetSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import ClinicalTrialService from 'services/firebase/clinicalTrialService';
 import UserService from 'services/firebase/userService';
 
-import { Appointment, ClinicalTrial } from 'shared/api';
+import { ClinicalTrial } from 'shared/api';
 
 import AppointmentsSection from './AppointmentSection';
 import ContactsBoard from './ContactsBoard';
@@ -17,9 +17,6 @@ async function PatientDashboard() {
 
   const userId = session?.user.sub;
   const patient = await UserService.getUserById(userId);
-
-  const doctors = await ClinicalTrialService.getAllContacts(patient.trialId);
-  console.log('doctors are here', doctors);
   // eslint-disable-next-line max-len
   const relatedTrial: ClinicalTrial = await ClinicalTrialService.getClinicalTrialById(patient.trialId);
 
@@ -37,7 +34,7 @@ async function PatientDashboard() {
         userId={userId}
       />
       <AppointmentsSection appointments={patient?.appointments || []} />
-      {/* <ContactsBoard staff={doctors} /> */}
+      <ContactsBoard staff={relatedTrial.contacts || []} />
     </>
   );
 }

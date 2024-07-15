@@ -8,6 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { SxProps, Theme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import PatientService from 'services/firebase/patientService';
 
 import Container from 'shared/layout/Container';
 
@@ -22,10 +23,10 @@ const ReportSymptom: React.FC<Props> = ({ symptoms, userId, sx = [] }) => {
   const [startDate, setStartDate] = useState('');
   const [comments, setComments] = useState('');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = { tag, startDate, comments };
-    console.log(`the user${userId} submitted:`, formData); // TODO replace with actual call to DB
+    await PatientService.updatePatientSymptoms(userId, formData);
     setTag('');
     setStartDate('');
     setComments('');
