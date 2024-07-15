@@ -2,7 +2,7 @@ import React from 'react';
 
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
-import { Appointment, Patient } from 'shared/api';
+import { Appointment } from 'shared/api';
 
 import AppointmentsSection from './AppointmentCalendar';
 import ContactsBoard from './ContactsBoard';
@@ -21,29 +21,6 @@ async function PatientDashboard() {
 
   const symptomsList = ['Fever', 'Cough', 'Headache', 'Fatigue']; // Example symptoms list
   const userId = '123456789'; // Example user ID
-
-  const appointments = [
-    {
-      title: 'Checkup',
-      date: new Date('2024-07-10T09:30:00'),
-    },
-    {
-      title: 'Dental cleaning',
-      date: new Date('2024-07-12T14:00:00'),
-    },
-    {
-      title: 'MRI Scan',
-      date: new Date('2024-07-15T11:15:00'),
-    },
-    {
-      title: 'Physical therapy',
-      date: new Date('2024-07-18T16:45:00'),
-    },
-    {
-      title: 'Consultation',
-      date: new Date('2024-07-22T10:00:00'),
-    },
-  ];
 
   const mockClinicalStudies = [
     {
@@ -98,7 +75,7 @@ async function PatientDashboard() {
         steps={mockAppointments as Appointment[]}
       />
       <ReportSymptom symptoms={symptomsList} userId={userId} />
-      <AppointmentsSection appointments={mockAppointments} />
+      <AppointmentsSection appointments={mockAppointments as Appointment[]} />
       <ContactsBoard staff={doctors} />
     </>
   );

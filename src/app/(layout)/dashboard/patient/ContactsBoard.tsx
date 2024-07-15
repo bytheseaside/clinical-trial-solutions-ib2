@@ -7,10 +7,11 @@ import { SxProps, Theme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 
+import { Contact } from 'shared/api';
 import Container from 'shared/layout/Container';
 
 type Props = {
-  staff: { name: string; specialty: string; phone: string }[];
+  staff: Contact[];
   sx?: SxProps<Theme>;
 };
 
