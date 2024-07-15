@@ -341,9 +341,10 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                       Symptoms
                     </Typography>
                     <List>
-                      {patient.symptoms.map(({ startDate, comments, tag }) => (
+                      {patient.symptoms.map(({ startDate, comments, tag }, index) => (
                         <ListItem
-                          key={startDate.toISOString()}
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={comments + tag + index}
                           sx={{
                             py: 1,
                             display: 'flex',
@@ -358,7 +359,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                                 {tag}
                                 {' '}
                                 (
-                                {startDate.toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
+                                {new Date(startDate).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
                                 )
                               </Typography>
                         )}
