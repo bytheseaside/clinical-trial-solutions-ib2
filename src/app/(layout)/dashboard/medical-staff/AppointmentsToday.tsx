@@ -10,28 +10,17 @@ import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+import { Appointment, ClinicalStudy, ClinicalTrial, Patient } from 'shared/api';
 import Container from 'shared/layout/Container';
 
-type ClinicalTrial = {
-  id: string;
-  name: string;
-};
-
-type Study = {
-  id: string;
-  name: string;
-  trialId: string;
-};
-
 type PersonWithAppointment = {
-  id: string;
-  name: string;
-  hour: string;
+  patient: Patient;
+  appointment: Appointment;
 };
 
 type Props = {
   clinicalTrials: ClinicalTrial[];
-  studies: Study[];
+  studies: ClinicalStudy[];
   peopleWithAppointmentsToday: PersonWithAppointment[];
   sx?: SxProps<Theme>;
 };
@@ -39,21 +28,37 @@ type Props = {
 const AppointmentsToday: React.FC<Props> = ({
   sx,
   clinicalTrials,
-  studies,
   peopleWithAppointmentsToday,
 }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [selectedTrial, setSelectedTrial] = useState<string>(searchParams.get('trial') || '');
-  const [selectedStudy, setSelectedStudy] = useState<string>(searchParams.get('study') || '');
+  const [selectedTrialId, setSelectedTrialId] = useState<string>(searchParams.get('trial') || '');
+  const [selectedStudyName, setSelectedStudyName] = useState<string>(searchParams.get('study') || '');
+  const [selectedTrial, setSelectedTrial] = useState<ClinicalTrial | null>(null);
+  const [selectedStudy, setSelectedStudy] = useState<ClinicalStudy | null>(null);
+
+  useEffect(() => {
+    const trial = clinicalTrials.find((t) => t.id === selectedTrialId);
+    setSelectedTrial(trial || null);
+  }, [selectedTrialId]);
+
+  useEffect(() => {
+    if (selectedTrial) {
+      const study = selectedTrial.studies.find((s) => s.name === selectedStudyName);
+      setSelectedStudy(study || null);
+    }
+    if (!selectedStudyName) {
+      setSelectedStudy(null);
+    }
+  }, [selectedStudyName, selectedTrial]);
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
     if (selectedTrial) {
-      params.set('trial', selectedTrial);
+      params.set('trial', selectedTrialId);
       if (selectedStudy) {
-        params.set('study', selectedStudy);
+        params.set('study', selectedStudyName);
       } else {
         params.delete('study');
       }
@@ -65,12 +70,12 @@ const AppointmentsToday: React.FC<Props> = ({
   }, [selectedTrial, selectedStudy]);
 
   const handleTrialChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedTrial(event.target.value);
-    setSelectedStudy('');
+    setSelectedTrialId(event.target.value);
+    setSelectedStudyName('');
   };
 
   const handleStudyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedStudy(event.target.value);
+    setSelectedStudyName(event.target.value);
   };
 
   const handleViewDetails = (patientId: string) => {
@@ -119,7 +124,7 @@ const AppointmentsToday: React.FC<Props> = ({
             select
             size="small"
             label="Select Clinical Trial"
-            value={selectedTrial}
+            value={selectedTrialId}
             onChange={handleTrialChange}
             fullWidth
           >
@@ -136,7 +141,7 @@ const AppointmentsToday: React.FC<Props> = ({
           <TextField
             select
             label="Select Study"
-            value={selectedStudy}
+            value={selectedStudyName}
             onChange={handleStudyChange}
             fullWidth
             size="small"
@@ -146,13 +151,15 @@ const AppointmentsToday: React.FC<Props> = ({
             <MenuItem value="" disabled dense>
               Select
             </MenuItem>
-            {Array.isArray(studies) && studies.length > 0
-            && studies.filter((study) => study.trialId === selectedTrial)
-              .map((study) => (
-                <MenuItem key={study.id} value={study.id} dense>
+            {
+              Array.isArray(selectedTrial?.studies)
+              && selectedTrial.studies.length > 0
+              && selectedTrial.studies.map((study) => (
+                <MenuItem key={study.name} value={study.name} dense>
                   {study.name}
                 </MenuItem>
-              ))}
+              ))
+            }
           </TextField>
         </Box>
       </Box>
@@ -174,14 +181,12 @@ const AppointmentsToday: React.FC<Props> = ({
                   justifyContent: 'center',
                   gap: 2,
                   py: 3,
-                  maxHeight: '50vh',
-                  overflowY: 'scroll',
                 }}
               >
-                {peopleWithAppointmentsToday.map((person) => (
+                {peopleWithAppointmentsToday.map(({ patient, appointment: { date } }) => (
                   <Box
-                    key={person.id}
-                    onClick={() => handleViewDetails(person.id)}
+                    key={patient.id + date.toISOString()}
+                    onClick={() => handleViewDetails(patient.id)}
                     sx={{
                       backgroundColor: 'background.paper',
                       px: 2,
@@ -218,15 +223,14 @@ const AppointmentsToday: React.FC<Props> = ({
                     >
                       Today at
                       {' '}
-                      {person.hour}
+                      {date.toLocaleTimeString({ hour: '2-digit', minute: '2-digit' })}
                     </Typography>
                     <Typography
                       variant="body1"
                       color="text.primary"
                       sx={{ mb: 1, typography: { xxs: 'captionSmall', sm: 'caption' } }}
                     >
-                      {person.name}
-
+                      {`${patient.surname}, ${patient.name}`}
                     </Typography>
                   </Box>
                 ))}

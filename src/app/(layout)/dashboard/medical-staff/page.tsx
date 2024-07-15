@@ -2,58 +2,99 @@ import React from 'react';
 
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
+import { Appointment, ClinicalStudy, ClinicalTrial, Patient } from 'shared/api';
+
 import AppoinmentsToday from './AppointmentsToday';
 import MedicalStaffHead from './MedicalStaffHead';
 
 async function MedicalStaffDashboard() {
-  const clinicalTrials = [
-    { id: '1', name: 'Trial A' },
-    { id: '2', name: 'Trial B' },
-    { id: '3', name: 'Trial C' },
+  const mockClinicalTrials = [
+    {
+      id: 'trial1',
+      name: 'Trial 1',
+      studies: [
+        {
+          name: 'Study A',
+          keyVariables: [
+            { name: 'Variable 1', type: 'boolean' },
+            { name: 'Variable 2', type: 'number' },
+          ],
+        },
+      ],
+      groups: ['Group 1', 'Group 2'],
+      knownPossibleSecondaryEffects: ['Nausea', 'Headache'],
+      exclusionCriteria: [
+        { question: 'Are you pregnant?', answerToExclude: true },
+      ],
+    },
+    {
+      id: 'trial2',
+      name: 'Trial 2',
+      studies: [
+        {
+          name: 'Study B',
+          keyVariables: [
+            { name: 'Variable 3', type: 'text' },
+            { name: 'Variable 4', type: 'threshold' },
+          ],
+        },
+      ],
+    },
   ];
-  const studies = [
-    { id: '1-1', name: 'Study A1', trialId: '1' },
-    { id: '1-2', name: 'Study A2', trialId: '1' },
-    { id: '2-1', name: 'Study B1', trialId: '2' },
-    { id: '2-2', name: 'Study B2', trialId: '2' },
-    { id: '3-1', name: 'Study C1', trialId: '3' },
-    { id: '3-2', name: 'Study C2', trialId: '3' },
+
+  const mockStudies = [
+    {
+      name: 'Study A',
+      keyVariables: [
+        { name: 'Variable 1', type: 'boolean' },
+        { name: 'Variable 2', type: 'number' },
+      ],
+    },
+    {
+      name: 'Study B',
+      keyVariables: [
+        { name: 'Variable 3', type: 'text' },
+        { name: 'Variable 4', type: 'threshold' },
+      ],
+    },
   ];
-  const mockPeopleWithAppointmentsToday = [
+
+  const mockPersonWithAppointments = [
     {
-      id: 'p1',
-      name: 'Alice Johnson',
-      hour: '09:00 AM',
+      patient: {
+        usertype: 'patient',
+        mail: 'john.doe@example.com',
+        name: 'John',
+        surname: 'Doe',
+        dni: '12345678',
+        birthDate: new Date('1980-01-01'),
+        age: 44,
+        sex: 'M',
+        id: 'patient1',
+        trialId: 'trial1',
+        appointments: [
+          { date: new Date(), study: { name: 'Study A', keyVariables: [{ name: 'Variable 1', type: 'boolean' }, { name: 'Variable 2', type: 'number' }] } },
+        ],
+      },
+      appointment: { date: new Date(), study: { name: 'Study A', keyVariables: [{ name: 'Variable 1', type: 'boolean' }, { name: 'Variable 2', type: 'number' }] } },
     },
     {
-      id: 'p2',
-      name: 'Bob Smith',
-      hour: '10:30 AM',
-    },
-    {
-      id: 'p3',
-      name: 'Charlie Brown',
-      hour: '01:00 PM',
-    },
-    {
-      id: 'p4',
-      name: 'Diana Prince',
-      hour: '02:30 PM',
-    },
-    {
-      id: 'p5',
-      name: 'Evelyn Adams',
-      hour: '04:00 PM',
-    },
-    {
-      id: 'p6',
-      name: 'Franklin Roosevelt',
-      hour: '05:30 PM',
-    },
-    {
-      id: 'p7',
-      name: 'Gina Rodriguez',
-      hour: '07:00  PM',
+      patient: {
+        usertype: 'patient',
+        mail: 'jane.smith@example.com',
+        name: 'Jane',
+        surname: 'Smith',
+        dni: '87654321',
+        birthDate: new Date('1990-05-15'),
+        age: 34,
+        sex: 'F',
+        id: 'patient2',
+        trialId: 'trial1',
+        appointments: [
+          { date: new Date(), study: { name: 'Study A', keyVariables: [{ name: 'Variable 1', type: 'boolean' }, { name: 'Variable 2', type: 'number' }] } },
+        ],
+      },
+      appointment: { date: new Date(), study: { name: 'Study A', keyVariables: [{ name: 'Variable 1', type: 'boolean' }, { name: 'Variable 2', type: 'number' }] } },
     },
   ];
 
@@ -61,9 +102,11 @@ async function MedicalStaffDashboard() {
     <>
       <MedicalStaffHead name="some name" trialName="ajbskd" />
       <AppoinmentsToday
-        clinicalTrials={clinicalTrials}
-        studies={studies}
-        peopleWithAppointmentsToday={mockPeopleWithAppointmentsToday}
+        clinicalTrials={mockClinicalTrials as ClinicalTrial[]}
+        studies={mockStudies as ClinicalStudy[]}
+        peopleWithAppointmentsToday={
+          mockPersonWithAppointments as { patient: Patient; appointment: Appointment }[]
+        }
       />
     </>
   );

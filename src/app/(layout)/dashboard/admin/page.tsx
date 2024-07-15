@@ -7,6 +7,7 @@ import { Patient } from 'shared/api';
 import AdminHead from './AdminHead';
 import AssignAppointments from './AssignAppointments';
 import CreateNewClinicalTrial from './CreateNewClinicalTrial';
+import TrialsList from './TrialsList';
 
 async function AdminDashboard() {
   const mockPatientList = [
@@ -245,11 +246,17 @@ async function AdminDashboard() {
       ],
     },
   ];
+  const clinicalTrials = [
+    { id: '1', name: 'Trial A' },
+    { id: '2', name: 'Trial B' },
+    { id: '3', name: 'Trial C' },
+  ];
   return (
     <>
       <AdminHead clinicName="Clinica Monte Grande" />
       <CreateNewClinicalTrial />
       <AssignAppointments patientList={mockPatientList as Patient[]} />
+      <TrialsList trials={clinicalTrials} />
     </>
   );
 }
