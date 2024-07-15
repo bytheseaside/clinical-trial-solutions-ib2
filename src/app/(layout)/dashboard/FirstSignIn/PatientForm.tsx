@@ -12,10 +12,10 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
 
-import { Patient } from 'shared/api';
+import { ClinicalTrial, Patient } from 'shared/api';
 
 type Props = {
-  trialId: string;
+  trial: ClinicalTrial;
   group: string;
   sx?: SxProps<Theme>;
 };
@@ -33,12 +33,12 @@ const BASE_PATIENT : Omit<Patient, 'mail' | 'id' | 'group' | 'trialId'> = {
   appointments: [],
 };
 
-const PatientForm: React.FC<Props> = ({ trialId, group, sx = [] }) => {
+const PatientForm: React.FC<Props> = ({ trial, group, sx = [] }) => {
   const { user } = useUser();
   const router = useRouter();
 
   const [patientData, setPatientData] = React.useState<Patient>(
-    { ...BASE_PATIENT, mail: user?.email || '', id: user?.sub || '', trialId, group },
+    { ...BASE_PATIENT, mail: user?.email || '', id: user?.sub || '', trialId: trial.id, group },
   );
 
   const handleSubmission = (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -49,11 +49,11 @@ const PatientForm: React.FC<Props> = ({ trialId, group, sx = [] }) => {
 
   useEffect(
     () => {
-      if (trialId && group) {
-        setPatientData({ ...patientData, trialId, group });
+      if (trial && group) {
+        setPatientData({ ...patientData, trialId: trial.id, group });
       }
     },
-    [trialId, group],
+    [trial, group],
   );
 
   return (
@@ -144,6 +144,7 @@ const PatientForm: React.FC<Props> = ({ trialId, group, sx = [] }) => {
           }}
           referenceDate={dayjs()}
         />
+
         <Button
           type="submit"
           variant="contained"
