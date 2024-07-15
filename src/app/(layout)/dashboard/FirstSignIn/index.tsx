@@ -21,7 +21,6 @@ const FirstSignIn: React.FC<Props> = ({ sx = [] }) => {
   const [usertype, setUsertype] = useState<'patient' | 'medicalStaff' | 'analyst' | ''>('');
   const [group, setGroup] = useState<string>('');
 
-
   useEffect(() => {
     if (code) {
       // ClinicalTrial.getTrialByCode(code)
