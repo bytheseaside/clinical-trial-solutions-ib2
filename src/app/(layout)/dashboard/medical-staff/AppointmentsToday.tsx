@@ -151,7 +151,8 @@ const AppointmentsToday: React.FC<Props> = ({
               Select
             </MenuItem>
             {
-              Array.isArray(selectedTrial?.studies)
+              selectedTrial
+              && Array.isArray(selectedTrial?.studies)
               && selectedTrial.studies.length > 0
               && selectedTrial.studies.map((study) => (
                 <MenuItem key={study.name} value={study.name} dense>
