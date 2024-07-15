@@ -150,6 +150,25 @@ async function AnalystDashboard() {
     },
   ];
 
+  const mockNumericAssessmentsData: AssessmentData[] = [
+    {
+      type: 'numeric',
+      data: [
+        { group: 'Group A', value: 10 },
+        { group: 'Group A', value: 15 },
+        { group: 'Group A', value: 20 },
+        { group: 'Group B', value: 25 },
+        { group: 'Group B', value: 30 },
+        { group: 'Group B', value: 35 },
+        { group: 'Group C', value: 40 },
+        { group: 'Group C', value: 45 },
+        { group: 'Group C', value: 50 },
+
+      ],
+      title: 'Numeric Data Chart',
+    },
+  ];
+
   return (
     <>
       <AnalystHead
@@ -160,7 +179,9 @@ async function AnalystDashboard() {
         colors={colors}
       />
       <AssesmentsResultsReport
-        assesmentsData={[...mockAssesmentsData, ...mockBooleanAssessmentsData]}
+        assesmentsData={
+          [...mockNumericAssessmentsData, ...mockAssesmentsData, ...mockBooleanAssessmentsData]
+}
         colors={colors}
       />
     </>

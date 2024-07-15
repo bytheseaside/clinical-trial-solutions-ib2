@@ -7,11 +7,12 @@ import Typography from '@mui/material/Typography';
 import Container from 'shared/layout/Container';
 
 import BooleanChart, { BooleanData } from './BooleanChart';
+import NumericChart, { NumericData } from './NumericChart';
 import ThresholdChart, { ThresholdData } from './ThresholdChart';
 
 export type AssessmentData = {
   type: 'threshold' | 'boolean' | 'numeric';
-  data: (ThresholdData | BooleanData)[];
+  data: (ThresholdData | BooleanData | NumericData)[];
   title: string;
 };
 
@@ -68,9 +69,18 @@ const AssesmentsResultsReport: React.FC<Props> = ({ assesmentsData, colors, sx =
             />
           );
         }
+        if (data.type === 'numeric') {
+          return (
+            <NumericChart
+              key={data.title}
+              title={data.title}
+              data={data.data as NumericData[]}
+              colors={colors}
+            />
+          );
+        }
         return null;
       })}
-
     </Box>
   </Container>
 );
