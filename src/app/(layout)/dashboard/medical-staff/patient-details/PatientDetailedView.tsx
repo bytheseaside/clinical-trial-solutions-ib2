@@ -82,12 +82,13 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
     if (patientId) {
       const foundPatient = patientList.find((p) => p.id === patientId);
       if (foundPatient) {
-        // async call to get clinical trial related to patient
+        // async call to get clinical trial related to patient TO DO DB
         const clinicalTrialId = foundPatient.trialId;
         const foundClinicalTrial: ClinicalTrial = {
           id: clinicalTrialId,
+          contacts: [],
           name: 'Trial A',
-          signUpCodes: { patient: 'P001', medicalStaff: 'D001', analist: 'A001' },
+          signUpCodes: { patient: 'P001', medicalStaff: 'D001', analyst: 'A001' },
           studies: [
             {
               name: 'Study A1',

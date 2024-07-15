@@ -26,11 +26,12 @@ const BASE_TRIAL = {
   groups: [],
   knownPossibleSecondaryEffects: [],
   exclusionCriteria: [],
+  contact: [],
   signUpCodes: {
     patient: '',
-    medicalStaff: '',
-    analist: '',
+    analyst: '',
   },
+  contacts: [],
 };
 
 const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
@@ -43,7 +44,7 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
 
     const uniqueSignUpCodes: SignUpCodes = {
       medicalStaff: Math.random().toString(36).substring(2, 15),
-      analist: Math.random().toString(36).substring(2, 15),
+      analyst: Math.random().toString(36).substring(2, 15),
     };
 
     if (trial?.groups?.length) {

@@ -20,7 +20,7 @@ const renderIcon = (key: string) => {
   switch (key) {
     case 'medicalStaff':
       return <LocalHospital color="secondary" sx={{ mr: 1 }} />;
-    case 'analist':
+    case 'analyst':
       return <AssignmentInd color="secondary" sx={{ mr: 1 }} />;
     default:
       return <People color="secondary" sx={{ mr: 1 }} />;
@@ -31,8 +31,8 @@ const renderLabel = (key: string) => {
   switch (key) {
     case 'medicalStaff':
       return 'Medical Staff';
-    case 'analist':
-      return 'Analist';
+    case 'analyst':
+      return 'Analyst';
     default:
       return `Patient (${key.split('-')[1] || 'General'})`;
   }

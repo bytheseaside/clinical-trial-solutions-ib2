@@ -47,8 +47,7 @@ export type ExclusionCriteria = {
 };
 
 export type SignUpCodes = {
-  medicalStaff: string;
-  analist: string;
+  analyst: string;
   [key: string]: string; // allow for presence of group patient codes
 };
 

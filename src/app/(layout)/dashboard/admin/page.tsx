@@ -268,12 +268,13 @@ async function AdminDashboard() {
         },
       ],
       signUpCodes: {
-        medicalStaff: 'MS-TR1-001',
-        analist: 'AN-TR1-001',
+        analyst: 'AN-TR1-001',
         patient: 'PT-TR1-001',
       },
+      contacts: [],
     },
     {
+      contacts: [],
       id: 'trial2',
       name: 'Trial 2',
       studies: [
@@ -301,13 +302,13 @@ async function AdminDashboard() {
       ],
       groups: ['Group 1', 'Group 2'],
       signUpCodes: {
-        medicalStaff: 'MS-TR2-001',
-        analist: 'AN-TR2-001',
+        analyst: 'AN-TR2-001',
         'patient-Group 1': 'PT-G1-TR2-001',
         'patient-Group 2': 'PT-G2-TR2-001',
       },
     },
     {
+      contacts: [],
       id: 'trial3',
       name: 'Trial 3',
       studies: [
@@ -324,8 +325,7 @@ async function AdminDashboard() {
         { question: 'Are you pregnant?', answerToExclude: true },
       ],
       signUpCodes: {
-        medicalStaff: 'MS-TR3-001',
-        analist: 'AN-TR3-001',
+        analyst: 'AN-TR3-001',
         patient: 'PT-TR3-001',
       },
     },
@@ -351,13 +351,15 @@ async function AdminDashboard() {
       groups: ['Group 1', 'Group 2', 'Group 3'],
       signUpCodes: {
         medicalStaff: 'MS-TR4-001',
-        analist: 'AN-TR4-001',
+        analyst: 'AN-TR4-001',
         'patient-Group 1': 'PT-G1-TR4-001',
         'patient-Group 2': 'PT-G2-TR4-001',
         'patient-Group 3': 'PT-G3-TR4-001',
       },
+      contacts: [],
     },
     {
+      contacts: [],
       id: 'trial5',
       name: 'Trial 5',
       studies: [
@@ -372,7 +374,7 @@ async function AdminDashboard() {
       knownPossibleSecondaryEffects: ['Fatigue'],
       signUpCodes: {
         medicalStaff: 'MS-TR5-001',
-        analist: 'AN-TR5-001',
+        analyst: 'AN-TR5-001',
         patient: 'PT-TR5-001',
       },
     },

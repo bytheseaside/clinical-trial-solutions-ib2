@@ -71,9 +71,9 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
           ],
         },
       ],
+      contacts: [],
       signUpCodes: {
-        medicalStaff: 'MS-TR1-001',
-        analist: 'AN-TR1-001',
+        analyst: 'AN-TR1-001',
         patient: 'PT-TR1-001',
       },
     }; // TODO replace with actual call to DB
@@ -123,14 +123,6 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
           value={selectedPatient}
           onChange={(event, choosenPatient) => {
             setSelectedPatient(choosenPatient);
-            if (choosenPatient) {
-              const { id } = choosenPatient;
-              const params = new URLSearchParams();
-              params.set('patient', id);
-              router.push(`/dashboard/admin?${params.toString()}`, { scroll: false });
-            } else {
-              router.push('/dashboard/admin', { scroll: false });
-            }
           }}
           fullWidth
         />
@@ -156,7 +148,11 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
                 }));
               }}
               // eslint-disable-next-line max-len
-              referenceDate={dayjs().add(1, 'day')} // only allow appointments starting from tomorrow
+              referenceDate={dayjs()}
+              disablePast
+              sx={{
+                width: { xxs: '100%', sm: '35%' },
+              }}
             />
             <TextField
               select
@@ -168,6 +164,8 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
               value={newAppointment.study.name}
               onChange={(e) => {
                 if (e.target.value === 'extraAppointment') {
+                  console.log(' extraaaa');
+
                   setNewAppointment((prevAppointment) => ({
                     ...prevAppointment,
                     study: {
@@ -178,6 +176,7 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
                   return;
                 }
 
+                console.log('not extra');
                 const matchingStudy = patientTrial.studies.find(
                   (s) => s.name === e.target.value,
                 );
@@ -194,8 +193,8 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
                   {study.name}
                 </MenuItem>
               ))}
-              <MenuItem value="extraAppointment" dense>
-                Extra appointment.
+              <MenuItem value="Extra appointment" dense>
+                Extra appointment
               </MenuItem>
             </TextField>
             <Button
