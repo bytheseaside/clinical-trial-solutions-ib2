@@ -53,4 +53,9 @@ export type ClinicalTrial = {
   groups?: string[];
   knownPossibleSecondaryEffects?: string[];
   exclusionCriteria?: ExclusionCriteria[];
+  signUpCodes: {
+    medicalStaff: string;
+    analist: string;
+    [key: string]: string; // allow for presence of group patient codes
+  };
 };
