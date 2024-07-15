@@ -2,11 +2,8 @@ import React from 'react';
 
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
-import Container from 'shared/layout/Container';
-
 import AnalystHead from './AnalystHead';
 import SecondaryEffectsReport from './SecondaryEffecstReport';
-import SecondaryEffectChart, { Data } from './SecondaryEffectChart';
 
 async function AnalystDashboard() {
   const colors = ([
