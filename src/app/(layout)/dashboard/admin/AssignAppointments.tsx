@@ -51,7 +51,7 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
 
     try {
       await AppointmentService.addAppointmentToPatient(selectedPatient.id, newAppointment);
-      setNewAppointment(BASE_APPOINTMENT);
+      router.push('/dashboard/admin');
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error adding appointment:', error);

@@ -185,7 +185,7 @@ const AppointmentsToday: React.FC<Props> = ({
               >
                 {peopleWithAppointmentsToday.map(({ patient, appointment: { date } }) => (
                   <Box
-                    key={patient.id + date.toISOString()}
+                    key={patient.id + new Date(date).toISOString()}
                     onClick={() => handleViewDetails(patient.id)}
                     sx={{
                       backgroundColor: 'background.paper',
@@ -223,7 +223,7 @@ const AppointmentsToday: React.FC<Props> = ({
                     >
                       Today at
                       {' '}
-                      {date.toLocaleTimeString('default', { hour: '2-digit', minute: '2-digit' })}
+                      {new Date(date).toLocaleTimeString('default', { hour: '2-digit', minute: '2-digit' })}
                     </Typography>
                     <Typography
                       variant="body1"
