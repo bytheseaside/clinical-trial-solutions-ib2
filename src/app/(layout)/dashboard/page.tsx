@@ -2,13 +2,19 @@
 
 import React from 'react';
 
-import { withPageAuthRequired } from '@auth0/nextjs-auth0/client';
+import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0/client';
+
+import FirstSignIn from './FirstSignIn';
+import Header from './Header';
 
 function Dashboard() {
+  const { user, error: userError, isLoading } = useUser();
+  console.log(user, userError, isLoading);
+
   return (
     <>
-      General dashboard.  Later we have to redirect people to the correct dashboard
-      after checking their role.
+      <Header />
+      <FirstSignIn />
     </>
   );
 }
