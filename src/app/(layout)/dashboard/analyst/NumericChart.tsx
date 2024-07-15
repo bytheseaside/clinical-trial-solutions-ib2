@@ -64,35 +64,34 @@ const NumericChart: React.FC<Props> = ({ data, title, colors }) => {
     bargroupgap: 0.05,
   };
 
-  return (isUpSm
-    && (
-      <>
-        <Box
-          component={Plot}
-          data={trace}
-          layout={layout as PlotLayout}
-        />
-        <Typography
-          sx={{
-            color: 'text.secondary',
-          }}
-        >
-          The chart was made only considering the participants of the trial that have a value
-          loaded for the mentioned variable. There are
-          {' '}
-          {counterNonCompleted}
-          {' '}
-          patients with an
-          empty field of
-          {' '}
-          {data.length}
-          {' '}
-          participants total (
-          {((counterNonCompleted / data.length) * 100).toFixed(2)}
-          %).
-        </Typography>
-      </>
-    )
+  return (isUpSm ? (
+    <>
+      <Box
+        component={Plot}
+        data={trace}
+        layout={layout as PlotLayout}
+      />
+      <Typography
+        sx={{
+          color: 'text.secondary',
+        }}
+      >
+        The chart was made only considering the participants of the trial that have a value
+        loaded for the mentioned variable. There are
+        {' '}
+        {counterNonCompleted}
+        {' '}
+        patients with an
+        empty field of
+        {' '}
+        {data.length}
+        {' '}
+        participants total (
+        {((counterNonCompleted / data.length) * 100).toFixed(2)}
+        %).
+      </Typography>
+    </>
+  ) : null
   );
 };
 

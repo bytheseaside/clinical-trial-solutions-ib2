@@ -57,14 +57,13 @@ const TotalAmountChart: React.FC<Props> = ({ data, title, colors }) => {
     bargroupgap: 0.05,
   };
 
-  return (isUpSm
-    && (
-      <Box
-        component={Plot}
-        data={trace}
-        layout={layout as PlotLayout}
-      />
-    )
+  return (isUpSm ? (
+    <Box
+      component={Plot}
+      data={trace}
+      layout={layout as PlotLayout}
+    />
+  ) : null
   );
 };
 

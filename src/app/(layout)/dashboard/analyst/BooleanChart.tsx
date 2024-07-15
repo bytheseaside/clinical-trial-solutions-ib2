@@ -48,14 +48,15 @@ const BooleanChart: React.FC<Props> = ({ data, title }) => {
 
   const layout = { title, xaxis: { tickangle: -45 } };
 
-  return (isUpSm
-    && (
+  return (
+    isUpSm ? (
       <Box
         component={Plot}
         data={trace as PlotData[]}
         layout={layout as PlotLayout}
       />
     )
+      : null
   );
 };
 
