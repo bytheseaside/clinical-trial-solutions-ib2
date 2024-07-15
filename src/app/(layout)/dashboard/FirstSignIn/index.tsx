@@ -1,7 +1,10 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { SxProps, Theme } from '@mui/material/styles';
+import { useRouter } from 'next/navigation';
 import ClinicalTrialService from 'services/firebase/ClinicalTrialService';
 import CodeService from 'services/firebase/codeService';
 import UserService from 'services/firebase/userService';
@@ -18,6 +21,7 @@ type Props = {
 
 const FirstSignIn: React.FC<Props> = ({ sx = [] }) => {
   const { user } = useUser();
+  const router = useRouter();
   const [error, setError] = useState<boolean>(false);
   const [code, setCode] = useState<string>('');
   const [relatedTrial, setRelatedTrial] = useState<ClinicalTrial | null>(null);
@@ -77,7 +81,8 @@ const FirstSignIn: React.FC<Props> = ({ sx = [] }) => {
         mail: user.email,
         id: user.sub,
       };
-      UserService.createUser(user.sub, baseUser);
+      UserService.createUser(user.sub, baseUser)
+        .then(() => router.push('/dashboard/medical-staff'));
     }
     if ((usertype === 'analyst') && user?.sub && user?.email && relatedTrial) {
       const baseUser = {
@@ -86,7 +91,8 @@ const FirstSignIn: React.FC<Props> = ({ sx = [] }) => {
         id: user.sub,
         trialId: relatedTrial.id,
       };
-      UserService.createUser(user.sub, baseUser);
+      UserService.createUser(user.sub, baseUser)
+        .then(() => router.push('/dashboard/analyst'));
     }
   }, [usertype]);
 

@@ -9,7 +9,7 @@ import UserService from 'services/firebase/userService';
 import FirstSignIn from './FirstSignIn';
 import Header from './Header';
 
-const USER_TYPE_PAGES = {
+const USER_TYPE_PAGES: { [key: string]: string } = {
   patient: 'patient',
   medicalStaff: 'medical-staff',
   analyst: 'analyst',
@@ -26,7 +26,14 @@ function Dashboard() {
       if (user?.sub) {
         const auxUser = await UserService.getUserById(user.sub);
         if (auxUser) {
-          router.push(`/dashboard/${USER_TYPE_PAGES[auxUser.usertype]}`);
+          const userTypePage = USER_TYPE_PAGES[auxUser.usertype];
+          if (userTypePage) {
+            router.push(`/dashboard/${userTypePage}`);
+          } else {
+            // eslint-disable-next-line no-console
+            console.error('Unknown user type:', auxUser.usertype);
+            setIsFirstSignIn(true);
+          }
         } else {
           setIsFirstSignIn(true);
         }
