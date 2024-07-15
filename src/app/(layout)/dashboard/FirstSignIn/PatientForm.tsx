@@ -38,7 +38,7 @@ const PatientForm: React.FC<Props> = ({ trial, group, sx = [] }) => {
   const router = useRouter();
 
   const [patientData, setPatientData] = React.useState<Patient>(
-    { ...BASE_PATIENT, mail: user?.email || '', id: user?.sub || '', trialId: trial.id, group },
+    { ...BASE_PATIENT, mail: user?.email || '', id: user?.sub || '', trialId: trial?.id || '', group: group || '' },
   );
 
   const handleSubmission = (e: React.SyntheticEvent<HTMLFormElement>) => {
