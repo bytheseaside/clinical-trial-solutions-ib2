@@ -222,7 +222,7 @@ const AppointmentsToday: React.FC<Props> = ({
                     >
                       Today at
                       {' '}
-                      {date.toLocaleTimeString({ hour: '2-digit', minute: '2-digit' })}
+                      {date.toLocaleTimeString('default', { hour: '2-digit', minute: '2-digit' })}
                     </Typography>
                     <Typography
                       variant="body1"
