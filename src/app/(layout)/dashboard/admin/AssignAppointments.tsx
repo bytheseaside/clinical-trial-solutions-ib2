@@ -51,14 +51,23 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
     }
 
     try {
-      await AppointmentService.addAppointmentToPatient(selectedPatient.id, newAppointment);
-      setSelectedPatient((prevPatient) => {
-        if (!prevPatient) return null;
-        return ({
-          ...prevPatient,
-          appointments: [...prevPatient.appointments, newAppointment],
+      await AppointmentService.addAppointmentToPatient(selectedPatient.id, newAppointment)
+        .then(() => {
+          setSelectedPatient((prevPatient) => {
+            if (!prevPatient) return null;
+            return ({
+              ...prevPatient,
+              appointments: [
+                ...(
+                  Array.isArray(prevPatient?.appointments)
+                    ? prevPatient.appointments : []
+                ),
+                newAppointment,
+              ],
+            });
+          });
+          setNewAppointment(BASE_APPOINTMENT);
         });
-      });
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error adding appointment:', error);
