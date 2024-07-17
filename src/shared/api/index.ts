@@ -24,7 +24,7 @@ export type Patient = {
   symptoms?: Symptom[];
   assesments?: {
     [key: string]: boolean | number | string;
-  }[];
+  }[][]; //  outer array is for each study, inner array is for each assesment
   appointments: Appointment[];
 };
 

@@ -25,7 +25,7 @@ const FirstSignIn: React.FC<Props> = ({ sx = [] }) => {
   const [error, setError] = useState<boolean>(false);
   const [code, setCode] = useState<string>('');
   const [relatedTrial, setRelatedTrial] = useState<ClinicalTrial | null>(null);
-  const [usertype, setUsertype] = useState<'patient' | 'medicalStaff' | 'analyst' | ''>('');
+  const [usertype, setUsertype] = useState<'patient' | 'medicalStaff' | 'analyst' | 'admin' | ''>('');
   const [group, setGroup] = useState<string>('');
 
   useEffect(() => {
@@ -93,6 +93,15 @@ const FirstSignIn: React.FC<Props> = ({ sx = [] }) => {
       };
       UserService.createUser(user.sub, baseUser)
         .then(() => router.push('/dashboard/analyst'));
+    }
+    if (usertype === 'admin' && user?.sub && user?.email) {
+      const baseUser = {
+        usertype,
+        mail: user.email,
+        id: user.sub,
+      };
+      UserService.createUser(user.sub, baseUser)
+        .then(() => router.push('/dashboard/admin'));
     }
   }, [usertype]);
 

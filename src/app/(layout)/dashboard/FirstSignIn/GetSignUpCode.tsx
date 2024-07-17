@@ -11,7 +11,7 @@ type Props = {
   error: boolean;
   setError: (value:boolean) => void;
   setCode: (value: string) => void;
-  usertype: 'patient' | 'medicalStaff' | 'analyst' | '';
+  usertype: 'patient' | 'medicalStaff' | 'analyst' | 'admin' | '';
   sx?: SxProps<Theme>;
 };
 

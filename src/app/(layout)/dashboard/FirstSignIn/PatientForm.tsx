@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { SxProps, Theme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
 import UserService from 'services/firebase/userService';
@@ -38,6 +38,7 @@ const BASE_PATIENT : Omit<Patient, 'mail' | 'id' | 'group' | 'trialId'> = {
 const PatientForm: React.FC<Props> = ({ trial, group, sx = [] }) => {
   const { user } = useUser();
   const router = useRouter();
+  const [optimisticMessage, setOptimisticMessage] = useState<string>('');
 
   const [patientData, setPatientData] = useState<Patient>(
     { ...BASE_PATIENT, mail: user?.email || '', id: user?.sub || '', trialId: trial?.id || '', group: group || '' },
@@ -46,6 +47,7 @@ const PatientForm: React.FC<Props> = ({ trial, group, sx = [] }) => {
 
   const handleSubmission = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setOptimisticMessage('');
 
     // Verifica si exclusionAnswers y trial están definidos
     if (!exclusionAnswers || !trial?.exclusionCriteria) {
@@ -70,7 +72,12 @@ const PatientForm: React.FC<Props> = ({ trial, group, sx = [] }) => {
       return;
     }
 
-    UserService.createUser(user!.sub, patientData);
+    setOptimisticMessage('Your profile is being created, wait for a second while you\'re being redirected.');
+    UserService.createUser(user!.sub, patientData)
+      .then(() => router.push('/dashboard/patient'))
+      .catch(() => {
+        setOptimisticMessage('There was some error. Please try again later');
+      });
   };
 
   useEffect(
@@ -88,6 +95,9 @@ const PatientForm: React.FC<Props> = ({ trial, group, sx = [] }) => {
         ...(Array.isArray(sx) ? sx : [sx]),
       }}
     >
+      <Typography variant="caption" color="text.secondary">
+        Please fill the following form to continue with the registration process.
+      </Typography>
       <Box
         component="form"
         sx={{
@@ -158,7 +168,7 @@ const PatientForm: React.FC<Props> = ({ trial, group, sx = [] }) => {
             Masculine
           </MenuItem>
         </TextField>
-        <DateTimePicker
+        <DatePicker
           label="Birth date of the patient"
           value={dayjs(patientData.birthDate)}
           onChange={(newDate: Dayjs | null) => {
@@ -182,7 +192,7 @@ const PatientForm: React.FC<Props> = ({ trial, group, sx = [] }) => {
                 select
                 label={criteria.question}
                 variant="outlined"
-                value={exclusionAnswers[criteria.question]}
+                value={exclusionAnswers[criteria.question] || false}
                 onChange={(e) => setExclusionAnswers((prevAnswers) => ({
                   ...prevAnswers,
                   [criteria.question]: e.target.value === 'true',
@@ -208,6 +218,12 @@ const PatientForm: React.FC<Props> = ({ trial, group, sx = [] }) => {
           Next
         </Button>
       </Box>
+      <Typography
+        variant="body2"
+        color="text.primary"
+      >
+        {optimisticMessage}
+      </Typography>
     </Box>
   );
 };

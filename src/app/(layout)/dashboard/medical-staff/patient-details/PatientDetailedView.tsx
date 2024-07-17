@@ -20,6 +20,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import ClinicalTrialService from 'services/firebase/clinicalTrialService';
 import PatientService from 'services/firebase/patientService';
 
 import { ClinicalStudyKeyVariable, ClinicalTrial, Patient } from 'shared/api';
@@ -86,70 +87,31 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
     }
   };
 
-  const handleKeyVariableSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleKeyVariableSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    for (let i = 0; i < keyVariableValues.length; i += 1) {
-      for (let j = 0; j < keyVariableValues[i].length; j += 1) {
-        const assesmentItem = keyVariableValues[i][j];
-        const medicionPaciente = {
-          name: assesmentItem.name,
-          value: assesmentItem.value,
-          study: i,
-        };
-        console.log('Submitting key variable:', medicionPaciente); // TODO replace with actual call to DB
-      }
-    }
+
   };
 
   useEffect(() => {
-    const patientId = searchParams.get('patient');
-    if (patientId) {
-      const foundPatient = patientList.find((p) => p.id === patientId);
-      if (foundPatient) {
-        // async call to get clinical trial related to patient TO DO DB
-        const clinicalTrialId = foundPatient.trialId;
-        const foundClinicalTrial: ClinicalTrial = {
-          id: clinicalTrialId,
-          contacts: [],
-          name: 'Trial A',
-          signUpCodes: { patient: 'P001', medicalStaff: 'D001', analyst: 'A001' },
-          studies: [
-            {
-              name: 'Study A1',
-              keyVariables: [
-                { name: 'Variable A', type: 'boolean' },
-                { name: 'Variable B', type: 'threshold' },
-                { name: 'Variable C', type: 'text' },
-                { name: 'Variable D', type: 'number' },
-              ],
-            },
-            {
-              name: 'Study A2',
-              keyVariables: [
-                { name: 'Variable E', type: 'boolean' },
-                { name: 'Variable F', type: 'threshold' },
-                { name: 'Variable G', type: 'text' },
-                { name: 'Variable H', type: 'number' },
-              ],
-            },
-          ],
-          groups: ['A', 'B', 'C'],
-          knownPossibleSecondaryEffects: ['Effect A', 'Effect B', 'Effect C'],
-          exclusionCriteria: [
-            {
-              question: 'Question A',
-              answerToExclude: false,
-            },
-            {
-              question: 'Question B',
-              answerToExclude: true,
-            },
-          ],
-        }; // TODO replace with actual call to DB
-        setClinicalTrial(foundClinicalTrial);
-        setPatient(foundPatient);
+    const fetchPatientAndTrial = async () => {
+      const patientId = searchParams.get('patient');
+      if (patientId) {
+        const foundPatient = patientList.find((p) => p.id === patientId);
+        if (foundPatient) {
+          try {
+            const clinicalTrialId = foundPatient.trialId;
+            // eslint-disable-next-line max-len
+            const foundClinicalTrial = await ClinicalTrialService.getClinicalTrialById(clinicalTrialId);
+            setClinicalTrial(foundClinicalTrial);
+            setPatient(foundPatient);
+          } catch (error) {
+            console.error('Error al obtener el ensayo clínico:', error);
+          }
+        }
       }
-    }
+    };
+
+    fetchPatientAndTrial();
   }, [searchParams, patientList]);
 
   useEffect(() => {
@@ -362,12 +324,12 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                                 {new Date(startDate).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
                                 )
                               </Typography>
-                        )}
+                            )}
                             secondary={(
                               <Typography variant="body2" color="textSecondary">
                                 {comments}
                               </Typography>
-                        )}
+                            )}
                             sx={{ ml: 1 }}
                           />
                         </ListItem>

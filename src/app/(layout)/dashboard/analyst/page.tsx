@@ -1,12 +1,25 @@
 import React from 'react';
 
-import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import UserService from 'services/firebase/userService';
+
+import WrongPage from 'shared/components/WrongPage';
 
 import AnalystHead from './AnalystHead';
 import AssesmentsResultsReport, { AssessmentData } from './AssesmentsResultsReport';
 import SecondaryEffectsReport from './SecondaryEffecstReport';
 
 async function AnalystDashboard() {
+  const session = await getSession();
+  const userId = session?.user.sub;
+  const user = await UserService.getUserById(userId);
+  if (user.usertype !== 'analyst') {
+    console.warn('User is not an analyst');
+    return (
+      <WrongPage />
+    );
+  }
+
   const colors = ([
     '#CCABD8', // azul
     '#ff7f0e', // naranja

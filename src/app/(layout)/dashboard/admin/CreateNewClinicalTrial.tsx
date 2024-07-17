@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -46,7 +47,6 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
     event.preventDefault();
 
     const uniqueSignUpCodes: SignUpCodes = {
-      medicalStaff: Math.random().toString(36).substring(2, 15),
       analyst: Math.random().toString(36).substring(2, 15),
     };
 
@@ -58,8 +58,11 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
       uniqueSignUpCodes.patient = Math.random().toString(36).substring(2, 15);
     }
 
-    ClinicalTrialService.addTrial({ ...trial, signUpCodes: uniqueSignUpCodes });
-    router.push('/dashboard/admin');
+    ClinicalTrialService.addTrial({ ...trial, signUpCodes: uniqueSignUpCodes })
+      .then(() => { // reload the page to show the new trial
+        router.refresh();
+        setTrial(BASE_TRIAL);
+      });
   };
 
   return (
@@ -124,6 +127,7 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
             sx={{ flexBasis: { sm: '70%' } }}
           />
         </Box>
+        <Divider />
         {/* studies */}
         <Box>
           <Typography
@@ -132,7 +136,6 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
               display: 'flex',
               alignItems: 'center',
               gap: 1,
-              mt: 2,
               typography: { xxs: 'h5', sm: 'h4' },
             }}
           >
@@ -194,6 +197,7 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
                 </Typography>
                 <TextField
                   size="small"
+                  required
                   id={`studyName${studyIndex + 1}`}
                   name={`studyName${studyIndex + 1}`}
                   label={`Name of the study ${studyIndex + 1}`}
@@ -236,6 +240,7 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
                   }}
                   value={trial.studies[studyIndex].keyVariables.length}
                 />
+                <Divider />
                 <Box>
                   {!!trial.studies[studyIndex].keyVariables.length && (
                     <Typography
@@ -294,12 +299,12 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
                           value={trial.studies[studyIndex].keyVariables[varIndex].type}
                         >
                           <MenuItem disabled dense value="">
-                            Seleccione tipo de variable
+                            Select the variable type
                           </MenuItem>
-                          <MenuItem dense value="umbral">Umbral 1-10</MenuItem>
-                          <MenuItem dense value="siNo">Si/No</MenuItem>
-                          <MenuItem dense value="numerica">Numerica</MenuItem>
-                          <MenuItem dense value="texto">Texto</MenuItem>
+                          <MenuItem dense value="threshold">Threshold 1-10</MenuItem>
+                          <MenuItem dense value="boolean">Yes/No</MenuItem>
+                          <MenuItem dense value="numeric">Numeric</MenuItem>
+                          <MenuItem dense value="text">Text</MenuItem>
                         </Select>
                       </FormControl>
                     </Box>
@@ -310,6 +315,7 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
           </Box>
         </Box>
         {/* exclusion criteria */}
+        <Divider />
         <Box>
           <Typography
             color="text.primary"
@@ -317,7 +323,6 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
               display: 'flex',
               alignItems: 'center',
               gap: 1,
-              mt: 2,
               typography: { xxs: 'h5', sm: 'h4' },
             }}
           >
@@ -328,7 +333,7 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
             name="exclusionQuestionsNumber"
             helperText="Input the number of exlusion questions in the trial."
             type="number"
-            inputProps={{ min: 1 }}
+            inputProps={{ min: 0 }}
             required
             label="Number of exclusion questions"
             variant="outlined"
@@ -426,6 +431,7 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
               ))}
           </Box>
         </Box>
+        <Divider />
         {/* secondary effects */}
         <Box>
           <Typography
@@ -434,7 +440,6 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
               display: 'flex',
               alignItems: 'center',
               gap: 1,
-              mt: 2,
               typography: { xxs: 'h5', sm: 'h4' },
             }}
           >
@@ -459,6 +464,7 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
               id="sec-effects"
               name="sec-effects"
               type="number"
+              helperText="Input the number of secondary effects to track."
               inputProps={{ min: 0 }}
               label="Secondary effects"
               variant="outlined"
@@ -492,13 +498,14 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
                 && trial.knownPossibleSecondaryEffects.map((effect, effectIndex) => (
                   <TextField
                     size="small"
-                  // eslint-disable-next-line react/no-array-index-key
+                    // eslint-disable-next-line react/no-array-index-key
                     key={`effect ${effectIndex}`}
                     id={`effect ${effectIndex}`}
                     name={`effect ${effectIndex}`}
                     required
                     label={`Effect #${effectIndex + 1} to track`}
                     variant="outlined"
+                    value={effect}
                     onChange={(event) => {
                       // eslint-disable-next-line max-len
                       const auxKnownPossibleSecondaryEffects = [...trial?.knownPossibleSecondaryEffects || []];
@@ -511,6 +518,7 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
             </Box>
           </Box>
         </Box>
+        <Divider />
         {/* trial groups */}
         <Box>
           <Typography
@@ -519,7 +527,6 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
               display: 'flex',
               alignItems: 'center',
               gap: 1,
-              mt: 2,
               typography: { xxs: 'h5', sm: 'h4' },
             }}
           >
@@ -593,10 +600,11 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
           </Box>
         </Box>
         <Button
+          size="small"
           type="submit"
           variant="outlined"
           color="primary"
-          sx={{ alignSelf: 'flex-end', mt: 1, backgroundColor: 'transparent' }}
+          sx={{ alignSelf: 'flex-end', mt: -5, backgroundColor: 'transparent' }}
         >
           Create trial
         </Button>

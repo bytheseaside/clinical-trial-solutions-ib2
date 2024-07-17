@@ -61,6 +61,21 @@ const PatientService = {
       console.error('Error updating patient symptoms:', error);
     }
   },
+  updateKeyVariable: async (patientId, studyIndex, keyVariable) => {
+    if (!patientId || !studyIndex || !keyVariable || !keyVariable.name) {
+      throw new Error('Faltan datos necesarios para actualizar la variable clave.');
+    }
+
+    const database = getDatabase();
+    const keyVariableRef = ref(database, `patients/${patientId}/assessments/${studyIndex}/keyVariables/${keyVariable.name}`);
+
+    try {
+      await set(keyVariableRef, keyVariable);
+      console.log(`Variable clave ${keyVariable.name} actualizada correctamente.`);
+    } catch (error) {
+      console.error('Error al actualizar la variable clave:', error);
+    }
+  },
 };
 
 export default PatientService;

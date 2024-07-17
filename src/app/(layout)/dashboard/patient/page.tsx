@@ -4,7 +4,9 @@ import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import ClinicalTrialService from 'services/firebase/clinicalTrialService';
 import UserService from 'services/firebase/userService';
 
-import { ClinicalTrial } from 'shared/api';
+import { ClinicalTrial, Patient } from 'shared/api';
+import WrongPage from 'shared/components/WrongPage';
+import getAuxSteps from 'shared/utils/getAuxSteps';
 
 import AppointmentsSection from './AppointmentSection';
 import ContactsBoard from './ContactsBoard';
@@ -16,9 +18,17 @@ async function PatientDashboard() {
   const session = await getSession();
 
   const userId = session?.user.sub;
-  const patient = await UserService.getUserById(userId);
+  const patient: Patient = await UserService.getUserById(userId);
+  if (patient.usertype !== 'patient') {
+    console.warn('User is not a patient');
+    return (
+      <WrongPage />
+    );
+  }
   // eslint-disable-next-line max-len
   const relatedTrial: ClinicalTrial = await ClinicalTrialService.getClinicalTrialById(patient.trialId);
+
+  const auxSteps = getAuxSteps(relatedTrial, patient);
 
   return (
     <>
@@ -27,7 +37,7 @@ async function PatientDashboard() {
         trialName={relatedTrial.name}
       />
       <TrialProgress
-        steps={patient?.appointments || []}
+        steps={auxSteps}
       />
       <ReportSymptom
         symptoms={relatedTrial.knownPossibleSecondaryEffects || []}
