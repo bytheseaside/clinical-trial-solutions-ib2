@@ -44,6 +44,11 @@ const AppointmentsToday: React.FC<Props> = ({
 
   useEffect(() => {
     if (selectedTrial) {
+      if (selectedStudyName === 'Extra appointment') {
+        setSelectedStudy({ name: 'Extra appointment', keyVariables: [] });
+        return;
+      }
+
       const study = selectedTrial.studies.find((s) => s.name === selectedStudyName);
       setSelectedStudy(study || null);
     }
@@ -160,6 +165,9 @@ const AppointmentsToday: React.FC<Props> = ({
                 </MenuItem>
               ))
             }
+            <MenuItem value="Extra appointment" dense>
+              Extra Appointments
+            </MenuItem>
           </TextField>
         </Box>
       </Box>
@@ -173,7 +181,9 @@ const AppointmentsToday: React.FC<Props> = ({
             Appointments for Selected Study
           </Typography>
           {Array.isArray(peopleWithAppointmentsToday)
-            && peopleWithAppointmentsToday.length > 0 ? (
+            && peopleWithAppointmentsToday.filter(
+              ({ appointment }) => appointment.study.name === selectedStudyName,
+            ).length > 0 ? (
               <Box
                 sx={{
                   display: 'flex',
@@ -183,7 +193,9 @@ const AppointmentsToday: React.FC<Props> = ({
                   py: 3,
                 }}
               >
-                {peopleWithAppointmentsToday.map(({ patient, appointment: { date } }) => (
+                {peopleWithAppointmentsToday.filter(
+                  ({ appointment }) => appointment.study.name === selectedStudyName,
+                ).map(({ patient, appointment: { date } }) => (
                   <Box
                     key={patient.id + new Date(date).toISOString()}
                     onClick={() => handleViewDetails(patient.id)}
