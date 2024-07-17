@@ -3,7 +3,9 @@
 import React, { useEffect, useState } from 'react';
 
 import ClearIcon from '@mui/icons-material/Clear';
+import DeleteIcon from '@mui/icons-material/Delete';
 import LabelImportantIcon from '@mui/icons-material/LabelImportant';
+import { IconButton } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -50,7 +52,13 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
 
     try {
       await AppointmentService.addAppointmentToPatient(selectedPatient.id, newAppointment);
-      router.push('/dashboard/admin');
+      setSelectedPatient((prevPatient) => {
+        if (!prevPatient) return null;
+        return ({
+          ...prevPatient,
+          appointments: [...prevPatient.appointments, newAppointment],
+        });
+      });
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error adding appointment:', error);
@@ -225,6 +233,7 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
                       key={`appointment${appointmentIndex}`}
                       sx={{
                         display: 'flex',
+                        justifyContent: 'space-between',
                       }}
                     >
                       <Typography
@@ -239,6 +248,34 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
                         {new Date(appointment.date).toLocaleString('es-AR')}
                         {` - ${appointment.study.name}`}
                       </Typography>
+                      <IconButton
+                        aria-label={`delete appointment${appointmentIndex}`}
+                        onClick={async () => {
+                          try {
+                            await AppointmentService.deleteAppointment(
+                              selectedPatient.id,
+                              appointmentIndex,
+                            ).then(() => {
+                              setSelectedPatient(
+                                (prevPatient) => {
+                                  if (!prevPatient) return null;
+                                  return ({
+                                    ...prevPatient,
+                                    appointments: prevPatient.appointments.filter(
+                                      (app, index) => index !== appointmentIndex,
+                                    ),
+                                  });
+                                },
+                              );
+                            });
+                          } catch (error) {
+                            // eslint-disable-next-line no-console
+                            console.error('Error deleting appointment:', error);
+                          }
+                        }}
+                      >
+                        <DeleteIcon fontSize="inherit" />
+                      </IconButton>
                     </Box>
                   ),
                 ) : (

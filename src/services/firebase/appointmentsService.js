@@ -61,6 +61,29 @@ const AppointmentService = {
       throw error;
     }
   },
+  deleteAppointment: async (patientId, appointmentId) => {
+    try {
+      const patientRef = ref(firebaseDB, `/users/${patientId}`);
+      const snapshot = await get(patientRef);
+
+      if (snapshot.exists()) {
+        const patientData = snapshot.val();
+        const updatedAppointments = patientData.appointments.filter(
+          (appointment, index) => index !== appointmentId,
+        );
+
+        await update(patientRef, { appointments: updatedAppointments });
+
+        console.log('Appointment deleted successfully');
+      } else {
+        console.error(`Patient with ID ${patientId} not found.`);
+        throw new Error('Patient not found');
+      }
+    } catch (error) {
+      console.error('Error deleting appointment:', error);
+      throw error;
+    }
+  },
 
 };
 
