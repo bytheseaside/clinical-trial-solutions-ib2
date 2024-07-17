@@ -8,6 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { SxProps, Theme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { set } from 'firebase/database';
 import ClinicalTrialService from 'services/firebase/clinicalTrialService';
 
 import { ClinicalTrial, Contact } from 'shared/api';
@@ -45,13 +46,16 @@ const ContactInfo: React.FC<Props> = ({ trials, sx = [] }) => {
     e.preventDefault();
     if (selectedTrial?.id) {
       try {
-        await ClinicalTrialService.updateTrialContactInfo(selectedTrial.id, contact);
+        await ClinicalTrialService.updateTrialContactInfo(selectedTrial.id, contact)
+          .then(() => {
+            setContact({
+              name: '',
+              phone: '',
+              specialty: '',
+            });
+            setSelectedTrial(null);
+          });
         console.log('Contact info submitted successfully');
-        setContact({
-          name: '',
-          phone: '',
-          specialty: '',
-        });
       } catch (error) {
         console.error('Error submitting contact info:', error);
       }
