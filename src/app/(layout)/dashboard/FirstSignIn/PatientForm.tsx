@@ -31,7 +31,7 @@ const BASE_PATIENT : Omit<Patient, 'mail' | 'id' | 'group' | 'trialId'> = {
   sex: 'F',
   observations: [],
   symptoms: [],
-  assesments: [],
+  assessments: [],
   appointments: [],
 };
 
