@@ -403,7 +403,8 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                  // eslint-disable-next-line react/no-array-index-key
                  <Box
                    component="form"
-                   onSubmit={(e) => handleKeyVariableSubmit(e, studyIndex)}
+                   // eslint-disable-next-line max-len
+                   onSubmit={(e: React.SyntheticEvent<HTMLFormElement>) => handleKeyVariableSubmit(e, studyIndex)}
                    // eslint-disable-next-line react/no-array-index-key
                    key={`study-assesment-fragment${studyIndex}`}
                    sx={{
