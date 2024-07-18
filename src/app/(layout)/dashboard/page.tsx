@@ -26,7 +26,6 @@ function Dashboard() {
       if (user?.sub) {
         const auxUser = await UserService.getUserById(user.sub);
         if (auxUser) {
-          console.log('auxUser type is', auxUser.usertype);
           const userTypePage = USER_TYPE_PAGES[auxUser.usertype];
           if (userTypePage) {
             router.push(`/dashboard/${userTypePage}`);
