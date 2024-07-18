@@ -281,7 +281,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                       primary={(
                         <Typography variant="body2">
                           <AccessTimeIcon sx={{ mr: 1, color: 'text.secondary' }} />
-                          {new Date(date).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
+                          {new Date(date).toLocaleDateString('es-AR', { day: 'numeric', month: 'short' })}
                         </Typography>
                         )}
                       secondary={(
@@ -366,7 +366,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                                 {tag}
                                 {' '}
                                 (
-                                {new Date(startDate).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
+                                {new Date(startDate).toLocaleDateString('es-AR', { day: 'numeric', month: 'short' })}
                                 )
                               </Typography>
                             )}
