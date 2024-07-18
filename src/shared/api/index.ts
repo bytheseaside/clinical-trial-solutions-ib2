@@ -89,6 +89,7 @@ export type Analyst = {
   usertype: 'analyst';
   mail: string;
   id: string;
+  trialId: string;
 };
 
 export type Admin = {
