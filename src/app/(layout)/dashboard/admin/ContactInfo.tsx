@@ -8,7 +8,6 @@ import MenuItem from '@mui/material/MenuItem';
 import { SxProps, Theme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { set } from 'firebase/database';
 import ClinicalTrialService from 'services/firebase/clinicalTrialService';
 
 import { ClinicalTrial, Contact } from 'shared/api';
