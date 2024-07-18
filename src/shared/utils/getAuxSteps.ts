@@ -29,12 +29,12 @@ const getAuxSteps = (trial: ClinicalTrial, patient: Patient): Appointment[] => {
     }
   });
 
-  const extraAppointments = patient.appointments.filter((appointment) => {
-    const isExtraAppointment = appointment.study.name === 'Extra appointment';
-    return isExtraAppointment;
-  });
+  // const extraAppointments = patient.appointments.filter((appointment) => {
+  //   const isExtraAppointment = appointment.study.name === 'Extra appointment';
+  //   return isExtraAppointment;
+  // });
 
-  auxSteps.push(...extraAppointments);
+  // auxSteps.push(...extraAppointments);
 
   return auxSteps;
 };
