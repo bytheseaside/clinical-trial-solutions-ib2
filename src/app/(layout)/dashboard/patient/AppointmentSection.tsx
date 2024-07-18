@@ -36,8 +36,8 @@ const AppointmentsSection: React.FC<Props> = ({ appointments, sx = [] }) => {
       >
         {appointments.map(({ study, date }) => {
           const appointmentDate = new Date(date);
-          const today = new Date();
-          if (appointmentDate < today) return null;
+          const today = new Date().setHours(0, 0, 0, 0);
+          if (appointmentDate.setHours(0, 0, 0, 0) < today) return null;
           const monthNames = [
             'January', 'February', 'March', 'April', 'May', 'June', 'July',
             'August', 'September', 'October', 'November', 'December',
