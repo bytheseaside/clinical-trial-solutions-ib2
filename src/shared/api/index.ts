@@ -1,5 +1,5 @@
 export type Observation = {
-  date: Date;
+  date: string;
   text: string;
 };
 

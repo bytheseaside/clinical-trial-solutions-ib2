@@ -57,25 +57,23 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
       const createdNewObservation = { date: new Date().toISOString(), text: newObservation };
 
       try {
-        await PatientService.addObservation(patient!.id, createdNewObservation);
-        setNewObservation('');
-
-        const { id } = patient!;
-        const params = new URLSearchParams();
-        params.set('patient', id);
-        router.push(`/dashboard/medical-staff/patient-details?${params.toString()}`);
-        setPatient((prevPatient) => {
-          if (prevPatient !== null) {
-            return {
-              ...prevPatient,
-              observations: [
-                ...(prevPatient?.observations || []),
-                createdNewObservation,
-              ],
-            };
-          }
-          return prevPatient;
-        });
+        await PatientService.addObservation(patient!.id, createdNewObservation).then(
+          () => {
+            setNewObservation('');
+            setPatient((prevPatient) => {
+              if (prevPatient == null) {
+                return prevPatient;
+              }
+              return {
+                ...prevPatient,
+                observations: [
+                  ...(prevPatient?.observations || []),
+                  createdNewObservation,
+                ],
+              };
+            });
+          },
+        );
       } catch (error) {
       // Handle any errors that occurred during the observation submission
         console.error('Failed to add observation:', error);
