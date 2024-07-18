@@ -22,7 +22,7 @@ export type Patient = {
   group?: string;
   observations?:Observation[];
   symptoms?: Symptom[];
-  assesments?: {
+  assessments?: {
     [key: string]: boolean | number | string;
   }[]; //  each element of the array is study, each pair key-value is the assesment,
   // where the key is the name of the assesment and the value is the value of the assesment

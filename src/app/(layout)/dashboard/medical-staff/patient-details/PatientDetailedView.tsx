@@ -148,11 +148,13 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
         }
       }
 
-      const keyVariableMeasuredValues = patient?.assesments;
+      const keyVariableMeasuredValues = patient?.assessments;
       if (keyVariableMeasuredValues) {
+        console.log('in the if');
         for (let i = 0; i < keyVariableMeasuredValues.length; i += 1) { // for each study
           for (let j = 0; j < auxiliarKeyVariableValues[i].length; j += 1) { // for each assesment
             const currentAssesment = auxiliarKeyVariableValues[i][j].name;
+            console.log('currentAssesment', currentAssesment);
             const value = keyVariableMeasuredValues[i][currentAssesment];
             if (value) {
               auxiliarKeyVariableValues[i][j].value = value;
@@ -168,6 +170,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
           }
         }
       } else {
+        console.log('in the else');
         for (let i = 0; i < auxiliarKeyVariableValues.length; i += 1) {
           for (let j = 0; j < auxiliarKeyVariableValues[i].length; j += 1) {
             // we need to check the type of the assesment
