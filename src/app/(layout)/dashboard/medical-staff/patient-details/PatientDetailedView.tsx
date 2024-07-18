@@ -439,7 +439,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                            }}
                            component="li"
                             // eslint-disable-next-line react/no-array-index-key
-                           key={name + assesmentIndex + studyIndex + type}
+                           key={`${name + assesmentIndex + studyIndex}boolean`}
                          >
                            <Typography
                              color="text.primary"
@@ -479,7 +479,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                              gap: 2,
                            }}
                                // eslint-disable-next-line react/no-array-index-key
-                           key={name + assesmentIndex + studyIndex + type}
+                           key={`${name + assesmentIndex + studyIndex}threshold`}
                          >
                            <Typography
                              color="text.primary"
@@ -505,7 +505,8 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                                {[...Array(10)].map((_, index) => (
                                  <MenuItem
                                    dense
-                                   key={`threshold + ${name}`}
+                                   // eslint-disable-next-line react/no-array-index-key
+                                   key={`threshold + ${name}+${index}`}
                                    value={index + 1}
                                  >
                                    {index + 1}
@@ -529,7 +530,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                              gap: 2,
                            }}
                                // eslint-disable-next-line react/no-array-index-key
-                           key={name + assesmentIndex + studyIndex + type}
+                           key={`${name + assesmentIndex + studyIndex}text`}
                          >
                            <Typography
                              color="text.primary"
@@ -565,7 +566,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                              gap: 2,
                            }}
                                // eslint-disable-next-line react/no-array-index-key
-                           key={name + assesmentIndex + studyIndex + type}
+                           key={`${name + assesmentIndex + studyIndex}numeric`}
                          >
                            <Typography
                              color="text.primary"
