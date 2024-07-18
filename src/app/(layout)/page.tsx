@@ -95,7 +95,7 @@ export default async function Home() {
           }}
         >
           <LoginIcon sx={{ color: 'inherit', fontSize: 20 }} />
-          Log in or sign in
+          Log in or sign up
         </Button>
       </Box>
     </Container>
