@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import PatientService from 'services/firebase/patientService';
 import UserService from 'services/firebase/userService';
 
 import WrongPage from 'shared/components/WrongPage';
@@ -19,6 +20,11 @@ async function AnalystDashboard() {
       <WrongPage />
     );
   }
+
+  // get all patients and filter by analyst clinical trial id
+
+  const patients = await PatientService.getAllPatients();
+  const patientsInClinicalTrial = patients.filter((patient) => patient.analystId === userId);
 
   const colors = ([
     '#CCABD8', // azul
@@ -184,9 +190,7 @@ async function AnalystDashboard() {
 
   return (
     <>
-      <AnalystHead
-        name="BRISA ROJAS"
-      />
+      <AnalystHead />
       <SecondaryEffectsReport
         effectsData={mockEffectsData}
         colors={colors}
@@ -194,7 +198,7 @@ async function AnalystDashboard() {
       <AssesmentsResultsReport
         assesmentsData={
           [...mockNumericAssessmentsData, ...mockAssesmentsData, ...mockBooleanAssessmentsData]
-}
+        }
         colors={colors}
       />
     </>
