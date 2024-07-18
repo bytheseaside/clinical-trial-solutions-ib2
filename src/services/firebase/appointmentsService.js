@@ -1,4 +1,4 @@
-import { get, ref, update } from 'firebase/database';
+import { get, off, ref, update } from 'firebase/database';
 
 import firebaseDB from './firebaseDB';
 
@@ -32,7 +32,7 @@ const AppointmentService = {
 
           return todayAppointments.map((appointment) => ({ patient, appointment }));
         });
-
+      off(usersRef);
       return appointmentsData;
     } catch (error) {
       console.error('Error getting appointments:', error);
@@ -56,6 +56,7 @@ const AppointmentService = {
         console.error(`Patient with ID ${patientId} not found.`);
         throw new Error('Patient not found');
       }
+      off(patientRef);
     } catch (error) {
       console.error('Error adding appointment:', error);
       throw error;
@@ -79,6 +80,7 @@ const AppointmentService = {
         console.error(`Patient with ID ${patientId} not found.`);
         throw new Error('Patient not found');
       }
+      off(patientRef);
     } catch (error) {
       console.error('Error deleting appointment:', error);
       throw error;

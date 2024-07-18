@@ -126,16 +126,40 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
 
       const keyVariableMeasuredValues = patient?.assesments;
       if (keyVariableMeasuredValues) {
-        for (let i = 0; i < keyVariableMeasuredValues.length; i += 1) {
-          for (let j = 0; j < auxiliarKeyVariableValues[i].length; j += 1) {
-            const currentAssesment = auxiliarKeyVariableValues[i][j];
-            const value = keyVariableMeasuredValues[i][currentAssesment.name];
+        for (let i = 0; i < keyVariableMeasuredValues.length; i += 1) { // for each study
+          for (let j = 0; j < auxiliarKeyVariableValues[i].length; j += 1) { // for each assesment
+            const currentAssesment = auxiliarKeyVariableValues[i][j].name;
+            const value = keyVariableMeasuredValues[i][currentAssesment];
             if (value) {
               auxiliarKeyVariableValues[i][j].value = value;
+            } else if (auxiliarKeyVariableValues[i][j].type === 'boolean') {
+              auxiliarKeyVariableValues[i][j].value = false;
+            } else if (auxiliarKeyVariableValues[i][j].type === 'threshold') {
+              auxiliarKeyVariableValues[i][j].value = 1;
+            } else if (auxiliarKeyVariableValues[i][j].type === 'text') {
+              auxiliarKeyVariableValues[i][j].value = '';
+            } else if (auxiliarKeyVariableValues[i][j].type === 'numeric') {
+              auxiliarKeyVariableValues[i][j].value = 0;
+            }
+          }
+        }
+      } else {
+        for (let i = 0; i < auxiliarKeyVariableValues.length; i += 1) {
+          for (let j = 0; j < auxiliarKeyVariableValues[i].length; j += 1) {
+            // we need to check the type of the assesment
+            if (auxiliarKeyVariableValues[i][j].type === 'boolean') {
+              auxiliarKeyVariableValues[i][j].value = false;
+            } else if (auxiliarKeyVariableValues[i][j].type === 'threshold') {
+              auxiliarKeyVariableValues[i][j].value = 1;
+            } else if (auxiliarKeyVariableValues[i][j].type === 'text') {
+              auxiliarKeyVariableValues[i][j].value = '';
+            } else if (auxiliarKeyVariableValues[i][j].type === 'numeric') {
+              auxiliarKeyVariableValues[i][j].value = 0;
             }
           }
         }
       }
+
       setKeyVariableValues(auxiliarKeyVariableValues);
     }
   }, [clinicalTrial, patient]);
@@ -351,12 +375,13 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                  <DataThresholdingIcon fontSize="inherit" color="secondary" />
                  Study Assessment Data
                </Typography>
-               {clinicalTrial.studies.map((study, generalStudyIndex) => (
+               {keyVariableValues.map((studyAssesments, studyIndex) => (
+                 // eslint-disable-next-line react/no-array-index-key
                  <Box
                    component="form"
                    onSubmit={handleKeyVariableSubmit}
                    // eslint-disable-next-line react/no-array-index-key
-                   key={study.name + generalStudyIndex}
+                   key={`study-assesment-fragment${studyIndex}`}
                    sx={{
                      display: 'flex',
                      flexDirection: 'column',
@@ -373,181 +398,176 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                        borderColor: 'primary.main',
                      }}
                    >
-                     {study.name}
+                     {clinicalTrial.studies[studyIndex].name}
                    </Typography>
-                   {keyVariableValues.map((studyAssesments, studyIndex) => (
-                     // eslint-disable-next-line react/no-array-index-key
-                     <React.Fragment key={`study-assesment-fragment${studyIndex}`}>
-                       {studyAssesments.map(({ name, type, value }, assesmentIndex) => {
-                         if (type === 'boolean') {
-                           return (
-                             <Box
-                               sx={{
-                                 display: 'flex',
-                                 flexDirection: 'column',
-                                 alignItems: 'flex-start',
-                                 justifyContent: 'center',
-                                 my: 2,
-                                 gap: 2,
-                               }}
-                               component="li"
+                   {studyAssesments.map(({ name, type, value }, assesmentIndex) => {
+                     if (type === 'boolean') {
+                       return (
+                         <Box
+                           sx={{
+                             display: 'flex',
+                             flexDirection: 'column',
+                             alignItems: 'flex-start',
+                             justifyContent: 'center',
+                             my: 2,
+                             gap: 2,
+                           }}
+                           component="li"
+                            // eslint-disable-next-line react/no-array-index-key
+                           key={name + assesmentIndex + studyIndex + type}
+                         >
+                           <Typography
+                             color="text.primary"
+                             variant="lead"
+                           >
+                             {name}
+                             :
+                           </Typography>
+                           <Select
+                             size="small"
+                             value={value}
+                             onChange={(e) => {
+                               const aux = [...keyVariableValues];
+                               aux[studyIndex][assesmentIndex].value = e.target.value;
+                               setKeyVariableValues(aux);
+                             }}
+                           >
+                             <MenuItem value="" disabled dense>
+                               Select an option
+                             </MenuItem>
+                             <MenuItem value="true" dense>Yes</MenuItem>
+                             <MenuItem value="false" dense>No</MenuItem>
+                           </Select>
+                         </Box>
+                       );
+                     }
+                     if (type === 'threshold') {
+                       return (
+                         <Box
+                           component="li"
+                           sx={{
+                             display: 'flex',
+                             flexDirection: 'column',
+                             alignItems: 'flex-start',
+                             justifyContent: 'center',
+                             my: 2,
+                             gap: 2,
+                           }}
                                // eslint-disable-next-line react/no-array-index-key
-                               key={study.name + name + assesmentIndex + studyIndex + type}
-                             >
-                               <Typography
-                                 color="text.primary"
-                                 variant="lead"
-                               >
-                                 {name}
-                                 :
-                               </Typography>
-                               <Select
-                                 size="small"
-                                 value={value}
-                                 onChange={(e) => {
-                                   const aux = [...keyVariableValues];
-                                   aux[studyIndex][assesmentIndex].value = e.target.value;
-                                   setKeyVariableValues(aux);
-                                 }}
-                               >
-                                 <MenuItem value="" disabled dense>
-                                   Select an option
-                                 </MenuItem>
-                                 <MenuItem value="true" dense>Yes</MenuItem>
-                                 <MenuItem value="false" dense>No</MenuItem>
-                               </Select>
-                             </Box>
-                           );
-                         }
-                         if (type === 'threshold') {
-                           return (
-                             <Box
-                               component="li"
-                               sx={{
-                                 display: 'flex',
-                                 flexDirection: 'column',
-                                 alignItems: 'flex-start',
-                                 justifyContent: 'center',
-                                 my: 2,
-                                 gap: 2,
+                           key={name + assesmentIndex + studyIndex + type}
+                         >
+                           <Typography
+                             color="text.primary"
+                             variant="lead"
+                           >
+                             {name}
+                             :
+                           </Typography>
+                           {
+                             <Select
+                               value={value}
+                               size="small"
+                               onChange={(e) => {
+                                 // change the value of the measurement
+                                 const aux = [...keyVariableValues];
+                                 aux[studyIndex][assesmentIndex].value = e.target.value;
+                                 setKeyVariableValues(aux);
                                }}
-                               // eslint-disable-next-line react/no-array-index-key
-                               key={study.name + name + assesmentIndex + studyIndex + type}
                              >
-                               <Typography
-                                 color="text.primary"
-                                 variant="lead"
-                               >
-                                 {name}
-                                 :
-                               </Typography>
-                               {
-                                 <Select
-                                   value={value}
-                                   size="small"
-                                   onChange={(e) => {
-                                     // change the value of the measurement
-                                     const aux = [...keyVariableValues];
-                                     aux[studyIndex][assesmentIndex].value = e.target.value;
-                                     setKeyVariableValues(aux);
-                                   }}
+                               <MenuItem value="" disabled dense>
+                                 Select an option
+                               </MenuItem>
+                               {[...Array(10)].map((_, index) => (
+                                 <MenuItem
+                                   dense
+                                   key={`threshold + ${name}`}
+                                   value={index + 1}
                                  >
-                                   <MenuItem value="" disabled dense>
-                                     Select an option
-                                   </MenuItem>
-                                   {[...Array(10)].map((_, index) => (
-                                     <MenuItem
-                                       dense
-                                       key={`threshold + ${name}`}
-                                       value={index + 1}
-                                     >
-                                       {index + 1}
-                                     </MenuItem>
-                                   ))}
-                                 </Select>
+                                   {index + 1}
+                                 </MenuItem>
+                               ))}
+                             </Select>
                                }
-                             </Box>
-                           );
-                         }
-                         if (type === 'text') {
-                           return (
-                             <Box
-                               component="li"
-                               sx={{
-                                 display: 'flex',
-                                 flexDirection: 'column',
-                                 alignItems: 'flex-start',
-                                 justifyContent: 'center',
-                                 my: 2,
-                                 gap: 2,
-                               }}
+                         </Box>
+                       );
+                     }
+                     if (type === 'text') {
+                       return (
+                         <Box
+                           component="li"
+                           sx={{
+                             display: 'flex',
+                             flexDirection: 'column',
+                             alignItems: 'flex-start',
+                             justifyContent: 'center',
+                             my: 2,
+                             gap: 2,
+                           }}
                                // eslint-disable-next-line react/no-array-index-key
-                               key={study.name + name + assesmentIndex + studyIndex + type}
-                             >
-                               <Typography
-                                 color="text.primary"
-                                 variant="lead"
-                               >
-                                 {name}
-                                 :
-                               </Typography>
-                               <TextField
-                                 type="text"
-                                 value={value}
-                                 onChange={(e) => {
-                                   const aux = [...keyVariableValues];
-                                   aux[studyIndex][assesmentIndex].value = e.target.value;
-                                   setKeyVariableValues(aux);
-                                 }}
-                                 size="small"
-                                 sx={{ width: '100%' }}
-                               />
-                             </Box>
-                           );
-                         }
-                         if (type === 'number') {
-                           return (
-                             <Box
-                               component="li"
-                               sx={{
-                                 display: 'flex',
-                                 flexDirection: 'column',
-                                 alignItems: 'flex-start',
-                                 justifyContent: 'center',
-                                 my: 2,
-                                 gap: 2,
-                               }}
+                           key={name + assesmentIndex + studyIndex + type}
+                         >
+                           <Typography
+                             color="text.primary"
+                             variant="lead"
+                           >
+                             {name}
+                             :
+                           </Typography>
+                           <TextField
+                             type="text"
+                             value={value}
+                             onChange={(e) => {
+                               const aux = [...keyVariableValues];
+                               aux[studyIndex][assesmentIndex].value = e.target.value;
+                               setKeyVariableValues(aux);
+                             }}
+                             size="small"
+                             sx={{ width: '100%' }}
+                           />
+                         </Box>
+                       );
+                     }
+                     if (type === 'numeric') {
+                       return (
+                         <Box
+                           component="li"
+                           sx={{
+                             display: 'flex',
+                             flexDirection: 'column',
+                             alignItems: 'flex-start',
+                             justifyContent: 'center',
+                             my: 2,
+                             gap: 2,
+                           }}
                                // eslint-disable-next-line react/no-array-index-key
-                               key={study.name + name + assesmentIndex + studyIndex + type}
-                             >
-                               <Typography
-                                 color="text.primary"
-                                 variant="lead"
-                               >
-                                 {name}
-                                 :
-                               </Typography>
-                               {
-                                 <TextField
-                                   type="number"
-                                   value={value}
-                                   size="small"
-                                   sx={{ width: '100%' }}
-                                   onChange={(e) => {
-                                     // change the value of the measurement
-                                     const aux = [...keyVariableValues];
-                                     aux[studyIndex][assesmentIndex].value = e.target.value;
-                                     setKeyVariableValues(aux);
-                                   }}
-                                 />
+                           key={name + assesmentIndex + studyIndex + type}
+                         >
+                           <Typography
+                             color="text.primary"
+                             variant="lead"
+                           >
+                             {name}
+                             :
+                           </Typography>
+                           {
+                             <TextField
+                               type="number"
+                               value={value}
+                               size="small"
+                               sx={{ width: '100%' }}
+                               onChange={(e) => {
+                                 // change the value of the measurement
+                                 const aux = [...keyVariableValues];
+                                 aux[studyIndex][assesmentIndex].value = e.target.value;
+                                 setKeyVariableValues(aux);
+                               }}
+                             />
                                 }
-                             </Box>
-                           );
-                         }
-                         return null;
-                       })}
-                     </React.Fragment>
-                   ))}
+                         </Box>
+                       );
+                     }
+                     return null;
+                   })}
                    <Button
                      type="submit"
                      variant="outlined"
@@ -560,9 +580,9 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                        justifySelf: 'flex-end',
                      }}
                    >
-                     Submit Assessment for
+                     Submit Assessments for
                      {' '}
-                     {study.name}
+                     {clinicalTrial.studies[studyIndex].name}
                    </Button>
                  </Box>
                ))}

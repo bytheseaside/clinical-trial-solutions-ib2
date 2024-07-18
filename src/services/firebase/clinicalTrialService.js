@@ -1,14 +1,14 @@
-import { get, getDatabase, ref, set } from 'firebase/database';
+import { get, off, ref, set } from 'firebase/database';
 
 import firebaseDB from './firebaseDB';
 
 const updateTrialContactInfo = async (trialId, contactInfo) => {
   try {
-    const db = getDatabase();
-    const contactsRef = ref(db, `/clinical-trials/${trialId}/contacts`);
+    const contactsRef = ref(firebaseDB, `/clinical-trials/${trialId}/contacts`);
 
     const snapshot = await get(contactsRef);
 
+    off(contactsRef);
     if (snapshot.exists()) {
       const existingContacts = snapshot.val();
 
@@ -35,6 +35,7 @@ const getAllTrials = async () => {
     const trialsRef = ref(firebaseDB, '/clinical-trials');
     const snapshot = await get(trialsRef);
 
+    off(trialsRef);
     if (snapshot.exists()) {
       const trialsData = snapshot.val();
       // Asegúrate de que se devuelva un array
@@ -52,6 +53,7 @@ const addTrial = async (trial) => {
   try {
     const trialRef = ref(firebaseDB, `/clinical-trials/${trial.id}`);
     await set(trialRef, trial);
+    off(trialRef);
   } catch (error) {
     console.error('Error adding trial:', error);
   }
@@ -62,6 +64,7 @@ const getClinicalTrialById = async (trialId) => {
     const trialRef = ref(firebaseDB, `/clinical-trials/${trialId}`);
     const snapshot = await get(trialRef);
 
+    off(trialRef);
     if (snapshot.exists()) {
       return snapshot.val();
     }
@@ -77,6 +80,7 @@ const getAllContacts = async (trialId) => {
     const contactsRef = ref(firebaseDB, `/clinical-trials/${trialId}/contacts`);
     const snapshot = await get(contactsRef);
 
+    off(contactsRef);
     if (snapshot.exists()) {
       const contactsData = snapshot.val();
       // Asegúrate de que se devuelva un array

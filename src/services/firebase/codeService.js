@@ -1,11 +1,12 @@
-import { get, getDatabase, onValue, ref, set, update } from 'firebase/database';
+import { get, off, ref } from 'firebase/database';
 
 import firebaseDB from './firebaseDB';
 
-async function getMedicalStaffCode(id) {
+async function getMedicalStaffCode() {
   const medicalStaffCodeRef = ref(firebaseDB, '/medical-staff-code');
   return get(medicalStaffCodeRef)
     .then((snapshot) => {
+      off(medicalStaffCodeRef);
       if (snapshot.exists()) {
         return snapshot.val();
       }

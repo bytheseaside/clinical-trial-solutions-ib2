@@ -24,13 +24,25 @@ export type Patient = {
   symptoms?: Symptom[];
   assesments?: {
     [key: string]: boolean | number | string;
-  }[][]; //  outer array is for each study, inner array is for each assesment
+  }[]; //  each element of the array is study, each pair key-value is the assesment,
+  // where the key is the name of the assesment and the value is the value of the assesment
+  // example
+  // [
+  //   {
+  //      "study1Assesment1": a,
+  //      "study1Assesment2" : b,
+  //   },
+  //   {
+  //      "study2Asessment1": c,
+  //   },
+  // ]
+
   appointments: Appointment[];
 };
 
 export type Appointment = { date: Date; study: ClinicalStudy };
 
-export type ClinicalStudyKeyVariable = 'boolean' | 'threshold' | 'text' | 'number';
+export type ClinicalStudyKeyVariable = 'boolean' | 'threshold' | 'text' | 'numeric';
 
 export type ClinicalStudy = {
   name: string;
