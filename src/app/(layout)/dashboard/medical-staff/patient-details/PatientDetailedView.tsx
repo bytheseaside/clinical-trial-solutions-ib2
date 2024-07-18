@@ -89,7 +89,6 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
 
   const handleKeyVariableSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
   };
 
   useEffect(() => {
@@ -354,11 +353,12 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                  <DataThresholdingIcon fontSize="inherit" color="secondary" />
                  Study Assessment Data
                </Typography>
-               {clinicalTrial.studies.map((study) => (
+               {clinicalTrial.studies.map((study, generalStudyIndex) => (
                  <Box
                    component="form"
                    onSubmit={handleKeyVariableSubmit}
-                   key={study.name}
+                   // eslint-disable-next-line react/no-array-index-key
+                   key={study.name + generalStudyIndex}
                    sx={{
                      display: 'flex',
                      flexDirection: 'column',
@@ -378,7 +378,8 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                      {study.name}
                    </Typography>
                    {keyVariableValues.map((studyAssesments, studyIndex) => (
-                     <>
+                     // eslint-disable-next-line react/no-array-index-key
+                     <React.Fragment key={`study-assesment-fragment${studyIndex}`}>
                        {studyAssesments.map(({ name, type, value }, assesmentIndex) => {
                          if (type === 'boolean') {
                            return (
@@ -547,7 +548,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                          }
                          return null;
                        })}
-                     </>
+                     </React.Fragment>
                    ))}
                    <Button
                      type="submit"
