@@ -22,7 +22,7 @@ const AppointmentsSection: React.FC<Props> = ({ appointments, sx = [] }) => {
       sx={[...(Array.isArray(sx) ? sx : [sx])]}
     >
       <Typography color="text.primary" sx={{ typography: { xxs: 'h4', sm: 'h3' }, mb: 3 }}>
-        Appointments
+        Next appointments
       </Typography>
       <Typography variant="caption" color="text.secondary">
         Check when are you scheduled.
@@ -36,6 +36,8 @@ const AppointmentsSection: React.FC<Props> = ({ appointments, sx = [] }) => {
       >
         {appointments.map(({ study, date }) => {
           const appointmentDate = new Date(date);
+          const today = new Date();
+          if (appointmentDate < today) return null;
           const monthNames = [
             'January', 'February', 'March', 'April', 'May', 'June', 'July',
             'August', 'September', 'October', 'November', 'December',
