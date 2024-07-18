@@ -85,8 +85,32 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
     }
   };
 
-  const handleKeyVariableSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleKeyVariableSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+    studyIndex: number,
+  ) => {
     e.preventDefault();
+
+    if (patient) {
+      const keyVariableValuesForStudy = keyVariableValues[studyIndex]
+        .reduce((acc, { name, value }) => {
+          acc[name] = value;
+          return acc;
+        }, {} as Record<string, boolean | number | string | undefined>);
+
+      try {
+        await PatientService.updateKeyVariableAssessments(
+          patient.id,
+          keyVariableValuesForStudy,
+          studyIndex,
+        );
+        console.log('Key variable assessments updated successfully');
+      } catch (error) {
+      // Handle any errors that occurred during the update
+        console.error('Failed to update key variable assessments:', error);
+      // Optionally, show an error message to the user
+      }
+    }
   };
 
   useEffect(() => {
@@ -102,7 +126,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
             setClinicalTrial(foundClinicalTrial);
             setPatient(foundPatient);
           } catch (error) {
-            console.error('Error al obtener el ensayo clínico:', error);
+            console.error('Error obtaining the clinical trial:', error);
           }
         }
       }
@@ -379,7 +403,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                  // eslint-disable-next-line react/no-array-index-key
                  <Box
                    component="form"
-                   onSubmit={handleKeyVariableSubmit}
+                   onSubmit={(e) => handleKeyVariableSubmit(e, studyIndex)}
                    // eslint-disable-next-line react/no-array-index-key
                    key={`study-assesment-fragment${studyIndex}`}
                    sx={{

@@ -1,4 +1,4 @@
-import { get, off, ref, set } from 'firebase/database';
+import { get, off, ref, set, update } from 'firebase/database';
 
 import firebaseDB from './firebaseDB';
 
@@ -62,21 +62,16 @@ const PatientService = {
       console.error('Error updating patient symptoms:', error);
     }
   },
-  updateKeyVariable: async (patientId, studyIndex, keyVariable) => {
-    if (!patientId || !studyIndex || !keyVariable || !keyVariable.name) {
-      throw new Error('Missing data to update the variable.');
-    }
-
-    const keyVariableRef = ref(firebaseDB, `patients/${patientId}/assessments/${studyIndex}/keyVariables/${keyVariable.name}`);
+  async updateKeyVariableAssessments(patientId, keyVariableValues, studyNumber) {
+    const assessmentsRef = ref(firebaseDB, `users/${patientId}/assessments/${studyNumber}`);
 
     try {
-      await set(keyVariableRef, keyVariable);
-      console.log(`Variable clave ${keyVariable.name} actualizada correctamente.`);
-      off(keyVariableRef);
+      await update(assessmentsRef, keyVariableValues);
     } catch (error) {
-      console.error('Error al actualizar la variable clave:', error);
-      off(keyVariableRef);
+      console.error('Failed to update key variable assessments:', error);
+      throw error;
     }
+    off(assessmentsRef);
   },
 };
 
