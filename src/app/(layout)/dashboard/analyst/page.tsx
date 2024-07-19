@@ -4,6 +4,7 @@ import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import PatientService from 'services/firebase/patientService';
 import UserService from 'services/firebase/userService';
 
+import { Analyst, Patient } from 'shared/api';
 import WrongPage from 'shared/components/WrongPage';
 
 import AnalystHead from './AnalystHead';
@@ -13,7 +14,7 @@ import SecondaryEffectsReport from './SecondaryEffecstReport';
 async function AnalystDashboard() {
   const session = await getSession();
   const userId = session?.user.sub;
-  const user = await UserService.getUserById(userId);
+  const user: Analyst = await UserService.getUserById(userId);
   if (user.usertype !== 'analyst') {
     console.warn('User is not an analyst');
     return (
@@ -23,8 +24,11 @@ async function AnalystDashboard() {
 
   // get all patients and filter by analyst clinical trial id
 
-  const patients = await PatientService.getAllPatients();
-  const patientsInClinicalTrial = patients.filter((patient) => patient.analystId === userId);
+  const patients: Patient[] = await PatientService.getAllPatients();
+  const patientsInClinicalTrial = patients.filter((patient) => patient.trialId === user.trialId);
+
+  // eslint-disable-next-line no-console
+  console.log(patientsInClinicalTrial);
 
   const colors = ([
     '#CCABD8', // azul
