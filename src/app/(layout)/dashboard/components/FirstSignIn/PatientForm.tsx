@@ -43,6 +43,7 @@ const PatientForm: React.FC<Props> = ({ trial, group, sx = [] }) => {
   const [patientData, setPatientData] = useState<Patient>(
     { ...BASE_PATIENT, mail: user?.email || '', id: user?.sub || '', trialId: trial?.id || '', group: group || '' },
   );
+
   const [exclusionAnswers, setExclusionAnswers] = useState<Record<string, boolean>>({});
 
   const handleSubmission = (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -50,7 +51,7 @@ const PatientForm: React.FC<Props> = ({ trial, group, sx = [] }) => {
     setOptimisticMessage('');
 
     // Verifica si exclusionAnswers y trial están definidos
-    if (!exclusionAnswers || !trial?.exclusionCriteria) {
+    if (!exclusionAnswers && trial?.exclusionCriteria) {
       console.error('Exclusion answers or trial exclusion criteria are not defined.');
       return;
     }
