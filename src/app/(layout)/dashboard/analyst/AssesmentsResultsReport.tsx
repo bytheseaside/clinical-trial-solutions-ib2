@@ -66,6 +66,7 @@ const AssesmentsResultsReport: React.FC<Props> = ({ assesmentsData, colors, sx =
               key={data.title}
               title={data.title}
               data={data.data as BooleanData[]}
+              colors={colors}
             />
           );
         }

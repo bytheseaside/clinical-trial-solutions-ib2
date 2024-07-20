@@ -17,43 +17,67 @@ export type BooleanData = {
 type Props = {
   data: BooleanData[];
   title: string;
+  colors: string[];
 };
 
-const BooleanChart: React.FC<Props> = ({ data, title }) => {
+const BooleanChart: React.FC<Props> = ({ data, title, colors }) => {
   const [trace, setTrace] = useState<PlotData[]>([]);
+  const [totalPatients, setTotalPatients] = useState(0);
+  const [totalNC, setTotalNC] = useState(0);
   const isUpSm = useMediaQuery((theme: Theme) => theme.breakpoints.up('sm'));
 
   useEffect(() => {
-    const dataPerGroup: Record<string, { yes: number; no: number; nonCompleted: number }> = {};
+    const dataPerGroup: Record<string, { yes: number; no: number }> = {};
+    let patientCount = 0;
+    let ncCount = 0;
 
     data.forEach((item) => {
       if (item.value === 'NC' || item.value == null) {
-        if (!dataPerGroup[item.group]) {
-          dataPerGroup[item.group] = { yes: 0, no: 0, nonCompleted: 0 };
-        }
-        dataPerGroup[item.group].nonCompleted += 1;
+        ncCount += 1;
+      }
+      patientCount += 1;
+
+      if (!dataPerGroup[item.group]) {
+        dataPerGroup[item.group] = { yes: 0, no: 0 };
+      }
+
+      if (item.value === 'NC' || item.value == null) {
+        // Count NC separately
       } else {
-        if (!dataPerGroup[item.group]) {
-          dataPerGroup[item.group] = { yes: 0, no: 0, nonCompleted: 0 };
-        }
         dataPerGroup[item.group][item.value ? 'yes' : 'no'] += 1;
       }
     });
 
-    const traceData = Object.entries(dataPerGroup).map(([group, counts]) => ({
-      labels: ['Yes', 'No', 'Not completed'],
-      values: [counts.yes, counts.no, counts.nonCompleted],
+    setTotalPatients(patientCount);
+    setTotalNC(ncCount);
+
+    const labels: string[] = [];
+    const values: number[] = [];
+    const colorArray: string[] = [];
+
+    Object.entries(dataPerGroup).forEach(([group, counts], index) => {
+      labels.push(`Yes-${group}`, `No-${group}`);
+      values.push(counts.yes, counts.no);
+      colorArray.push(colors[index * 2], colors[index * 2 + 1]);
+    });
+
+    labels.push('Not completed');
+    values.push(ncCount);
+    colorArray.push(colors[colors.length - 1]); // Last color for 'No Contesta'
+
+    const traceData: PlotData = {
+      labels,
+      values,
       type: 'pie',
-      name: group,
       marker: {
-        colors: ['#00C49F', '#FF8042', '#D0D0D0'], // Colors for Yes, No, and Not Completed
+        colors: colorArray,
       },
       textinfo: 'label+percent',
       insidetextorientation: 'radial',
-    }));
+    };
 
-    setTrace(traceData as PlotData[]);
-  }, [data]);
+    setTrace([traceData]);
+  }, [data, colors]);
 
   const layout: Partial<PlotLayout> = {
     title: {
@@ -74,6 +98,8 @@ const BooleanChart: React.FC<Props> = ({ data, title }) => {
       r: 40,
     },
   };
+
+  const ncPercentage = ((totalNC / totalPatients) * 100).toFixed(2);
 
   return (
     isUpSm ? (
@@ -98,11 +124,23 @@ const BooleanChart: React.FC<Props> = ({ data, title }) => {
           sx={{
             color: 'text.secondary',
             textAlign: 'justify',
+            mt: 2,
           }}
         >
           The chart displays the distribution of responses for each group.
           &apos;Yes&apos; and &apos;No&apos; are counted along with entries
-          marked as &apos;Not Completed&apos;.
+          marked as &apos;Not completed&apos;.
+          There are
+          {' '}
+          {totalNC}
+          {' '}
+          patients with an empty field out of
+          {' '}
+          {totalPatients}
+          {' '}
+          participants total (
+          {ncPercentage}
+          %).
         </Typography>
       </Box>
     ) : null

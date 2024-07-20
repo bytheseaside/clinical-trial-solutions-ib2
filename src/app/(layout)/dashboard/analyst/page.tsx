@@ -137,6 +137,7 @@ async function AnalystDashboard() {
       ],
     },
   ];
+
   const mockNumericAssessmentsData: AssessmentData[] = [
     {
       type: 'numeric',
