@@ -171,12 +171,12 @@ const PatientForm: React.FC<Props> = ({ trial, group, sx = [] }) => {
         </TextField>
         <DatePicker
           label="Birth date of the patient"
-          value={dayjs(patientData.birthDate)}
+          value={dayjs(new Date(patientData.birthDate))}
           onChange={(newDate: Dayjs | null) => {
             if (!newDate) return;
             setPatientData((prevPatient) => ({
               ...prevPatient,
-              birthDate: newDate.toDate(),
+              birthDate: newDate.toDate().toISOString(),
             }));
           }}
           referenceDate={dayjs()}
