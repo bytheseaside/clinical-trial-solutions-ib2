@@ -188,6 +188,15 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
     }
   }, [clinicalTrial, patient]);
 
+  useEffect(
+    () => {
+      console.log('Patient:', patient);
+      console.log('Clinical Trial:', clinicalTrial);
+      console.log('Key Variable Values:', keyVariableValues);
+    },
+    [patient, clinicalTrial, keyVariableValues],
+  );
+
   return (
     <Container
       sx={[
@@ -249,6 +258,20 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
       />
       {patient && (
         <Box>
+          <Typography
+            color="text.primary"
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+              mt: 2,
+              typography: { xxs: 'h5', sm: 'h4' },
+            }}
+          >
+            Clinical trial:
+            {' '}
+            {clinicalTrial?.name}
+          </Typography>
           {/* OBSERVATIONS */}
           <Box>
             <Typography
@@ -299,7 +322,8 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
               onSubmit={handleObservationSubmit}
               sx={{
                 display: 'flex',
-                flexDirection: 'column',
+                flexDirection: { xxs: 'column', sm: 'row' },
+                gap: 3,
               }}
             >
               <TextField
@@ -322,8 +346,8 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                 type="submit"
                 sx={{
                   typography: { xxs: 'captionSmall', sm: 'caption' },
-                  mt: 2,
-                  alignSelf: 'flex-end',
+                  mt: { xxs: 2, sm: 0 },
+                  alignSelf: { xxs: 'flex-end', sm: 'flex-start' },
                 }}
               >
                 Submit
@@ -423,7 +447,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                        borderColor: 'primary.main',
                      }}
                    >
-                     {clinicalTrial.studies[studyIndex].name}
+                     {clinicalTrial.studies[studyIndex]?.name}
                    </Typography>
                    {studyAssesments.map(({ name, type, value }, assesmentIndex) => {
                      if (type === 'boolean') {
