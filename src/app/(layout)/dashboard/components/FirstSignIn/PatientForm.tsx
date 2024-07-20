@@ -27,7 +27,7 @@ const BASE_PATIENT : Omit<Patient, 'mail' | 'id' | 'group' | 'trialId'> = {
   name: '',
   surname: '',
   dni: '',
-  birthDate: new Date(),
+  birthDate: new Date().toISOString(),
   sex: 'F',
   observations: [],
   symptoms: [],
