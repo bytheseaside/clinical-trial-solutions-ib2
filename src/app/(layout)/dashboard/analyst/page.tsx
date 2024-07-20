@@ -144,28 +144,24 @@ async function AnalystDashboard() {
         { group: 'Group A', value: 10 },
         { group: 'Group A', value: 15 },
         { group: 'Group A', value: 20 },
-        { group: 'Group B', value: 25 },
-        { group: 'Group B', value: 30 },
-        { group: 'Group B', value: 35 },
+        { group: 'Group B', value: 1 },
+        { group: 'Group B', value: 1 },
+        { group: 'Group B', value: 1 },
         { group: 'Group C', value: 40 },
-        { group: 'Group C', value: 45 },
-        { group: 'Group C', value: 50 },
-
+        { group: 'Group C', value: 'NC' },
+        { group: 'Group C', value: 'NC' },
       ],
       title: 'Numeric Data Chart',
     },
   ];
-  console.log('effectsData', effectsData);
 
   return (
     <>
       <AnalystHead />
-
       <SecondaryEffectsReport
         effectsData={effectsData}
         colors={colors}
       />
-
       <AssesmentsResultsReport
         assesmentsData={
           [...mockNumericAssessmentsData, ...mockAssesmentsData, ...mockBooleanAssessmentsData]

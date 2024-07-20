@@ -25,37 +25,37 @@ const NumericChart: React.FC<Props> = ({ data, title, colors }) => {
   const isUpSm = useMediaQuery((theme: Theme) => theme.breakpoints.up('sm'));
   const [counterNonCompleted, setCounterNonCompleted] = useState<number>(0);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const createTrace = (info: NumericData[], groupIndex: number) => ({
-    x: info.map((_, index) => index),
-    y: info.map((item) => item.value || 0.05), // default value for 0
-    name: info[0].group,
-    type: 'bar',
-    marker: {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      color: info.map((_, idx) => colors[groupIndex]),
-      opacity: 0.7,
-    },
-  });
-
   useEffect(() => {
-    const dataPerGroup: Record<string, NumericData[]> = {};
-    let auxCounter = 0;
+    const dataPerGroup: Record<string, { sum: number; count: number }> = {};
+    let nonCompletedCount = 0;
+
     data.forEach((item) => {
-      if (item.value === 'NC') {
-        auxCounter = +1;
+      if (item.value === 'NC' || item.value == null) {
+        nonCompletedCount += 1;
       } else {
         if (!dataPerGroup[item.group]) {
-          dataPerGroup[item.group] = [];
+          dataPerGroup[item.group] = { sum: 0, count: 0 };
         }
-        dataPerGroup[item.group].push(item);
+        dataPerGroup[item.group].sum += item.value;
+        dataPerGroup[item.group].count += 1;
       }
     });
-    setCounterNonCompleted(auxCounter);
 
-    const traceData = Object.values(dataPerGroup).map((group, index) => createTrace(group, index));
+    setCounterNonCompleted(nonCompletedCount);
+
+    const traceData = Object.entries(dataPerGroup).map(([group, { sum, count }], index) => ({
+      x: [group],
+      y: [count > 0 ? sum / count : 0], // Average value per group
+      name: group,
+      type: 'bar',
+      marker: {
+        color: colors[index],
+        opacity: 0.7,
+      },
+    }));
+
     setTrace(traceData as PlotData[]);
-  }, []);
+  }, [data, colors]);
 
   const layout = {
     title,
