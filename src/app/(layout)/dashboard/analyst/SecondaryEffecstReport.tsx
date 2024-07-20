@@ -46,7 +46,6 @@ const SecondaryEffectsReport: React.FC<Props> = ({ effectsData, colors, sx = [] 
         gap: 3,
       }}
     >
-
       <TotalAmountChart
         data={effectsData}
         colors={colors}
