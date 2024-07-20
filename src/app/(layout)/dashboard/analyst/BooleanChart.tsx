@@ -27,7 +27,7 @@ const BooleanChart: React.FC<Props> = ({ data, title, colors }) => {
   const isUpSm = useMediaQuery((theme: Theme) => theme.breakpoints.up('sm'));
 
   useEffect(() => {
-    const dataPerGroup: Record<string, { yes: number; no: number }> = {};
+    const dataPerGroup: Record<string, { yes: number; no: number; nc: number }> = {};
     let patientCount = 0;
     let ncCount = 0;
 
@@ -38,11 +38,11 @@ const BooleanChart: React.FC<Props> = ({ data, title, colors }) => {
       patientCount += 1;
 
       if (!dataPerGroup[item.group]) {
-        dataPerGroup[item.group] = { yes: 0, no: 0 };
+        dataPerGroup[item.group] = { yes: 0, no: 0, nc: 0 };
       }
 
       if (item.value === 'NC' || item.value == null) {
-        // Count NC separately
+        dataPerGroup[item.group].nc += 1;
       } else {
         dataPerGroup[item.group][item.value ? 'yes' : 'no'] += 1;
       }
@@ -63,7 +63,7 @@ const BooleanChart: React.FC<Props> = ({ data, title, colors }) => {
 
     labels.push('Not completed');
     values.push(ncCount);
-    colorArray.push(colors[colors.length - 1]); // Last color for 'No Contesta'
+    colorArray.push(colors[colors.length - 1]); // Last color for 'Not completed'
 
     const traceData: PlotData = {
       labels,
