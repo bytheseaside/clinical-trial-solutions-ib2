@@ -33,35 +33,49 @@ const NumericChart: React.FC<Props> = ({ data, title, colors }) => {
       if (item.value === 'NC' || item.value == null) {
         nonCompletedCount += 1;
       } else {
+        // Convert value to a number if it's a string
+        const numericValue = typeof item.value === 'string' ? parseFloat(item.value) : item.value;
+
         if (!dataPerGroup[item.group]) {
           dataPerGroup[item.group] = { sum: 0, count: 0 };
         }
-        dataPerGroup[item.group].sum += item.value;
+        dataPerGroup[item.group].sum += numericValue;
         dataPerGroup[item.group].count += 1;
       }
     });
 
     setCounterNonCompleted(nonCompletedCount);
 
-    const traceData = Object.entries(dataPerGroup).map(([group, { sum, count }], index) => ({
-      x: [group],
-      y: [count > 0 ? sum / count : 0], // Average value per group
-      name: group,
-      type: 'bar',
-      marker: {
-        color: colors[index],
-        opacity: 0.7,
-      },
-    }));
+    const traceData: PlotData[] = Object.entries(dataPerGroup)
+      .map(([group, { sum, count }], index) => ({
+        x: [group],
+        y: [count > 0 ? sum / count : 0], // Average value per group
+        name: group,
+        type: 'bar',
+        marker: {
+          color: colors[index % colors.length],
+          // Handle case where there are more groups than colors
+          opacity: 0.7,
+        },
+      }));
 
-    setTrace(traceData as PlotData[]);
+    setTrace(traceData);
   }, [data, colors]);
 
-  const layout = {
-    title,
+  const layout: Partial<PlotLayout> = {
+    title: {
+      text: title,
+      font: { size: 16 },
+    },
     barmode: 'group',
     bargap: 0.15,
     bargroupgap: 0.05,
+    xaxis: {
+      title: 'Groups',
+    },
+    yaxis: {
+      title: 'Average Value',
+    },
   };
 
   return (isUpSm ? (
@@ -81,12 +95,11 @@ const NumericChart: React.FC<Props> = ({ data, title, colors }) => {
         {' '}
         {counterNonCompleted}
         {' '}
-        patients with an
-        empty field of
+        participants with missing values out of
         {' '}
         {data.length}
         {' '}
-        participants total (
+        total participants (
         {((counterNonCompleted / data.length) * 100).toFixed(2)}
         %).
       </Typography>
