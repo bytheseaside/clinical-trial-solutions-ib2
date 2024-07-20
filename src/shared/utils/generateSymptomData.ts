@@ -4,7 +4,7 @@ import { Data } from '../../app/(layout)/dashboard/analyst/TotalAmountChart';
 
 // Function to generate chart data from patients
 export const generateSymptomData = (patients: Patient[]): Data[] => {
-  // First, flatten all symptoms from patients
+  // Flatten all symptoms from patients
   const flattenedSymptoms = patients.flatMap((patient) =>
     (patient.symptoms || []).map((symptom) => ({
       symptom: symptom.tag,
@@ -21,6 +21,20 @@ export const generateSymptomData = (patients: Patient[]): Data[] => {
     acc[key].value += curr.value;
     return acc;
   }, {} as Record<string, Data>);
+
+  // Extract unique symptoms and groups
+  const uniqueSymptoms = Array.from(new Set(flattenedSymptoms.map((s) => s.symptom)));
+  const uniqueGroups = Array.from(new Set(flattenedSymptoms.map((s) => s.group)));
+
+  // Ensure all symptom-group combinations are included
+  uniqueSymptoms.forEach((symptom) => {
+    uniqueGroups.forEach((group) => {
+      const key = `${symptom}-${group}`;
+      if (!aggregatedData[key]) {
+        aggregatedData[key] = { symptom, value: 0, group };
+      }
+    });
+  });
 
   return Object.values(aggregatedData);
 };
