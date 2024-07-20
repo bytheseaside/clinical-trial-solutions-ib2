@@ -11,6 +11,7 @@ import { generateSymptomData } from 'shared/utils/generateSymptomData';
 
 import AnalystHead from './AnalystHead';
 import AssesmentsResultsReport, { AssessmentData } from './AssesmentsResultsReport';
+import ExportToExcel from './ExportToExcel';
 import SecondaryEffectsReport from './SecondaryEffecstReport';
 
 const colors = ([
@@ -80,6 +81,7 @@ async function AnalystDashboard() {
   return (
     <>
       <AnalystHead />
+      <ExportToExcel patientsData={patientsInClinicalTrial} trial={clinicalTrial} />
       <SecondaryEffectsReport
         effectsData={effectsData}
         colors={colors}

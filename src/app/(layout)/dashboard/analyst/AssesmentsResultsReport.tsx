@@ -8,11 +8,10 @@ import Container from 'shared/layout/Container';
 
 import BooleanChart, { BooleanData } from './BooleanChart';
 import NumericChart, { NumericData } from './NumericChart';
-import ThresholdChart, { ThresholdData } from './ThresholdChart';
 
 export type AssessmentData = {
   type: 'threshold' | 'boolean' | 'numeric';
-  data: (ThresholdData | BooleanData | NumericData)[];
+  data: (BooleanData | NumericData)[];
   title: string;
 };
 
@@ -25,6 +24,9 @@ type Props = {
 const AssesmentsResultsReport: React.FC<Props> = ({ assesmentsData, colors, sx = [] }) => (
   <Container
     sx={[
+      {
+        display: { xxs: 'none', sm: 'block' },
+      },
       ...(Array.isArray(sx) ? sx : [sx]),
     ]}
   >
@@ -52,10 +54,10 @@ const AssesmentsResultsReport: React.FC<Props> = ({ assesmentsData, colors, sx =
       {assesmentsData.map((data) => {
         if (data.type === 'threshold') {
           return (
-            <ThresholdChart
+            <NumericChart
               key={data.title}
               title={data.title}
-              data={data.data as ThresholdData[]}
+              data={data.data as NumericData[]}
               colors={colors}
             />
           );
