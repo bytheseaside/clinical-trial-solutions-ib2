@@ -24,6 +24,9 @@ type Props = {
 const AssesmentsResultsReport: React.FC<Props> = ({ assesmentsData, colors, sx = [] }) => (
   <Container
     sx={[
+      {
+        display: { xxs: 'none', sm: 'block' },
+      },
       ...(Array.isArray(sx) ? sx : [sx]),
     ]}
   >
