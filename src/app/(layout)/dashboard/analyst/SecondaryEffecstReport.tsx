@@ -9,7 +9,7 @@ import Container from 'shared/layout/Container';
 import TotalAmountChart, { Data } from './TotalAmountChart';
 
 type Props = {
-  effectsData: { data: Data[]; title: string }[];
+  effectsData: Data[];
   colors: string[];
   sx?: SxProps<Theme>;
 };
@@ -43,16 +43,12 @@ const SecondaryEffectsReport: React.FC<Props> = ({ effectsData, colors, sx = [] 
         gap: 3,
       }}
     >
-      {effectsData.map((data) => (
-        <TotalAmountChart
-          key={data.title}
-          title={data.title}
-          data={data.data}
-          colors={colors}
-        />
-      ))}
-    </Box>
 
+      <TotalAmountChart
+        data={effectsData}
+        colors={colors}
+      />
+    </Box>
   </Container>
 );
 

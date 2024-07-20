@@ -9,29 +9,28 @@ import { Data as PlotData, Layout as PlotLayout } from 'plotly.js';
 import Plot from 'react-plotly.js';
 
 export type Data = {
-  group: string;
+  symptom: string;
   value: number;
+  group: string;
 };
 
 type Props = {
   data: Data[];
-  title: string;
   colors: string[];
 };
 
-const TotalAmountChart: React.FC<Props> = ({ data, title, colors }) => {
+const TotalAmountChart: React.FC<Props> = ({ data, colors }) => {
   const [trace, setTrace] = useState<PlotData[]>([]);
-  const isUpSm = useMediaQuery((theme:Theme) => theme.breakpoints.up('sm'));
+  const isUpSm = useMediaQuery((theme: Theme) => theme.breakpoints.up('sm'));
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const createTrace = (info: Data[], groupIndex: number) => ({
-    x: info.map((_, index) => index),
-    y: info.map((item) => item.value || 0.05), // default value for 0
-    name: info[0].group,
+  // Create traces for each group
+  const createTrace = (group: string, symptomData: Data[], groupIndex: number): PlotData => ({
+    x: symptomData.map((item) => item.symptom),
+    y: symptomData.map((item) => item.value || 0.05), // default value for 0
+    name: group,
     type: 'bar',
     marker: {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      color: info.map((_, idx) => colors[groupIndex]),
+      color: colors[groupIndex],
       opacity: 0.7,
     },
   });
@@ -45,25 +44,33 @@ const TotalAmountChart: React.FC<Props> = ({ data, title, colors }) => {
       dataPerGroup[item.group].push(item);
     });
 
-    const traceData = Object.values(dataPerGroup)
-      .map((group, index) => createTrace(group, index));
+    const traceData = Object.entries(dataPerGroup)
+      .map(([group, symptomData], index) => createTrace(group, symptomData, index));
     setTrace(traceData as PlotData[]);
-  }, []);
+  }, [data, colors]);
 
-  const layout = {
-    title,
+  const layout: Partial<PlotLayout> = {
+    title: 'Total count of Expected Symptoms',
+    xaxis: {
+      title: 'Symptoms',
+      tickmode: 'linear',
+    },
+    yaxis: {
+      title: 'Count',
+    },
     barmode: 'group',
     bargap: 0.15,
     bargroupgap: 0.05,
   };
 
-  return (isUpSm ? (
-    <Box
-      component={Plot}
-      data={trace}
-      layout={layout as PlotLayout}
-    />
-  ) : null
+  return (
+    isUpSm ? (
+      <Box
+        component={Plot}
+        data={trace}
+        layout={layout as PlotLayout}
+      />
+    ) : null
   );
 };
 

@@ -6,6 +6,7 @@ import UserService from 'services/firebase/userService';
 
 import { Analyst, Patient } from 'shared/api';
 import WrongPage from 'shared/components/WrongPage';
+import { generateSymptomData } from 'shared/utils/generateSymptomData';
 
 import AnalystHead from './AnalystHead';
 import AssesmentsResultsReport, { AssessmentData } from './AssesmentsResultsReport';
@@ -27,11 +28,12 @@ async function AnalystDashboard() {
   const patients: Patient[] = await PatientService.getAllPatients();
   const patientsInClinicalTrial = patients.filter((patient) => patient.trialId === user.trialId);
 
-  // eslint-disable-next-line no-console
-  console.log(patientsInClinicalTrial);
+  const effectsData = generateSymptomData(patientsInClinicalTrial);
 
   const colors = ([
-    '#CCABD8', // azul
+    '#98df8a', // verde claro
+    '#c5b0d5', // morado claro
+    '#86E3C3', // rojo claro
     '#ff7f0e', // naranja
     '#D0E6A5', // verde
     '#d62728', // rojo
@@ -43,9 +45,6 @@ async function AnalystDashboard() {
     '#17becf', // celeste
     '#aec7e8', // azul claro
     '#ffbb78', // naranja claro
-    '#98df8a', // verde claro
-    '#86E3C3', // rojo claro
-    '#c5b0d5', // morado claro
     '#c49c94', // marron claro
     '#f7b6d2', // rosa claro
     '#c7c7c7', // gris claro
@@ -53,41 +52,20 @@ async function AnalystDashboard() {
     '#9edae5', // celeste claro
   ]);
 
-  const mockEffectsData = [
-    {
-      title: 'Effect 1',
-      data: [
-        { group: 'Group 1', value: 10 },
-        { group: 'Group 2', value: 15 },
-        { group: 'Group 3', value: 7 },
-        { group: 'Group 1', value: 12 },
-        { group: 'Group 2', value: 18 },
-        { group: 'Group 3', value: 9 },
-      ],
-    },
-    {
-      title: 'Effect 2',
-      data: [
-        { group: 'Group 1', value: 20 },
-        { group: 'Group 2', value: 25 },
-        { group: 'Group 3', value: 12 },
-        { group: 'Group 1', value: 22 },
-        { group: 'Group 2', value: 28 },
-        { group: 'Group 3', value: 15 },
-      ],
-    },
-    {
-      title: 'Effect 3',
-      data: [
-        { group: 'Group 1', value: 5 },
-        { group: 'Group 2', value: 8 },
-        { group: 'Group 3', value: 4 },
-        { group: 'Group 1', value: 6 },
-        { group: 'Group 2', value: 10 },
-        { group: 'Group 3', value: 5 },
-      ],
-    },
-  ];
+  // const mockEffectsData = [
+  //   {
+  //     title: 'Reported Secondary Effects',
+  //     data: [
+  //       { symptom: 'Headache', value: 10, group: 'A' },
+  //       { symptom: 'Nausea', value: 11, group: 'A' },
+  //       { symptom: 'Headache', value: 8, group: 'B' },
+  //       { symptom: 'Nausea', value: 6, group: 'B' },
+  //       { symptom: 'Rash', value: 6, group: 'A' },
+  //       { symptom: 'Rash', value: 8, group: 'B' },
+  //     ],
+  //   },
+  // ];
+
   const mockAssesmentsData: AssessmentData[] = [
     {
       type: 'threshold',
@@ -172,7 +150,6 @@ async function AnalystDashboard() {
       ],
     },
   ];
-
   const mockNumericAssessmentsData: AssessmentData[] = [
     {
       type: 'numeric',
@@ -191,14 +168,17 @@ async function AnalystDashboard() {
       title: 'Numeric Data Chart',
     },
   ];
+  console.log('effectsData', effectsData);
 
   return (
     <>
       <AnalystHead />
-      <SecondaryEffectsReport
-        effectsData={mockEffectsData}
-        colors={colors}
-      />
+      {Array.isArray(effectsData) && effectsData.length !== 0 && (
+        <SecondaryEffectsReport
+          effectsData={effectsData}
+          colors={colors}
+        />
+      )}
       <AssesmentsResultsReport
         assesmentsData={
           [...mockNumericAssessmentsData, ...mockAssesmentsData, ...mockBooleanAssessmentsData]
