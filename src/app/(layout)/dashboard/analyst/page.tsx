@@ -81,7 +81,7 @@ async function AnalystDashboard() {
   return (
     <>
       <AnalystHead />
-      <ExportToExcel patientsData={patientsInClinicalTrial} />
+      <ExportToExcel patientsData={patientsInClinicalTrial} trial={clinicalTrial} />
       <SecondaryEffectsReport
         effectsData={effectsData}
         colors={colors}
