@@ -162,7 +162,7 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
               }}
               // eslint-disable-next-line max-len
               referenceDate={dayjs()}
-              disablePast
+              // disablePast
               sx={{
                 width: { xxs: '100%', sm: '35%' },
               }}

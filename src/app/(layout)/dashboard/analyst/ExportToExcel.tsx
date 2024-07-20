@@ -13,16 +13,16 @@ import Container from 'shared/layout/Container';
 
 type Props = {
   patientsData: Patient[];
-  trial: ClinicalTrial; // Include the trial data as a prop
+  trial: ClinicalTrial;
   sx?: SxProps<Theme>;
 };
 
-// Function to handle date formatting
-const formatDate = (date: Date) => {
+const formatDate = (date: Date | string) => {
+  if (typeof date === 'string') {
+    return new Date(date).toISOString().split('T')[0];
+  }
   if (date instanceof Date) {
     return date.toISOString().split('T')[0];
-  } if (typeof date === 'string') {
-    return new Date(date).toISOString().split('T')[0];
   }
   return '';
 };
@@ -34,21 +34,24 @@ const ExportToExcel: React.FC<Props> = ({ patientsData, trial, sx = [] }) => {
 
     // Create headers
     const headers = [
-      'Index', 'Group', 'Sex', 'Date',
+      'Index', 'Group', 'Sex', 'Date of Birth',
       ...knownSideEffects,
       'Other Symptoms',
       ...studies.flatMap((study) =>
-        study.keyVariables.map((keyVar) => `${study.name}-${keyVar.name}`)),
+        study.keyVariables.map((keyVar) => `${study.name} - ${keyVar.name}`)),
       'Observations',
     ];
 
+    // Create data rows
     const dataForExcel = patientsData.map((patient, index) => {
+      // Initialize the symptoms count for each known side effect
       const symptomsCount = knownSideEffects.reduce((acc, sideEffect) => {
         acc[sideEffect] = 0;
         return acc;
       }, {} as Record<string, number>);
-      let otherSymptomsCount = 0;
 
+      // Count the occurrence of each symptom
+      let otherSymptomsCount = 0;
       patient.symptoms?.forEach((symptom) => {
         if (knownSideEffects.includes(symptom.tag)) {
           symptomsCount[symptom.tag] += 1;
@@ -57,33 +60,39 @@ const ExportToExcel: React.FC<Props> = ({ patientsData, trial, sx = [] }) => {
         }
       });
 
+      // Collect assessments data for each study key variable
       const assessmentsData = studies.flatMap((study) =>
         study.keyVariables.map((keyVar) => {
           const assessment = patient.assessments?.find(
-            (assess) => assess[`${study.name}-${keyVar.name}`],
+            (assess) => assess.keyVariableName === keyVar.name,
           );
-          return assessment ? assessment[`${study.name}-${keyVar.name}`] : '';
+          return assessment ? assessment.value : '';
         }));
 
       return {
         Index: index + 1,
         Group: patient.group || 'General',
         Sex: patient.sex,
-        Date: formatDate(new Date()),
-        ...symptomsCount,
+        'Date of Birth': formatDate(patient.birthDate),
+        ...Object.values(symptomsCount),
         'Other Symptoms': otherSymptomsCount,
         ...assessmentsData,
         Observations: patient.observations?.map((obs) => `${obs.date}: ${obs.text}`).join('; ') || '',
       };
     });
 
+    // Create worksheet
     const worksheet = XLSX.utils.json_to_sheet(dataForExcel);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-    XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' }); // Add headers
+
+    // Add headers
+    XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+
+    // Generate and save Excel file
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-    saveAs(blob, 'patients.xlsx');
+    saveAs(blob, `patients_data-${trial.name}_${formatDate(new Date())}.xlsx`);
   };
 
   return (
