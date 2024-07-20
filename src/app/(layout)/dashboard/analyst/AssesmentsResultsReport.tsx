@@ -52,7 +52,7 @@ const AssesmentsResultsReport: React.FC<Props> = ({ assesmentsData, colors, sx =
       {assesmentsData.map((data) => {
         if (data.type === 'threshold') {
           return (
-            <ThresholdChart
+            <NumericChart
               key={data.title}
               title={data.title}
               data={data.data as ThresholdData[]}

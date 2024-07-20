@@ -209,7 +209,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
         for (let i = 0; i < keyVariableMeasuredValues.length; i += 1) { // for each study
           for (let j = 0; j < auxiliarKeyVariableValues[i].length; j += 1) { // for each assesment
             const currentAssesment = auxiliarKeyVariableValues[i][j].name;
-            const value = keyVariableMeasuredValues[i][currentAssesment];
+            const value = keyVariableMeasuredValues[i][currentAssesment] ?? '';
             if (value) {
               auxiliarKeyVariableValues[i][j].value = value;
             } else if (auxiliarKeyVariableValues[i][j].type === 'boolean') {
