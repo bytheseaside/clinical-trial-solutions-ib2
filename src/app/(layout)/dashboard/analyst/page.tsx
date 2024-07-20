@@ -77,12 +77,6 @@ async function AnalystDashboard() {
       };
     }));
 
-  console.log('assessmentData', assessmentData);
-  // log the data inside the assesmentdata for each element to see if it is correct
-  assessmentData.forEach((data) => {
-    console.log('data', data);
-  });
-
   return (
     <>
       <AnalystHead />
