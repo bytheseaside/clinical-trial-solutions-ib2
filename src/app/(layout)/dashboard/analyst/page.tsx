@@ -33,6 +33,8 @@ async function AnalystDashboard() {
   const colors = ([
     '#98df8a', // verde claro
     '#c5b0d5', // morado claro
+    '#17becf', // celeste
+
     '#86E3C3', // rojo claro
     '#ff7f0e', // naranja
     '#D0E6A5', // verde
@@ -42,7 +44,6 @@ async function AnalystDashboard() {
     '#e377c2', // rosa
     '#7f7f7f', // gris
     '#bcbd22', // amarillo
-    '#17becf', // celeste
     '#aec7e8', // azul claro
     '#ffbb78', // naranja claro
     '#c49c94', // marron claro
@@ -51,20 +52,6 @@ async function AnalystDashboard() {
     '#dbdb8d', // amarillo claro
     '#9edae5', // celeste claro
   ]);
-
-  // const mockEffectsData = [
-  //   {
-  //     title: 'Reported Secondary Effects',
-  //     data: [
-  //       { symptom: 'Headache', value: 10, group: 'A' },
-  //       { symptom: 'Nausea', value: 11, group: 'A' },
-  //       { symptom: 'Headache', value: 8, group: 'B' },
-  //       { symptom: 'Nausea', value: 6, group: 'B' },
-  //       { symptom: 'Rash', value: 6, group: 'A' },
-  //       { symptom: 'Rash', value: 8, group: 'B' },
-  //     ],
-  //   },
-  // ];
 
   const mockAssesmentsData: AssessmentData[] = [
     {
