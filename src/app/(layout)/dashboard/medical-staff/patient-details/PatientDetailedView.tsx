@@ -44,6 +44,7 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
   const [newObservation, setNewObservation] = useState<string>('');
   const [clinicalTrial, setClinicalTrial] = useState<ClinicalTrial | null>(null);
   const [keyVariableValues, setKeyVariableValues] = useState<KeyVariableSingleValue[][]>([]);
+  const [successMessages, setSuccessMessages] = useState<string[]>([]);
 
   const handleClear = () => {
     setPatient(null);
@@ -85,6 +86,33 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
     }
   };
 
+  // const handleKeyVariableSubmit = async (
+  //   e: React.FormEvent<HTMLFormElement>,
+  //   studyIndex: number,
+  // ) => {
+  //   e.preventDefault();
+
+  //   if (patient) {
+  //     const keyVariableValuesForStudy = keyVariableValues[studyIndex]
+  //       .reduce((acc, { name, value }) => {
+  //         acc[name] = value;
+  //         return acc;
+  //       }, {} as Record<string, boolean | number | string | undefined>);
+
+  //     try {
+  //       await PatientService.updateKeyVariableAssessments(
+  //         patient.id,
+  //         keyVariableValuesForStudy,
+  //         studyIndex,
+  //       );
+  //       console.log('Key variable assessments updated successfully');
+  //     } catch (error) {
+  //     // Handle any errors that occurred during the update
+  //       console.error('Failed to update key variable assessments:', error);
+  //     // Optionally, show an error message to the user
+  //     }
+  //   }
+  // };
   const handleKeyVariableSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
     studyIndex: number,
@@ -104,11 +132,39 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
           keyVariableValuesForStudy,
           studyIndex,
         );
-        console.log('Key variable assessments updated successfully');
+
+        // Update success messages
+        setSuccessMessages((prev) => {
+          const updatedMessages = [...prev];
+          updatedMessages[studyIndex] = 'Assessment data updated successfully!';
+          return updatedMessages;
+        });
+
+        // Hide the message after a few seconds
+        setTimeout(() => {
+          setSuccessMessages((prev) => {
+            const updatedMessages = [...prev];
+            updatedMessages[studyIndex] = '';
+            return updatedMessages;
+          });
+        }, 3000); // Adjust the duration as needed
       } catch (error) {
-      // Handle any errors that occurred during the update
         console.error('Failed to update key variable assessments:', error);
-      // Optionally, show an error message to the user
+        // Update success messages
+        setSuccessMessages((prev) => {
+          const updatedMessages = [...prev];
+          updatedMessages[studyIndex] = 'Oops! Some error ocurred. Please try again after updating the values.';
+          return updatedMessages;
+        });
+
+        // Hide the message after a few seconds
+        setTimeout(() => {
+          setSuccessMessages((prev) => {
+            const updatedMessages = [...prev];
+            updatedMessages[studyIndex] = '';
+            return updatedMessages;
+          });
+        }, 3000); // Adjust the duration as needed
       }
     }
   };
@@ -187,15 +243,6 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
       setKeyVariableValues(auxiliarKeyVariableValues);
     }
   }, [clinicalTrial, patient]);
-
-  useEffect(
-    () => {
-      console.log('Patient:', patient);
-      console.log('Clinical Trial:', clinicalTrial);
-      console.log('Key Variable Values:', keyVariableValues);
-    },
-    [patient, clinicalTrial, keyVariableValues],
-  );
 
   return (
     <Container
@@ -632,8 +679,20 @@ const PatientDetailedView: React.FC<Props> = ({ patientList, sx = [] }) => {
                    >
                      Submit Assessments for
                      {' '}
-                     {clinicalTrial.studies[studyIndex].name}
+                     {clinicalTrial.studies[studyIndex]?.name}
                    </Button>
+                   {successMessages[studyIndex] && (
+                     <Typography
+                       color={
+                         // check if the message is a success message or an error message
+                          successMessages[studyIndex].includes('updated successfully') ? 'success.main' : 'error.main'
+                       }
+                       variant="body2"
+                       sx={{ mt: 2 }}
+                     >
+                       {successMessages[studyIndex]}
+                     </Typography>
+                   )}
                  </Box>
                ))}
              </Box>
