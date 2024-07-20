@@ -49,7 +49,7 @@ const NumericChart: React.FC<Props> = ({ data, title, colors }) => {
     const traceData: PlotData[] = Object.entries(dataPerGroup)
       .map(([group, { sum, count }], index) => ({
         x: [group],
-        y: [count > 0 ? sum / count : 0], // Average value per group
+        y: [count > 0 ? sum / count : 0.1], // Usar 0.1 para altura mínima
         name: group,
         type: 'bar',
         marker: {
@@ -58,6 +58,22 @@ const NumericChart: React.FC<Props> = ({ data, title, colors }) => {
           opacity: 0.7,
         },
       }));
+
+    const allGroups = new Set(data.map((item) => item.group));
+    allGroups.forEach((group) => {
+      if (!dataPerGroup[group]) {
+        traceData.push({
+          x: [group],
+          y: [0.1], // Small bar height
+          name: group,
+          type: 'bar',
+          marker: {
+            color: colors[traceData.length % colors.length],
+            opacity: 0.7,
+          },
+        });
+      }
+    });
 
     setTrace(traceData);
   }, [data, colors]);
