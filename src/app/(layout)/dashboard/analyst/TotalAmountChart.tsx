@@ -3,8 +3,6 @@
 import React, { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
-import { Theme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { Data as PlotData, Layout as PlotLayout } from 'plotly.js';
 import Plot from 'react-plotly.js';
 
@@ -21,7 +19,6 @@ type Props = {
 
 const TotalAmountChart: React.FC<Props> = ({ data, colors }) => {
   const [trace, setTrace] = useState<PlotData[]>([]);
-  const isUpSm = useMediaQuery((theme: Theme) => theme.breakpoints.up('sm'));
 
   // Create traces for each group
   const createTrace = (group: string, symptomData: Data[], groupIndex: number): PlotData => ({
@@ -50,7 +47,7 @@ const TotalAmountChart: React.FC<Props> = ({ data, colors }) => {
   }, [data, colors]);
 
   const layout: Partial<PlotLayout> = {
-    title: 'Total count of Expected Symptoms',
+    title: 'Total count of reported symptoms',
     xaxis: {
       title: 'Symptoms',
       tickmode: 'linear',
@@ -64,13 +61,11 @@ const TotalAmountChart: React.FC<Props> = ({ data, colors }) => {
   };
 
   return (
-    isUpSm ? (
-      <Box
-        component={Plot}
-        data={trace}
-        layout={layout as PlotLayout}
-      />
-    ) : null
+    <Box
+      component={Plot}
+      data={trace}
+      layout={layout as PlotLayout}
+    />
   );
 };
 

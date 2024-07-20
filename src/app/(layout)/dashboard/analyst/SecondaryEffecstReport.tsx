@@ -17,6 +17,9 @@ type Props = {
 const SecondaryEffectsReport: React.FC<Props> = ({ effectsData, colors, sx = [] }) => (
   <Container
     sx={[
+      {
+        display: { xxs: 'none', sm: 'block' },
+      },
       ...(Array.isArray(sx) ? sx : [sx]),
     ]}
   >

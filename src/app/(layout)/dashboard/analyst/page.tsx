@@ -173,12 +173,12 @@ async function AnalystDashboard() {
   return (
     <>
       <AnalystHead />
-      {Array.isArray(effectsData) && effectsData.length !== 0 && (
-        <SecondaryEffectsReport
-          effectsData={effectsData}
-          colors={colors}
-        />
-      )}
+
+      <SecondaryEffectsReport
+        effectsData={effectsData}
+        colors={colors}
+      />
+
       <AssesmentsResultsReport
         assesmentsData={
           [...mockNumericAssessmentsData, ...mockAssesmentsData, ...mockBooleanAssessmentsData]
