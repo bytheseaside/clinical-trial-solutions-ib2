@@ -8,11 +8,10 @@ import Container from 'shared/layout/Container';
 
 import BooleanChart, { BooleanData } from './BooleanChart';
 import NumericChart, { NumericData } from './NumericChart';
-import ThresholdChart, { ThresholdData } from './ThresholdChart';
 
 export type AssessmentData = {
   type: 'threshold' | 'boolean' | 'numeric';
-  data: (ThresholdData | BooleanData | NumericData)[];
+  data: (BooleanData | NumericData)[];
   title: string;
 };
 
@@ -55,7 +54,7 @@ const AssesmentsResultsReport: React.FC<Props> = ({ assesmentsData, colors, sx =
             <NumericChart
               key={data.title}
               title={data.title}
-              data={data.data as ThresholdData[]}
+              data={data.data as NumericData[]}
               colors={colors}
             />
           );
