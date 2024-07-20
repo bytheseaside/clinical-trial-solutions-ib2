@@ -45,24 +45,34 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
 
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setErrorID(false);
 
-    const uniqueSignUpCodes: SignUpCodes = {
-      analyst: Math.random().toString(36).substring(2, 15),
-    };
+    // get all trials, then check if the id is already in use
+    ClinicalTrialService.getAllTrials().then((trials) => {
+      if (trials.some((t) => t.id === trial.id)) {
+        setErrorID(true);
+      }
+    });
 
-    if (trial?.groups?.length) {
-      trial.groups.forEach((group) => {
-        uniqueSignUpCodes[`patient-${group}`] = Math.random().toString(36).substring(2, 15);
-      });
-    } else {
-      uniqueSignUpCodes.patient = Math.random().toString(36).substring(2, 15);
+    if (!errorID) {
+      const uniqueSignUpCodes: SignUpCodes = {
+        analyst: Math.random().toString(36).substring(2, 15),
+      };
+
+      if (trial?.groups?.length) {
+        trial.groups.forEach((group) => {
+          uniqueSignUpCodes[`patient-${group}`] = Math.random().toString(36).substring(2, 15);
+        });
+      } else {
+        uniqueSignUpCodes.patient = Math.random().toString(36).substring(2, 15);
+      }
+
+      ClinicalTrialService.addTrial({ ...trial, signUpCodes: uniqueSignUpCodes })
+        .then(() => { // reload the page to show the new trial
+          router.refresh();
+          setTrial(BASE_TRIAL);
+        });
     }
-
-    ClinicalTrialService.addTrial({ ...trial, signUpCodes: uniqueSignUpCodes })
-      .then(() => { // reload the page to show the new trial
-        router.refresh();
-        setTrial(BASE_TRIAL);
-      });
   };
 
   return (
@@ -120,7 +130,6 @@ const CreateNewClinicalTrial: React.FC<Props> = ({ sx = [] }) => {
             label="Clinical trial name"
             variant="outlined"
             helperText="Input the name of the clinical trial."
-            error={errorID}
             value={trial.name}
             size="small"
             fullWidth
