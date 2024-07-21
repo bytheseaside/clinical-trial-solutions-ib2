@@ -44,7 +44,7 @@ const AppointmentsSection: React.FC<Props> = ({ appointments, sx = [] }) => {
           ];
           const formattedDate = appointmentDate.getDate();
           const formattedMonth = monthNames[appointmentDate.getMonth()].slice(0, 3);
-          const formattedHour = appointmentDate.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+          const formattedHour = new Date(date).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
 
           return (
             <Box
