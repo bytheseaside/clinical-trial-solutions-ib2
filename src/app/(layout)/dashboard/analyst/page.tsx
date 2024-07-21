@@ -13,6 +13,7 @@ import AnalystHead from './AnalystHead';
 import AssesmentsResultsReport, { AssessmentData } from './AssesmentsResultsReport';
 import ExportToExcel from './ExportToExcel';
 import SecondaryEffectsReport from './SecondaryEffecstReport';
+import TrialProgress from './TrialProgress';
 
 const colors = ([
   '#98df8a', // verde claro
@@ -81,6 +82,7 @@ async function AnalystDashboard() {
   return (
     <>
       <AnalystHead />
+      <TrialProgress patientList={patientsInClinicalTrial} trial={clinicalTrial} />
       <ExportToExcel patientsData={patientsInClinicalTrial} trial={clinicalTrial} />
       <SecondaryEffectsReport
         effectsData={effectsData}
