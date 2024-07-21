@@ -17,6 +17,16 @@ const AppointmentsSection: React.FC<Props> = ({ appointments, sx = [] }) => {
     return null;
   }
 
+  const validAppointments = appointments.filter(({ date }) => {
+    const appointmentDate = new Date(date);
+    const today = new Date().setHours(0, 0, 0, 0);
+    return appointmentDate.setHours(0, 0, 0, 0) >= today;
+  });
+
+  if (validAppointments.length === 0) {
+    return null;
+  }
+
   return (
     <Container
       sx={[...(Array.isArray(sx) ? sx : [sx])]}
