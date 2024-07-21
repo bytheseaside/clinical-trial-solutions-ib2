@@ -254,7 +254,7 @@ const AssignAppointments: React.FC<Props> = ({ patientList, sx = [] }) => {
                         }}
                       >
                         <LabelImportantIcon fontSize="inherit" color="secondary" />
-                        {new Date(appointment.date).toLocaleString('es-AR', { day: 'numeric', month: 'numeric', hour: 'numeric', minute: 'numeric' })}
+                        {new Date(appointment.date).toLocaleString('es-AR', { day: 'numeric', month: 'numeric', hour: 'numeric', minute: 'numeric', year: 'numeric' })}
                         {` - ${appointment.study.name}`}
                       </Typography>
                       <IconButton
