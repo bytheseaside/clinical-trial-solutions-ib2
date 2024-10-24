@@ -1,7 +1,8 @@
-
-
-
 # MVP Electronic Data Capture System  - Clinical Trial Solutions
+
+## Live Demo
+You can try the live version of the application [here](https://clinical-trial-solutions.vercel.app/).
+
 
 ## Overview
 The MVP Electronic Data Capture (EDC) System is a web-based application designed to streamline data collection for clinical trial management. This project aims to enhance the efficiency and accuracy of clinical research processes by providing a user-friendly interface for data entry and management.
